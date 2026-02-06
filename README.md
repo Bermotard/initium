@@ -31,7 +31,7 @@ Voir [Installation Guide](docs/INSTALLATION.md)
 
 ### Quick Start
 ```bash
-git clone https://github.com/initium-dashboard/initium.git
+git clone https://github.com/Bermotard/initium.git
 cd initium
 cargo build --release
 cargo test
@@ -72,8 +72,8 @@ MIT License - voir [LICENSE](LICENSE)
 
 ## 📞 Support
 
-- **Issues:** https://github.com/initium-dashboard/initium/issues
-- **Discussions:** https://github.com/initium-dashboard/initium/discussions
+- **Issues:** https://github.com/Bermotard/initium/issues
+- **Discussions:** https://github.com/Bermotard/initium/discussions
 
 ---
 
