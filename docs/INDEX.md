@@ -8,7 +8,7 @@
 ## 📋 DOCUMENTS CRÉÉS
 
 ### Phase 1️⃣ - Planification Agile
-**Fichier:** `Initium_Phase1_Agile.docx` (9 pages)
+**Fichier:** `Initium_Phase1_Agile.html` (9 pages)
 - ✅ Vision et objectifs détaillés
 - ✅ 8 User Stories avec critères d'acceptation
 - ✅ Architecture technique complète
@@ -18,7 +18,7 @@
 - ✅ GitHub Flow strategy
 
 ### Phase 2️⃣ - Sprint 1 Core Engine
-**Fichier:** `Initium_Phase2_Sprint1.docx` (9 pages)
+**Fichier:** `Initium_Phase2_Sprint1.html` (9 pages)
 - ✅ Configuration Cargo.toml avec dépendances
 - ✅ 9 tâches techniques détaillées (DEV-001 à DEV-008)
 - ✅ Architecture modules Rust
@@ -29,7 +29,7 @@
 - ✅ Gestion des risques et mitigation
 
 ### Cargo.toml Configuration
-**Fichier:** `Cargo.toml` + `Initium_Cargo_Configuration.docx` (4 pages)
+**Fichier:** `Cargo.toml` + `Initium_Cargo_Configuration.html` (4 pages)
 - ✅ Cargo.toml complet et formaté
 - ✅ 18 dépendances Rust justifiées
 - ✅ Dépendances platform-spécifiques
@@ -42,7 +42,7 @@
   - Critères documentation (4)
 
 ### Phase 3️⃣ - Sprint 2 Interface & CRUD
-**Fichier:** `Initium_Phase3_Sprint2.docx` (9 pages)
+**Fichier:** `Initium_Phase3_Sprint2.html` (9 pages)
 - ✅ Architecture frontend complète
 - ✅ HTML structure responsive
 - ✅ CSS design system (dark mode + animations)
@@ -53,7 +53,7 @@
 - ✅ Matrice de test multiplateforme
 
 ### Phase 4️⃣ - Sprint 3 QA & Déploiement
-**Fichier:** `Initium_Phase4_Sprint3.docx` (9 pages)
+**Fichier:** `Initium_Phase4_Sprint3.html` (9 pages)
 - ✅ Stratégie QA complète (6 niveaux de test)
 - ✅ 50+ test cases (Rust + JavaScript)
 - ✅ Matrice de test multiplateforme (7×3)
@@ -70,7 +70,7 @@
 
 | Élément | Quantité |
 |---------|----------|
-| **Documents .docx** | 5 |
+| **Documents .html** | 5 |
 | **Pages totales** | 46 |
 | **User Stories** | 8 |
 | **Tâches définies** | 30+ |

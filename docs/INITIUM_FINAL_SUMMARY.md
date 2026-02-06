@@ -8,15 +8,15 @@
 
 ## 📦 LIVRABLES TOTAUX
 
-### 1️⃣ Documentation (5 documents .docx - 46 pages)
+### 1️⃣ Documentation (5 documents .html - 46 pages)
 
 | # | Document | Pages | Focus |
 |---|----------|-------|-------|
-| 1 | **Initium_Phase1_Agile.docx** | 9 | Vision, Architecture, Design, Planning |
-| 2 | **Initium_Phase2_Sprint1.docx** | 9 | Core Engine Rust, API, Risques |
-| 3 | **Initium_Cargo_Configuration.docx** | 4 | Dépendances, Critères Acceptation |
-| 4 | **Initium_Phase3_Sprint2.docx** | 9 | Interface, HTML/CSS/JS, CRUD |
-| 5 | **Initium_Phase4_Sprint3.docx** | 9 | QA, Tests, Export, Release |
+| 1 | **Initium_Phase1_Agile.html** | 9 | Vision, Architecture, Design, Planning |
+| 2 | **Initium_Phase2_Sprint1.html** | 9 | Core Engine Rust, API, Risques |
+| 3 | **Initium_Cargo_Configuration.html** | 4 | Dépendances, Critères Acceptation |
+| 4 | **Initium_Phase3_Sprint2.html** | 9 | Interface, HTML/CSS/JS, CRUD |
+| 5 | **Initium_Phase4_Sprint3.html** | 9 | QA, Tests, Export, Release |
 
 ### 2️⃣ Code Source (17 fichiers)
 
@@ -116,11 +116,11 @@ OS Integration (Linux/Windows/macOS)
 ### Fichiers de Documentation
 ```
 /mnt/user-data/outputs/
-├── Initium_Phase1_Agile.docx
-├── Initium_Phase2_Sprint1.docx
-├── Initium_Cargo_Configuration.docx
-├── Initium_Phase3_Sprint2.docx
-├── Initium_Phase4_Sprint3.docx
+├── Initium_Phase1_Agile.html
+├── Initium_Phase2_Sprint1.html
+├── Initium_Cargo_Configuration.html
+├── Initium_Phase3_Sprint2.html
+├── Initium_Phase4_Sprint3.html
 ├── Cargo.toml (fichier brut)
 ├── INDEX.md
 ├── GITHUB_SETUP_COMPLETE.md
@@ -181,7 +181,7 @@ git push -u origin main
 
 | Métrique | Valeur |
 |----------|--------|
-| **Documents** | 5 (.docx) |
+| **Documents** | 5 (.html) |
 | **Pages Documentation** | 46 |
 | **Fichiers Code** | 17 |
 | **Lignes Rust** | ~600 |

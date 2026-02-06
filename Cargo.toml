@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Initium Team"]
 description = "Tableau de bord intelligent multi-plateforme pour lancer applications et sites web"
 license = "MIT"
-repository = "https://github.com/initium-dashboard/initium"
+repository = "https://github.com/Bermotard/initium"
 
 [dependencies]
 # UI & Rendering

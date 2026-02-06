@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.2.7.2 (Linux)"/>
+	<meta name="author" content="Un-named"/>
+	<meta name="created" content="2026-02-06T09:33:24"/>
+	<meta name="changedby" content="Un-named"/>
+	<meta name="changed" content="2026-02-06T09:33:24"/>
+	<meta name="AppVersion" content="15.0000"/>
+	<style type="text/css">
+		@page { size: 21.59cm 27.94cm; margin: 2.54cm }
+		p { color: #000000; line-height: 115%; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.25cm; direction: ltr; background: transparent }
+		p.western { font-family: "Arial", serif; font-size: 11pt; so-language: fr-FR }
+		p.cjk { font-family: "Arial"; font-size: 11pt; so-language: zh-CN }
+		p.ctl { font-family: "Arial"; font-size: 11pt; so-language: hi-IN }
+		h1 { color: #1a1a1a; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.21cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h1.western { font-family: "Arial", sans-serif; font-size: 28pt; so-language: fr-FR; font-weight: bold }
+		h1.cjk { font-family: "Arial"; font-size: 28pt; so-language: zh-CN; font-weight: bold }
+		h1.ctl { font-family: "Arial"; font-size: 28pt; so-language: hi-IN; font-weight: bold }
+		h2 { color: #2c3e50; text-align: left; orphans: 2; widows: 2; margin-top: 0.32cm; margin-bottom: 0.18cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h2.western { font-family: "Arial", sans-serif; font-size: 16pt; so-language: fr-FR; font-weight: bold }
+		h2.cjk { font-family: "Arial"; font-size: 16pt; so-language: zh-CN; font-weight: bold }
+		h2.ctl { font-family: "Arial"; font-size: 16pt; so-language: hi-IN; font-weight: bold }
+		h3 { color: #34495e; text-align: left; orphans: 2; widows: 2; margin-top: 0.21cm; margin-bottom: 0.14cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h3.western { font-family: "Arial", sans-serif; font-size: 13pt; so-language: fr-FR; font-weight: bold }
+		h3.cjk { font-family: "Arial"; font-size: 13pt; so-language: zh-CN; font-weight: bold }
+		h3.ctl { font-family: "Arial"; font-size: 13pt; so-language: hi-IN; font-weight: bold }
+		a:link { color: #0563c1; text-decoration: underline }
+	</style>
+</head>
+<body lang="fr-FR" text="#000000" link="#0563c1" vlink="#800000" dir="ltr"><p class="western" style="line-height: 100%; margin-bottom: 0.42cm">
+<br/>
+<br/>
+
+</p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.21cm">
+<font color="#1a1a1a">📦 <font size="6" style="font-size: 28pt"><b>Cargo.toml
+- Initium</b></font></font></p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.42cm">
+<font color="#2c3e50"><font size="4" style="font-size: 14pt"><b>Configuration
+Complète des Dépendances</b></font></font></p>
+<h1 class="western">Cargo.toml Formaté</h1>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">[package]
+name = &quot;initium&quot; version = &quot;0.1.0-alpha&quot; edition
+= &quot;2021&quot; authors = [&quot;Initium Team&quot;] description =
+&quot;Tableau de bord intelligent multi-plateforme pour lancer
+applications et sites web&quot; license = &quot;MIT&quot; repository
+= &quot;https://github.com/initium-dashboard/initium&quot; 
+[dependencies] # UI &amp; Rendering servo = &quot;0.1&quot;  #
+Serialization &amp; Configuration serde = { version = &quot;1.0&quot;,
+features = [&quot;derive&quot;] } serde_json = &quot;1.0&quot;  #
+Async Runtime tokio = { version = &quot;1&quot;, features = [&quot;full&quot;]
+}  # Desktop Integration tauri = { version = &quot;1.5&quot;,
+features = [&quot;shell-open&quot;, &quot;window-all&quot;] }  #
+Logging log = &quot;0.4&quot; env_logger = &quot;0.10&quot;  #
+Conditional Compilation cfg-if = &quot;1.0&quot;  # HTTP Server hyper
+= { version = &quot;0.14&quot;, features = [&quot;full&quot;] } http
+= &quot;0.2&quot;  # Error Handling anyhow = &quot;1.0&quot;
+thiserror = &quot;1.0&quot;  # Utilities dirs = &quot;5.0&quot;
+lazy_static = &quot;1.4&quot;  [target.'cfg(target_os =
+&quot;linux&quot;)'.dependencies] # XDG Base Directory Specification
+xdg = &quot;2.4&quot; # Desktop Entry Files freedesktop_entry_parser
+= &quot;0.3&quot;  [target.'cfg(target_os = &quot;windows&quot;)'.dependencies]
+# Windows Registry Access winreg = &quot;0.50&quot; # Windows Shell
+Integration windows = { version = &quot;0.48&quot;, features =
+[&quot;Win32_Foundation&quot;, &quot;Win32_System_Com&quot;] } 
+[target.'cfg(target_os = &quot;macos&quot;)'.dependencies] # macOS
+Property Lists plist = &quot;1.5&quot; # Objective-C Runtime objc =
+&quot;0.2&quot; objc-foundation = &quot;0.1&quot; core-foundation =
+&quot;0.9&quot;  [dev-dependencies] # Testing tokio-test = &quot;0.4&quot;
+mockito = &quot;1.2&quot; tempfile = &quot;3.8&quot; criterion =
+&quot;0.5&quot;  [[bench]] name = &quot;launcher_performance&quot;
+harness = false  [profile.dev] opt-level = 0 debug = true 
+[profile.release] opt-level = 3 lto = true codegen-units = 1 strip =
+true  [profile.test] opt-level = 1  [lib] name = &quot;initium&quot;
+path = &quot;src/lib.rs&quot;  [[bin]] name = &quot;initium&quot;
+path = &quot;src/main.rs&quot;</font></font></font></p>
+<h1 class="western">Explications des Dépendances</h1>
+<h2 class="western">Dépendances Principales</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="117"/>
+	<col width="238"/>
+	<col width="237"/>
+	<tr>
+		<td width="117" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Crate</b></font></p>
+		</td>
+		<td width="238" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Fonction</b></font></p>
+		</td>
+		<td width="237" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Raison</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">servo</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Moteur
+			de rendu HTML/CSS</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Interface
+			fluide et performante</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">serde
+			+ serde_json</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Serialization
+			JSON</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Parse
+			config.json facilement</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">tokio</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Runtime
+			async Rust</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Serveur
+			HTTP concurrent</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">tauri</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Framework
+			desktop</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Intégration
+			OS et shell</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">log
+			+ env_logger</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Logging
+			framework</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Debug
+			et monitoring</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">hyper</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">HTTP
+			client/server</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">API
+			REST interne</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">Dépendances Platform-Spécifiques</h2>
+<h3 class="western">Linux (target_os = &quot;linux&quot;)</h3>
+<ul>
+	<li value="1"><p style="line-height: 100%; margin-bottom: 0cm"><b>xdg
+	</b>(2.4): XDG Base Directory Specification</p></li>
+</ul>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  →
+	Localisation fichiers config ~/.config/initium</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  → Autostart
+	via ~/.config/autostart/</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm"><b>freedesktop_entry_parser
+	</b>(0.3): Parsing .desktop files</p></li>
+</ul>
+<h3 class="western">Windows (target_os = &quot;windows&quot;)</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm"><b>winreg
+	</b>(0.50): Accès Windows Registry</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  →
+	Enregistrement
+	HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  →
+	Configuration portable AppData</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm"><b>windows
+	</b>(0.48): Windows API native</p></li>
+</ul>
+<h3 class="western">macOS (target_os = &quot;macos&quot;)</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm"><b>plist </b>(1.5):
+	Parsing .plist files</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  →
+	LaunchAgents XML: ~/Library/LaunchAgents/</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">  →
+	Configuration property list native</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm"><b>objc +
+	core-foundation: </b>Interop Objective-C</p></li>
+</ul>
+<h1 class="western">Dev Dependencies &amp; Build Profiles</h1>
+<h2 class="western">Dépendances de Développement</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="117"/>
+	<col width="238"/>
+	<col width="237"/>
+	<tr>
+		<td width="117" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Crate</b></font></p>
+		</td>
+		<td width="238" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Usage</b></font></p>
+		</td>
+		<td width="237" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Raison</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">tokio-test</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			async code</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Runtime
+			tokio dans tests</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">mockito</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Mock
+			HTTP requests</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tester
+			API sans serveur</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">tempfile</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Fichiers
+			temporaires</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test
+			création fichiers</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="117" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">criterion</span></font></p>
+		</td>
+		<td width="238" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Benchmarks</span></font></p>
+		</td>
+		<td width="237" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Performance
+			launcher</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">Profils de Compilation</h2>
+<h3 class="western">[profile.dev]</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">opt-level = 0:
+	Pas d'optimisation (compilation rapide)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">debug =
+	true: Symboles de débogage inclus</p></li>
+</ul>
+<h3 class="western">[profile.release]</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">opt-level = 3:
+	Optimisation maximale</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">lto = true:
+	Link Time Optimization</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">codegen-units =
+	1: Meilleure optimisation (compilation lente)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">strip =
+	true: Enlever symboles (executable réduit)</p></li>
+</ul>
+<h3 class="western">[profile.test]</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">opt-level =
+	1: Optimisation légère (balance speed/compile-time)</p></li>
+</ul>
+<h1 class="western">Critères d'Acceptation - DEV-001</h1>
+<h2 class="western">Tâche: Initialiser Cargo.toml + Dépendances</h2>
+<h3 class="western">✅ Critères Fonctionnels</h3>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="612"/>
+	<tr>
+		<td width="612" valign="top" bgcolor="#e8f8f5" style="background: #e8f8f5; border: 1px solid #cccccc; padding: 0.14cm 0.21cm">
+			<ul><li><p style="margin-bottom: 0cm">Cargo.toml existe et
+				contient les bonnes sections [package], [dependencies],
+				[profile.*]</p></li>
+				<li><p style="margin-bottom: 0cm">Toutes les dépendances
+				principales compilent sans erreurs</p></li>
+				<li><p style="margin-bottom: 0cm">Dépendances
+				platform-spécifiques correctement ciblées (Linux, Windows,
+				macOS)</p></li>
+				<li><p style="margin-bottom: 0cm">Dev-dependencies incluses pour
+				tests et benchmarks</p></li>
+				<li><p>Profils d'optimisation configurés (dev, release, test)</p></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h3 class="western">✅ Critères de Build</h3>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="612"/>
+	<tr>
+		<td width="612" valign="top" bgcolor="#e8f8f5" style="background: #e8f8f5; border: 1px solid #cccccc; padding: 0.14cm 0.21cm">
+			<ul><li><p style="margin-bottom: 0cm">$ cargo build compile sans
+				erreurs</p></li>
+				<li><p style="margin-bottom: 0cm">$ cargo check passe</p></li>
+				<li><p style="margin-bottom: 0cm">$ cargo build --release compile
+				sans erreurs</p></li>
+				<li><p style="margin-bottom: 0cm">$ cargo test --no-run compile
+				les tests</p></li>
+				<li><p>Pas de warnings de compilation (cargo -D warnings)</p></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h3 class="western">✅ Critères de Qualité Code</h3>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="612"/>
+	<tr>
+		<td width="612" valign="top" bgcolor="#e8f8f5" style="background: #e8f8f5; border: 1px solid #cccccc; padding: 0.14cm 0.21cm">
+			<ul><li><p style="margin-bottom: 0cm">$ cargo clippy → 0
+				warnings</p></li>
+				<li><p style="margin-bottom: 0cm">$ cargo fmt --check → Code
+				formaté</p></li>
+				<li><p style="margin-bottom: 0cm">Commentaires expliquant
+				dépendances principales</p></li>
+				<li><p>Versioning crates cohérent (pas de &quot;*&quot;)</p></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h3 class="western">✅ Critères de Cross-Platform</h3>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="612"/>
+	<tr>
+		<td width="612" valign="top" bgcolor="#e8f8f5" style="background: #e8f8f5; border: 1px solid #cccccc; padding: 0.14cm 0.21cm">
+			<ul><li><p style="margin-bottom: 0cm">Compilable sur Linux (cargo
+				build)</p></li>
+				<li><p style="margin-bottom: 0cm">Compilable sur Windows (cargo
+				build)</p></li>
+				<li><p style="margin-bottom: 0cm">Compilable sur macOS (cargo
+				build)</p></li>
+				<li><p>Dépendances platform-specifiques correctement isolées</p></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h3 class="western">✅ Critères de Documentation</h3>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="612"/>
+	<tr>
+		<td width="612" valign="top" bgcolor="#e8f8f5" style="background: #e8f8f5; border: 1px solid #cccccc; padding: 0.14cm 0.21cm">
+			<ul><li><p style="margin-bottom: 0cm">Cargo.toml commencé</p></li>
+				<li><p style="margin-bottom: 0cm">Commentaires expliquant rôle
+				de chaque dépendance</p></li>
+				<li><p style="margin-bottom: 0cm">README.md mis à jour avec
+				instructions setup</p></li>
+				<li><p>Versions crates documentées dans DEPENDENCIES.md</p></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.64cm"><br/>
+<br/>
+
+</p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0cm; border-top: 1px solid #cccccc; border-bottom: none; border-left: none; border-right: none; padding-top: 0.04cm; padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm">
+<font color="#95a5a6"><font size="2" style="font-size: 9pt"><i>Documentation
+Cargo.toml - Sprint 1 DEV-001 Généré: 06/02/2026 Repository:
+https://github.com/initium-dashboard</i></font></font></p>
+</body>
+</html>

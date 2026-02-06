@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.2.7.2 (Linux)"/>
+	<meta name="author" content="Un-named"/>
+	<meta name="created" content="2026-02-06T13:49:15"/>
+	<meta name="changedby" content="Un-named"/>
+	<meta name="changed" content="2026-02-06T13:49:15"/>
+	<meta name="AppVersion" content="15.0000"/>
+	<style type="text/css">
+		@page { size: 21.59cm 27.94cm; margin: 2.54cm }
+		p { color: #000000; line-height: 115%; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.25cm; direction: ltr; background: transparent }
+		p.western { font-family: "Arial", serif; font-size: 11pt; so-language: fr-FR }
+		p.cjk { font-family: "Arial"; font-size: 11pt; so-language: zh-CN }
+		p.ctl { font-family: "Arial"; font-size: 11pt; so-language: hi-IN }
+		h1 { color: #1a1a1a; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.21cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h1.western { font-family: "Arial", sans-serif; font-size: 28pt; so-language: fr-FR; font-weight: bold }
+		h1.cjk { font-family: "Arial"; font-size: 28pt; so-language: zh-CN; font-weight: bold }
+		h1.ctl { font-family: "Arial"; font-size: 28pt; so-language: hi-IN; font-weight: bold }
+		h2 { color: #2c3e50; text-align: left; orphans: 2; widows: 2; margin-top: 0.32cm; margin-bottom: 0.18cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h2.western { font-family: "Arial", sans-serif; font-size: 16pt; so-language: fr-FR; font-weight: bold }
+		h2.cjk { font-family: "Arial"; font-size: 16pt; so-language: zh-CN; font-weight: bold }
+		h2.ctl { font-family: "Arial"; font-size: 16pt; so-language: hi-IN; font-weight: bold }
+		h3 { color: #34495e; text-align: left; orphans: 2; widows: 2; margin-top: 0.21cm; margin-bottom: 0.14cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h3.western { font-family: "Arial", sans-serif; font-size: 13pt; so-language: fr-FR; font-weight: bold }
+		h3.cjk { font-family: "Arial"; font-size: 13pt; so-language: zh-CN; font-weight: bold }
+		h3.ctl { font-family: "Arial"; font-size: 13pt; so-language: hi-IN; font-weight: bold }
+		a:link { color: #0563c1; text-decoration: underline }
+	</style>
+</head>
+<body lang="fr-FR" text="#000000" link="#0563c1" vlink="#800000" dir="ltr"><p class="western" style="line-height: 100%; margin-bottom: 0.42cm">
+<br/>
+<br/>
+
+</p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.21cm">
+<font color="#1a1a1a">🧪 <font size="6" style="font-size: 28pt"><b>PHASE
+4 - SPRINT 3</b></font></font></p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.42cm">
+<font color="#2c3e50"><font size="4" style="font-size: 16pt"><b>QA &amp;
+Déploiement - Release v0.1.0-alpha</b></font></font></p>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="122"/>
+	<col width="480"/>
+	<tr>
+		<td width="122" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>OBJECTIF</b></font></p>
+		</td>
+		<td width="480" bgcolor="#8e44ad" style="background: #8e44ad; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western">
+			<font color="#ffffff"><font size="2" style="font-size: 10pt"><b>Tests
+			complets, export configuration, et déploiement multiplateforme</b></font></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western" style="margin-top: 0cm; margin-bottom: 0.21cm">APERÇU
+DU SPRINT</h2>
+<p class="western" align="justify" style="line-height: 100%; margin-bottom: 0.21cm">
+Sprint 3 finalise le projet Initium avec une couverture QA complète,
+l'implémentation de l'export de configuration, et la création de
+builds distribuables pour Linux, Windows et macOS. Ce sprint inclut
+les tests de régression, les performances, et la documentation
+utilisateur.</p>
+<h3 class="western">User Stories du Sprint</h3>
+<ul>
+	<li value="1"><p style="line-height: 100%; margin-bottom: 0cm">US-008:
+	Exporter configuration en PDF/HTML</p></li>
+</ul>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">Tests
+	complets: Unitaires + Intégration + E2E + Performance</p></li>
+</ul>
+<p class="western" align="center" style="line-height: 100%; margin-top: 0.64cm; margin-bottom: 0cm">
+<font color="#7f8c8d"><font size="2" style="font-size: 9pt"><i>Dépendances:
+Phase 1-3 complétées | Durée: 2 semaines</i></font></font></p>
+<h1 class="western">1. STRATÉGIE QA COMPLÈTE</h1>
+<h2 class="western">1.1 Niveaux de Test</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="111"/>
+	<col width="180"/>
+	<col width="180"/>
+	<col width="111"/>
+	<tr>
+		<td width="111" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Niveau</b></font></p>
+		</td>
+		<td width="180" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Description</b></font></p>
+		</td>
+		<td width="180" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Outils</b></font></p>
+		</td>
+		<td width="111" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Coverage</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Unitaires</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			fonctions isolées</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">cargo
+			test, Jest</span></font></p>
+		</td>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			≥<font size="2" style="font-size: 10pt"><span style="font-weight: normal">80%</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Intégration</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			modules ensemble</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">cargo
+			test --test</span></font></p>
+		</td>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			≥<font size="2" style="font-size: 10pt"><span style="font-weight: normal">70%</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">E2E</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			workflow complet</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Playwright,
+			Selenium</span></font></p>
+		</td>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			≥<font size="2" style="font-size: 10pt"><span style="font-weight: normal">60%</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Performance</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Bench
+			launching speed</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">criterion,
+			Lighthouse</span></font></p>
+		</td>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">&lt;
+			2s load</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Cross-platform</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			sur 3 OS</span></font></p>
+		</td>
+		<td width="180" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">CI/CD
+			(GitHub Actions)</span></font></p>
+		</td>
+		<td width="111" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">100%</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">1.2 Matrice de Test Multiplateforme</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="97"/>
+	<col width="119"/>
+	<col width="119"/>
+	<col width="119"/>
+	<col width="118"/>
+	<tr>
+		<td width="97" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Fonction</b></font></p>
+		</td>
+		<td width="119" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Linux</b></font></p>
+		</td>
+		<td width="119" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Windows</b></font></p>
+		</td>
+		<td width="119" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>macOS</b></font></p>
+		</td>
+		<td width="118" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Statut</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Lancer
+			URL</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Lancer
+			app</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Autostart</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Add
+			launcher</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Del
+			launcher</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Export
+			config</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="97" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Perf
+			grid</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="119" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
+		</td>
+		<td width="118" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PASS</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h1 class="western">2. CAS DE TEST DÉTAILLÉS</h1>
+<h2 class="western">2.1 Test Suite - Rust Backend</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">//
+tests/launcher_tests.rs #[cfg(test)] mod tests {   use
+initium::launcher::*;   use initium::config::*;    #[test]   fn
+test_launcher_creation() {     let launcher = Launcher {       id:
+&quot;test_001&quot;.to_string(),       name: &quot;Test
+App&quot;.to_string(),       launch_type: LaunchType::App,      
+target: &quot;/usr/bin/test&quot;.to_string(),       icon:
+&quot;icon.svg&quot;.to_string(),     };    
+assert_eq!(launcher.name, &quot;Test App&quot;);   }   
+#[tokio::test]   async fn test_execute_launcher_web() {     let
+launcher = Launcher {       id: &quot;web_001&quot;.to_string(),     
+ name: &quot;Google&quot;.to_string(),       launch_type:
+LaunchType::Web,       target: &quot;https://google.com&quot;.to_string(),
+      icon: &quot;icon.svg&quot;.to_string(),     };     let result =
+execute_launcher(&amp;launcher).await;     assert!(result.is_ok());  
+}    #[test]   fn test_config_load() {     let config =
+Config::load(&quot;config.json&quot;);     assert!(config.is_ok());  
+}    #[test]   fn test_add_launcher() {     let mut config = Config {
+      version: &quot;0.1.0&quot;.to_string(),       theme:
+&quot;dark&quot;.to_string(),       autostart: true,       launchers:
+vec![],     };     let launcher = /* ... */;    
+config.add_launcher(launcher.clone());    
+assert_eq!(config.launchers.len(), 1);   }    #[test]   fn
+test_remove_launcher() {     let mut config = /* ... with launchers
+... */;     let initial_len = config.launchers.len();    
+config.remove_launcher(&quot;id_to_remove&quot;);    
+assert!(config.launchers.len() &lt; initial_len);   } }</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">2.2 Test Suite - JavaScript Frontend</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">//
+tests/api.test.js const api = require(&quot;../assets/modules/api&quot;);
+ describe(&quot;API Client&quot;, () =&gt; {   test(&quot;getLaunchers
+returns array&quot;, async () =&gt; {     const launchers = await
+api.getLaunchers();     expect(Array.isArray(launchers)).toBe(true); 
+ });    test(&quot;addLauncher creates new launcher&quot;, async ()
+=&gt; {     const launcher = {       name: &quot;Test&quot;,      
+target: &quot;https://test.com&quot;,       type: &quot;web&quot;,   
+   icon: &quot;test.svg&quot;     };     const result = await
+api.addLauncher(launcher);     expect(result.id).toBeDefined();   });
+   test(&quot;removeLauncher deletes launcher&quot;, async () =&gt; {
+    const result = await api.removeLauncher(&quot;test_id&quot;);    
+expect(result.ok).toBe(true);   });    test(&quot;executeLauncher
+opens application&quot;, async () =&gt; {     const result = await
+api.executeLauncher(&quot;launcher_id&quot;);    
+expect(result.ok).toBe(true);   }); });  // tests/launcher.test.js
+describe(&quot;LauncherManager&quot;, () =&gt; {   test(&quot;renders
+grid correctly&quot;, () =&gt; {     const manager = new
+LauncherManager();     manager.launchers = [{id: &quot;1&quot;, name:
+&quot;Test&quot;}];     manager.render();    
+expect(document.querySelectorAll(&quot;.launcher-item&quot;).length).toBe(1);
+  });    test(&quot;adds launcher to grid&quot;, async () =&gt; {    
+const manager = new LauncherManager();     await manager.add({name:
+&quot;New&quot;, target: &quot;url&quot;});    
+expect(manager.launchers.length).toBeGreaterThan(0);   }); });  //
+tests/modal.test.js describe(&quot;ModalManager&quot;, () =&gt; {  
+test(&quot;opens modal on button click&quot;, () =&gt; {     const
+modal = new ModalManager();     modal.open();    
+expect(modal.modal.classList.contains(&quot;hidden&quot;)).toBe(false);
+  });    test(&quot;closes modal on cancel&quot;, () =&gt; {    
+const modal = new ModalManager();     modal.open();    
+modal.close();    
+expect(modal.modal.classList.contains(&quot;hidden&quot;)).toBe(true);
+  }); });</font></font></font></p>
+<h1 class="western">3. EXPORT CONFIGURATION (US-008)</h1>
+<h2 class="western">3.1 Implémentation Export PDF</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">//
+src/export/mod.rs use wkhtmltopdf::*; use std::fs;  pub struct
+ExportManager;  impl ExportManager {   pub fn export_to_pdf(config:
+&amp;Config, output_path: &amp;str) -&gt; Result&lt;(), Box&lt;dyn
+std::error::Error&gt;&gt; {     let html =
+Self::generate_html(config);     let pdf = PdfApplication::new()?    
+  .builder()       .enable_local_file_access()      
+.build_from_html(&amp;html)?       .save(output_path)?;     Ok(())  
+}    pub fn export_to_html(config: &amp;Config, output_path: &amp;str)
+-&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {     let
+html = Self::generate_html(config);     fs::write(output_path,
+html)?;     Ok(())   }    fn generate_html(config: &amp;Config) -&gt;
+String {     format!(       r#&quot;&lt;!DOCTYPE html&gt; &lt;html&gt;
+&lt;head&gt;   &lt;meta charset=&quot;UTF-8&quot;&gt;  
+&lt;title&gt;Initium Configuration Report&lt;/title&gt;   &lt;style&gt;
+    body {{ font-family: Arial; background: #f5f5f5; }}     h1 {{
+color: #2c3e50; }}     .launcher {{ border: 1px solid #ccc; padding:
+10px; margin: 5px; }}   &lt;/style&gt; &lt;/head&gt; &lt;body&gt;  
+&lt;h1&gt;Initium Configuration&lt;/h1&gt;  
+&lt;p&gt;&lt;strong&gt;Version:&lt;/strong&gt; {}&lt;/p&gt;  
+&lt;h2&gt;Launchers&lt;/h2&gt;   &lt;div class=&quot;launchers&quot;&gt;{}&lt;/div&gt;
+&lt;/body&gt; &lt;/html&gt;&quot;#,       config.version,      
+config.launchers.iter()         .map(|l| format!(           r#&quot;&lt;div
+class=&quot;launcher&quot;&gt;&lt;strong&gt;{}&lt;/strong&gt;&lt;br/&gt;Type:
+{}&lt;br/&gt;Target: {}&lt;/div&gt;&quot;#,           l.name,
+format!(&quot;{:?}&quot;, l.launch_type), l.target         ))        
+.collect::&lt;Vec&lt;_&gt;&gt;()         .join(&quot;&quot;)     )  
+} }</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">3.2 Critères Acceptation US-008</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Menu
+	Fichier → Exporter visible</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Dialog
+	export (PDF/HTML)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Fichier PDF
+	généré avec config</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Fichier
+	HTML généré avec config</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✅
+	Sauvegarde dans ~/Downloads</p></li>
+</ul>
+<h1 class="western">4. BUILD &amp; RELEASE SCRIPTS</h1>
+<h2 class="western">4.1 Build Script Principal</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">#!/bin/bash
+# build.sh - Build script multiplateforme  set -e  echo &quot;🔨
+Building Initium...&quot;  # Clean echo &quot;Cleaning old builds...&quot;
+rm -rf target/release/initium rm -rf dist/  # Build echo &quot;Compiling
+Rust...&quot; cargo build --release  # Create distribution mkdir -p
+dist/{linux,windows,macos}  # Linux echo &quot;Packaging for
+Linux...&quot; cp target/release/initium dist/linux/ cp -r assets
+dist/linux/ cd dist/linux &amp;&amp; tar -czf
+../initium-0.1.0-alpha-linux-x64.tar.gz . &amp;&amp; cd ../..  #
+Windows echo &quot;Packaging for Windows...&quot; cp
+target/release/initium.exe dist/windows/ 2&gt;/dev/null || true cp -r
+assets dist/windows/ cd dist/windows &amp;&amp; zip -r
+../initium-0.1.0-alpha-windows-x64.zip . &amp;&amp; cd ../..  # macOS
+echo &quot;Packaging for macOS...&quot; cp target/release/initium
+dist/macos/ cp -r assets dist/macos/ cd dist/macos &amp;&amp; tar
+-czf ../initium-0.1.0-alpha-macos-x64.tar.gz . &amp;&amp; cd ../.. 
+echo &quot;✅ Builds complete!&quot; echo &quot;Artifacts in
+./dist/&quot; ls -lah dist/*.{tar.gz,zip} 2&gt;/dev/null || true</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">4.2 GitHub Actions CI/CD</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 6pt">name:
+Build &amp; Release  on:   push:     tags:       - &quot;v*&quot;  
+workflow_dispatch:  jobs:   build:     runs-on: ${{ matrix.os }}    
+strategy:       matrix:         os: [ubuntu-latest, windows-latest,
+macos-latest]         include:           - os: ubuntu-latest         
+   artifact: initium-linux-x64.tar.gz           - os: windows-latest 
+           artifact: initium-windows-x64.zip           - os:
+macos-latest             artifact: initium-macos-x64.tar.gz     
+steps:       - uses: actions/checkout@v3        - name: Install Rust 
+       uses: actions-rs/toolchain@v1         with:          
+toolchain: stable        - name: Build         run: cargo build
+--release        - name: Test         run: cargo test --release      
+ - name: Package         run: bash build.sh        - name: Upload
+artifacts         uses: actions/upload-artifact@v3         with:     
+     name: ${{ runner.os }}-build           path: dist/*.{tar.gz,zip}
+       - name: Create Release         uses:
+softprops/action-gh-release@v1         if: startsWith(github.ref,
+&quot;refs/tags/&quot;)         with:           files: dist/*</font></font></font></p>
+<h1 class="western">5. TÂCHES DÉTAILLÉES SPRINT 3</h1>
+<h2 class="western">5.1 Tableau des Tâches</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="60"/>
+	<col width="188"/>
+	<col width="167"/>
+	<col width="96"/>
+	<col width="60"/>
+	<tr>
+		<td width="60" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>ID</b></font></p>
+		</td>
+		<td width="188" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Tâche</b></font></p>
+		</td>
+		<td width="167" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Dépendances</b></font></p>
+		</td>
+		<td width="96" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Durée</b></font></p>
+		</td>
+		<td width="60" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Owner</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-004</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			unitaires Rust</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			1-3</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-005</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			intégration API</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-004</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-006</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			E2E frontend</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-005</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-007</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			performance</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-006</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-008</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			multiplateforme</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-007</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-009</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Export
+			PDF/HTML</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			1-3</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Backend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-010</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Build
+			scripts</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-009</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DevOps</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-011</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">CI/CD
+			setup GitHub</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-010</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DevOps</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DOC-001</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Documentation
+			user</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-008</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tech
+			Writer</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">5.2 Calendrier Sprint 3</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="70"/>
+	<col width="261"/>
+	<col width="260"/>
+	<tr>
+		<td width="70" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Semaine</b></font></p>
+		</td>
+		<td width="261" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Focus Principal</b></font></p>
+		</td>
+		<td width="260" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Livrables</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S1</span></font></p>
+		</td>
+		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			complets + Export config</span></font></p>
+		</td>
+		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Coverage
+			≥80% + US-008 done</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S2</span></font></p>
+		</td>
+		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Build
+			+ Release + Documentation</span></font></p>
+		</td>
+		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">v0.1.0-alpha
+			binaires + docs</span></font></p>
+		</td>
+	</tr>
+</table>
+<h1 class="western">6. LIVRABLES FINAUX</h1>
+<h2 class="western">6.1 Artefacts Release</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="123"/>
+	<col width="225"/>
+	<col width="244"/>
+	<tr>
+		<td width="123" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Artefact</b></font></p>
+		</td>
+		<td width="225" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Description</b></font></p>
+		</td>
+		<td width="244" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Localisation</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">initium-linux</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Binary
+			executable Linux x64</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">dist/initium-linux-x64.tar.gz</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">initium-windows</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Binary
+			executable Windows x64</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">dist/initium-windows-x64.zip</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">initium-macos</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Binary
+			executable macOS x64</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">dist/initium-macos-x64.tar.gz</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Source
+			code</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">GitHub
+			repository tag v0.1.0-alpha</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">github.com/initium-dashboard</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Documentation</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">User
+			guide PDF + API docs</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">docs/USER_GUIDE.pdf</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="123" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test
+			reports</span></font></p>
+		</td>
+		<td width="225" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Coverage
+			+ Performance results</span></font></p>
+		</td>
+		<td width="244" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">docs/TEST_REPORT.html</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">6.2 Contenu Documentation</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">README.md - Vue
+	d'ensemble du projet</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">INSTALLATION.md
+	- Guide d'installation par OS</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">USER_GUIDE.pdf
+	- Manuel utilisateur</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">API.md -
+	Documentation API REST</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">ARCHITECTURE.md
+	- Architecture technique</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">CONTRIBUTING.md
+	- Guide contribution</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">CHANGELOG.md
+	- Notes release v0.1.0-alpha</p></li>
+</ul>
+<h1 class="western">7. CHECKLIST DE RELEASE</h1>
+<h3 class="western">Tests ✅</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests
+	unitaires: coverage ≥80%</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests
+	intégration: tous les modules</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests E2E:
+	workflow complet</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests
+	multiplateforme: Linux/Win/macOS</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Performance:
+	&lt; 2s load time</p></li>
+</ul>
+<h3 class="western">Code Quality ✅</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">cargo clippy: 0
+	warnings</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">cargo fmt: code
+	formatted</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">ESLint: 0
+	warnings</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Security
+	audit: no vulnerabilities</p></li>
+</ul>
+<h3 class="western">Builds ✅</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Linux binary:
+	tested on Ubuntu 20.04+</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Windows binary:
+	tested on Windows 10+</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">macOS binary:
+	tested on macOS 10.15+</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">All
+	artifacts signed &amp; checksummed</p></li>
+</ul>
+<h3 class="western">Documentation ✅</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">README.md
+	complete</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Installation
+	guide for all OS</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">API
+	documentation complete</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Architecture
+	documentation</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">User guide
+	PDF</p></li>
+</ul>
+<h3 class="western">Release ✅</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tag GitHub:
+	v0.1.0-alpha</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Release notes
+	published</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Binaries
+	uploaded to releases</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">Announcement
+	blog/socials</p></li>
+</ul>
+<h1 class="western">8. ROADMAP POST-RELEASE</h1>
+<h2 class="western">v0.2.0 - Enhanced Features</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Drag &amp; drop
+	launcher reordering</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Custom themes
+	support</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Search/filter
+	functionality</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Cloud sync
+	configuration</p></li>
+</ul>
+<h2 class="western">v0.3.0 - Advanced</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Browser
+	extension integration</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Keyboard
+	shortcuts customization</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Analytics
+	dashboard</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">Internationalization
+	(i18n)</p></li>
+</ul>
+<h2 class="western">v1.0.0 - Production Ready</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Commercial
+	distribution</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Enterprise
+	features</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Premium support</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.64cm">Team
+	collaboration</p></li>
+</ul>
+<h1 class="western">9. RÉSUMÉ PROJET COMPLET</h1>
+<h2 class="western">Phases Complétées</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="110"/>
+	<col width="158"/>
+	<col width="158"/>
+	<col width="157"/>
+	<tr>
+		<td width="110" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Phase</b></font></p>
+		</td>
+		<td width="158" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Livrable</b></font></p>
+		</td>
+		<td width="158" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Statut</b></font></p>
+		</td>
+		<td width="157" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Date</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="110" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			1</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Backlog
+			&amp; Architecture</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">COMPLETE</span></font></p>
+		</td>
+		<td width="157" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Semaine
+			1</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="110" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			2</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Core
+			Engine Rust</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">COMPLETE</span></font></p>
+		</td>
+		<td width="157" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Semaines
+			2-3</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="110" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			3</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Interface
+			Frontend</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">COMPLETE</span></font></p>
+		</td>
+		<td width="157" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Semaines
+			4-5</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="110" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
+			4</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA
+			&amp; Release</span></font></p>
+		</td>
+		<td width="158" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			✅ <font size="2" style="font-size: 10pt"><span style="font-weight: normal">COMPLETE</span></font></p>
+		</td>
+		<td width="157" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Semaines
+			6-7</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">Métriques Finales</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Code Rust:
+	~2000 lignes</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Code
+	JavaScript: ~1500 lignes</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">CSS: ~800
+	lignes</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests: 50+ test
+	cases</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Coverage: ≥80%</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Durée
+	totale: 7-8 semaines</p></li>
+</ul>
+<h2 class="western">Succès</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅
+	Multi-plateforme fonctionnel</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅
+	Architecture modulaire et extensible</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Tests
+	complets et performants</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅
+	Documentation professionnelle</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.64cm">✅ Prêt
+	pour production v0.1.0-alpha</p></li>
+</ul>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0cm; border-top: 1px solid #cccccc; border-bottom: none; border-left: none; border-right: none; padding-top: 0.04cm; padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm">
+<font color="#95a5a6"><font size="2" style="font-size: 9pt"><i>Sprint
+3 - QA &amp; Release | Initium v0.1.0-alpha Généré: 06/02/2026
+Repository: https://github.com/initium-dashboard</i></font></font></p>
+</body>
+</html>

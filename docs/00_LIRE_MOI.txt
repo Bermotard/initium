@@ -50,7 +50,7 @@
 ═══════════════════════════════════════════════════════════════════════════════
 
 Documentation:
-  • 5 documents .docx (46 pages)
+  • 5 documents .html (46 pages)
   • 4 guides markdown (.md)
   • Code examples inclus (Rust, JS, CSS, Bash, YAML)
   • ~2000 lignes de documentation
@@ -139,11 +139,11 @@ Infrastructure:
 ├── GITHUB_SETUP_COMPLETE.md      # Setup GitHub (complet)
 ├── GITHUB_SETUP_GUIDE.md         # Guide GitHub (pas à pas)
 │
-├── Initium_Phase1_Agile.docx     # Phase 1: Vision & Planning
-├── Initium_Phase2_Sprint1.docx   # Phase 2: Core Engine
-├── Initium_Cargo_Configuration.docx  # Cargo.toml + Critères
-├── Initium_Phase3_Sprint2.docx   # Phase 3: Interface & CRUD
-├── Initium_Phase4_Sprint3.docx   # Phase 4: QA & Release
+├── Initium_Phase1_Agile.html     # Phase 1: Vision & Planning
+├── Initium_Phase2_Sprint1.html   # Phase 2: Core Engine
+├── Initium_Cargo_Configuration.html  # Cargo.toml + Critères
+├── Initium_Phase3_Sprint2.html   # Phase 3: Interface & CRUD
+├── Initium_Phase4_Sprint3.html   # Phase 4: QA & Release
 │
 ├── Cargo.toml                    # Configuration Rust (fichier brut)
 └── Initium_Phase1_Agile.pdf      # Bonus: Phase 1 en PDF

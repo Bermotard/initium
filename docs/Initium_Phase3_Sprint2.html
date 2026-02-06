@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.2.7.2 (Linux)"/>
+	<meta name="author" content="Un-named"/>
+	<meta name="created" content="2026-02-06T09:42:22"/>
+	<meta name="changedby" content="Un-named"/>
+	<meta name="changed" content="2026-02-06T09:42:22"/>
+	<meta name="AppVersion" content="15.0000"/>
+	<style type="text/css">
+		@page { size: 21.59cm 27.94cm; margin: 2.54cm }
+		p { color: #000000; line-height: 115%; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.25cm; direction: ltr; background: transparent }
+		p.western { font-family: "Arial", serif; font-size: 11pt; so-language: fr-FR }
+		p.cjk { font-family: "Arial"; font-size: 11pt; so-language: zh-CN }
+		p.ctl { font-family: "Arial"; font-size: 11pt; so-language: hi-IN }
+		h1 { color: #1a1a1a; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.21cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h1.western { font-family: "Arial", sans-serif; font-size: 28pt; so-language: fr-FR; font-weight: bold }
+		h1.cjk { font-family: "Arial"; font-size: 28pt; so-language: zh-CN; font-weight: bold }
+		h1.ctl { font-family: "Arial"; font-size: 28pt; so-language: hi-IN; font-weight: bold }
+		h2 { color: #2c3e50; text-align: left; orphans: 2; widows: 2; margin-top: 0.32cm; margin-bottom: 0.18cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h2.western { font-family: "Arial", sans-serif; font-size: 16pt; so-language: fr-FR; font-weight: bold }
+		h2.cjk { font-family: "Arial"; font-size: 16pt; so-language: zh-CN; font-weight: bold }
+		h2.ctl { font-family: "Arial"; font-size: 16pt; so-language: hi-IN; font-weight: bold }
+		h3 { color: #34495e; text-align: left; orphans: 2; widows: 2; margin-top: 0.21cm; margin-bottom: 0.14cm; direction: ltr; background: transparent; page-break-after: avoid }
+		h3.western { font-family: "Arial", sans-serif; font-size: 13pt; so-language: fr-FR; font-weight: bold }
+		h3.cjk { font-family: "Arial"; font-size: 13pt; so-language: zh-CN; font-weight: bold }
+		h3.ctl { font-family: "Arial"; font-size: 13pt; so-language: hi-IN; font-weight: bold }
+		a:link { color: #0563c1; text-decoration: underline }
+	</style>
+</head>
+<body lang="fr-FR" text="#000000" link="#0563c1" vlink="#800000" dir="ltr"><p class="western" style="line-height: 100%; margin-bottom: 0.42cm">
+<br/>
+<br/>
+
+</p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.21cm">
+<font color="#1a1a1a">🎨 <font size="6" style="font-size: 28pt"><b>PHASE
+3 - SPRINT 2</b></font></font></p>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0.42cm">
+<font color="#2c3e50"><font size="4" style="font-size: 16pt"><b>Interface
+&amp; CRUD - Frontend Servo</b></font></font></p>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="122"/>
+	<col width="480"/>
+	<tr>
+		<td width="122" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>OBJECTIF</b></font></p>
+		</td>
+		<td width="480" bgcolor="#27ae60" style="background: #27ae60; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western">
+			<font color="#ffffff"><font size="2" style="font-size: 10pt"><b>Implémenter
+			interface graphique et opérations CRUD pour gérer les lanceurs</b></font></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western" style="margin-top: 0cm; margin-bottom: 0.21cm">APERÇU
+DU SPRINT</h2>
+<p class="western" align="justify" style="line-height: 100%; margin-bottom: 0.21cm">
+Sprint 2 construit sur l'architecture core de Sprint 1. Nous
+développerons l'interface utilisateur avec Servo, implémente un
+système de grille responsive, et ajouterons les fonctionnalités
+CRUD (Create, Read, Update, Delete) pour gérer les lanceurs
+directement depuis l'application.</p>
+<h3 class="western">User Stories du Sprint</h3>
+<ul>
+	<li value="1"><p style="line-height: 100%; margin-bottom: 0cm">US-002:
+	Afficher grille d'icônes avec noms</p></li>
+</ul>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">US-005: Ajouter
+	un nouveau lanceur via l'UI</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">US-006:
+	Supprimer un lanceur existant</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">US-007:
+	Interface responsive et performante</p></li>
+</ul>
+<p class="western" align="center" style="line-height: 100%; margin-top: 0.64cm; margin-bottom: 0cm">
+<font color="#7f8c8d"><font size="2" style="font-size: 9pt"><i>Dépendances:
+Sprint 1 core + Servo | Durée: 2 semaines</i></font></font></p>
+<h1 class="western">1. STRUCTURE FRONTEND</h1>
+<h2 class="western">1.1 Architecture des Assets</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="2" style="font-size: 9pt">assets/
+├── index.html          # Page principale ├── styles.css 
+        # Design global ├── app.js              # Logique
+application ├── modules/ │   ├── launcher.js     #
+Gestion lanceurs │   ├── modal.js        # Dialogs │   ├──
+api.js          # Appels API │   └── storage.js      # Local
+storage ├── icons/ │   ├── google.svg      # Icônes
+lanceurs │   ├── vscode.svg │   └── ... └──
+fonts/     └── roboto.woff2    # Polices web</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">1.2 Fichier HTML Principal</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">&lt;!DOCTYPE
+html&gt; &lt;html lang=&quot;fr&quot;&gt; &lt;head&gt;   &lt;meta
+charset=&quot;UTF-8&quot;&gt;   &lt;meta name=&quot;viewport&quot;
+content=&quot;width=device-width, initial-scale=1.0&quot;&gt;  
+&lt;title&gt;Initium - Dashboard Intelligent&lt;/title&gt;   &lt;link
+rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt; &lt;/head&gt;
+&lt;body&gt;   &lt;div id=&quot;app&quot; class=&quot;app-container&quot;&gt;
+    &lt;!-- Header --&gt;     &lt;header class=&quot;app-header&quot;&gt;
+      &lt;h1&gt;Initium&lt;/h1&gt;       &lt;div
+class=&quot;header-actions&quot;&gt;         &lt;button
+id=&quot;btn-add-launcher&quot; class=&quot;btn btn-primary&quot;&gt;+
+Ajouter&lt;/button&gt;         &lt;button id=&quot;btn-settings&quot;
+class=&quot;btn btn-secondary&quot;&gt;⚙️&lt;/button&gt;      
+&lt;/div&gt;     &lt;/header&gt;      &lt;!-- Main Grid --&gt;    
+&lt;main class=&quot;app-main&quot;&gt;       &lt;div
+id=&quot;launcher-grid&quot; class=&quot;launcher-grid&quot;&gt;     
+   &lt;!-- Launchers inserted dynamically --&gt;       &lt;/div&gt;  
+  &lt;/main&gt;      &lt;!-- Modal Add Launcher --&gt;     &lt;div
+id=&quot;modal-add&quot; class=&quot;modal hidden&quot;&gt;      
+&lt;div class=&quot;modal-content&quot;&gt;         &lt;h2&gt;Ajouter
+un lanceur&lt;/h2&gt;         &lt;form id=&quot;form-add-launcher&quot;&gt;
+          &lt;input type=&quot;text&quot; id=&quot;input-name&quot;
+placeholder=&quot;Nom&quot; required&gt;           &lt;input
+type=&quot;text&quot; id=&quot;input-target&quot; placeholder=&quot;URL
+ou chemin&quot; required&gt;           &lt;select id=&quot;input-type&quot;&gt;
+            &lt;option value=&quot;web&quot;&gt;Site Web&lt;/option&gt;
+            &lt;option value=&quot;app&quot;&gt;Application&lt;/option&gt;
+          &lt;/select&gt;           &lt;input type=&quot;text&quot;
+id=&quot;input-icon&quot; placeholder=&quot;Icône (URL ou chemin)&quot;&gt;
+          &lt;div class=&quot;modal-actions&quot;&gt;            
+&lt;button type=&quot;submit&quot; class=&quot;btn
+btn-success&quot;&gt;Ajouter&lt;/button&gt;             &lt;button
+type=&quot;button&quot; class=&quot;btn btn-cancel&quot;
+data-close=&quot;true&quot;&gt;Annuler&lt;/button&gt;          
+&lt;/div&gt;         &lt;/form&gt;       &lt;/div&gt;     &lt;/div&gt;
+     &lt;!-- Toast Notifications --&gt;     &lt;div
+id=&quot;toast-container&quot; class=&quot;toast-container&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;    &lt;script src=&quot;modules/api.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;modules/storage.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;modules/launcher.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;modules/modal.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt; &lt;/body&gt;
+&lt;/html&gt;</font></font></font></p>
+<h1 class="western">2. STYLES CSS - DESIGN SYSTEM</h1>
+<h2 class="western">2.1 CSS Principal (styles.css)</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">/*
+Variables &amp; Couleurs */ :root {   --color-bg: #1a1a1a;  
+--color-bg-secondary: #2d2d2d;   --color-text: #ffffff;  
+--color-text-secondary: #b0b0b0;   --color-accent: #3498db;  
+--color-success: #27ae60;   --color-error: #e74c3c;   --color-hover:
+#2980b9;   --spacing: 24px;   --border-radius: 8px;   --transition:
+all 0.2s ease-out; }  /* Reset &amp; Base */ * {   margin: 0;  
+padding: 0;   box-sizing: border-box; }  body {   font-family:
+-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+Ubuntu, sans-serif;   background: var(--color-bg);   color:
+var(--color-text);   font-size: 16px;   line-height: 1.5; }  /* App
+Container */ .app-container {   width: 100%;   height: 100vh;  
+display: flex;   flex-direction: column; }  /* Header */ .app-header
+{   background: var(--color-bg-secondary);   padding: 20px 40px;  
+display: flex;   justify-content: space-between;   align-items:
+center;   border-bottom: 1px solid rgba(255, 255, 255, 0.1);  
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }  .app-header h1 {  
+font-size: 28px;   font-weight: 700;   letter-spacing: 2px; } 
+.header-actions {   display: flex;   gap: 12px; }  /* Buttons */ .btn
+{   padding: 10px 20px;   border: none;   border-radius:
+var(--border-radius);   cursor: pointer;   font-size: 14px;  
+font-weight: 600;   transition: var(--transition); }  .btn-primary { 
+ background: var(--color-accent);   color: white; } 
+.btn-primary:hover {   background: var(--color-hover);   transform:
+translateY(-2px);   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3); }
+ .btn-secondary {   background: transparent;   color:
+var(--color-text-secondary);   border: 1px solid
+var(--color-text-secondary); }  .btn-secondary:hover {   color:
+var(--color-text);   border-color: var(--color-text); }  .btn-success
+{   background: var(--color-success);   color: white; } 
+.btn-success:hover {   background: #229954; }  .btn-cancel {  
+background: transparent;   color: var(--color-text-secondary);  
+border: 1px solid var(--color-text-secondary); }  /* Main Content */
+.app-main {   flex: 1;   overflow-y: auto;   padding: 40px; }  /*
+Launcher Grid */ .launcher-grid {   display: grid;  
+grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));   gap:
+var(--spacing);   animation: fadeIn 0.3s ease-out; }  /* Launcher
+Item */ .launcher-item {   display: flex;   flex-direction: column;  
+align-items: center;   justify-content: center;   padding: 20px;  
+background: var(--color-bg-secondary);   border-radius:
+var(--border-radius);   cursor: pointer;   transition:
+var(--transition);   position: relative;   group: &quot;launcher&quot;;
+}  .launcher-item:hover {   background: var(--color-bg);   transform:
+scale(1.08);   box-shadow: 0 8px 24px rgba(52, 152, 219, 0.2); } 
+.launcher-item:hover .launcher-delete {   opacity: 1; } 
+.launcher-icon {   width: 64px;   height: 64px;   margin-bottom:
+12px;   object-fit: contain; }  .launcher-name {   font-size: 14px;  
+text-align: center;   word-wrap: break-word;   max-width: 100%;  
+color: var(--color-text); }  .launcher-delete {   position: absolute;
+  top: 8px;   right: 8px;   width: 24px;   height: 24px;  
+background: var(--color-error);   border: none;   border-radius: 50%;
+  color: white;   cursor: pointer;   opacity: 0;   transition:
+var(--transition);   font-size: 16px;   display: flex;   align-items:
+center;   justify-content: center; }  .launcher-delete:hover {  
+background: #c0392b;   transform: scale(1.1); }</font></font></font></p>
+<h2 class="western">2.2 CSS - Modal &amp; Notifications</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 7pt">/*
+Modal */ .modal {   position: fixed;   top: 0;   left: 0;   width:
+100%;   height: 100%;   background: rgba(0, 0, 0, 0.7);   display:
+flex;   align-items: center;   justify-content: center;   z-index:
+1000;   opacity: 1;   transition: opacity 0.3s ease-out; } 
+.modal.hidden {   display: none;   opacity: 0; }  .modal-content {  
+background: var(--color-bg-secondary);   padding: 40px;  
+border-radius: var(--border-radius);   max-width: 500px;   width:
+90%;   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);   animation:
+slideUp 0.3s ease-out; }  .modal-content h2 {   margin-bottom: 24px; 
+ font-size: 24px; }  .modal-content form {   display: flex;  
+flex-direction: column;   gap: 16px; }  .modal-content input,
+.modal-content select {   padding: 12px 16px;   background:
+var(--color-bg);   border: 1px solid rgba(255, 255, 255, 0.1);  
+border-radius: var(--border-radius);   color: var(--color-text);  
+font-size: 14px;   transition: var(--transition); }  .modal-content
+input:focus, .modal-content select:focus {   outline: none;  
+border-color: var(--color-accent);   box-shadow: 0 0 0 3px rgba(52,
+152, 219, 0.1); }  .modal-actions {   display: flex;   gap: 12px;  
+margin-top: 24px; }  .modal-actions .btn {   flex: 1; }  /* Toast
+Notifications */ .toast-container {   position: fixed;   bottom:
+24px;   right: 24px;   z-index: 2000; }  .toast {   background:
+var(--color-bg-secondary);   border-left: 4px solid
+var(--color-accent);   color: var(--color-text);   padding: 16px
+24px;   margin-bottom: 12px;   border-radius: var(--border-radius);  
+min-width: 300px;   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  
+animation: slideInRight 0.3s ease-out; }  .toast.success {  
+border-left-color: var(--color-success); }  .toast.error {  
+border-left-color: var(--color-error); }  /* Animations */ @keyframes
+fadeIn {   from {     opacity: 0;   }   to {     opacity: 1;   } } 
+@keyframes slideUp {   from {     transform: translateY(20px);    
+opacity: 0;   }   to {     transform: translateY(0);     opacity: 1; 
+ } }  @keyframes slideInRight {   from {     transform:
+translateX(400px);     opacity: 0;   }   to {     transform:
+translateX(0);     opacity: 1;   } }  /* Responsive Design */ @media
+(max-width: 1200px) {   .launcher-grid {     grid-template-columns:
+repeat(auto-fit, minmax(100px, 1fr));     gap: 16px;   } }  @media
+(max-width: 768px) {   .app-header {     flex-direction: column;    
+gap: 16px;   }      .app-main {     padding: 20px;   }     
+.launcher-grid {     grid-template-columns: repeat(auto-fit,
+minmax(80px, 1fr));     gap: 12px;   }      .launcher-item {    
+padding: 12px;   }      .launcher-icon {     width: 48px;     height:
+48px;   }      .launcher-name {     font-size: 12px;   } }</font></font></font></p>
+<h1 class="western">3. JAVASCRIPT - LOGIQUE APPLICATION</h1>
+<h2 class="western">3.1 Module API (api.js)</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
+modules/api.js const API_BASE = 'http://127.0.0.1:8080/api';  class
+APIClient {   async getLaunchers() {     try {       const response =
+await fetch(`${API_BASE}/launchers`);       if (!response.ok) throw
+new Error('Failed to fetch launchers');       return await
+response.json();     } catch (error) {       console.error('Error
+fetching launchers:', error);       throw error;     }   }    async
+addLauncher(launcher) {     try {       const response = await
+fetch(`${API_BASE}/add-launcher`, {         method: 'POST',        
+headers: { 'Content-Type': 'application/json' },         body:
+JSON.stringify(launcher)       });       if (!response.ok) throw new
+Error('Failed to add launcher');       return await response.json(); 
+   } catch (error) {       console.error('Error adding launcher:',
+error);       throw error;     }   }    async removeLauncher(id) {   
+ try {       const response = await
+fetch(`${API_BASE}/launcher/${id}`, {         method: 'DELETE'      
+});       if (!response.ok) throw new Error('Failed to delete
+launcher');       return await response.json();     } catch (error) {
+      console.error('Error removing launcher:', error);       throw
+error;     }   }    async executeLauncher(id) {     try {       const
+response = await fetch(`${API_BASE}/execute`, {         method:
+'POST',         headers: { 'Content-Type': 'application/json' },     
+   body: JSON.stringify({ id })       });       if (!response.ok)
+throw new Error('Failed to execute launcher');       return await
+response.json();     } catch (error) {       console.error('Error
+executing launcher:', error);       throw error;     }   } }  const
+api = new APIClient();</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">3.2 Module Launcher (launcher.js)</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
+modules/launcher.js class LauncherManager {   constructor() {    
+this.launchers = [];     this.grid =
+document.getElementById('launcher-grid');   }    async initialize() {
+    try {       this.launchers = await api.getLaunchers();      
+this.render();     } catch (error) {       showToast('Erreur lors du
+chargement', 'error');     }   }    render() {    
+this.grid.innerHTML = '';     this.launchers.forEach(launcher =&gt; {
+      const item = document.createElement('div');      
+item.className = 'launcher-item';       item.innerHTML = `        
+&lt;img src=&quot;${launcher.icon}&quot; alt=&quot;${launcher.name}&quot;
+class=&quot;launcher-icon&quot;&gt;         &lt;span
+class=&quot;launcher-name&quot;&gt;${launcher.name}&lt;/span&gt;     
+   &lt;button class=&quot;launcher-delete&quot;
+data-id=&quot;${launcher.id}&quot;&gt;×&lt;/button&gt;       `;     
+        // Click to execute       item.addEventListener('click', (e)
+=&gt; {         if (!e.target.classList.contains('launcher-delete'))
+{           this.execute(launcher.id);         }       });           
+  // Delete button      
+item.querySelector('.launcher-delete').addEventListener('click', (e)
+=&gt; {         e.stopPropagation();        
+this.delete(launcher.id);       });             
+this.grid.appendChild(item);     });   }    async execute(id) {    
+try {       await api.executeLauncher(id);     } catch (error) {     
+ showToast('Impossible de lancer', 'error');     }   }    async
+add(launcher) {     try {       const result = await
+api.addLauncher(launcher);       this.launchers.push(result);      
+this.render();       showToast('Lanceur ajouté', 'success');     }
+catch (error) {       showToast('Erreur lors de l'ajout', 'error');  
+  }   }    async delete(id) {     if (!confirm('Êtes-vous sûr ?'))
+return;     try {       await api.removeLauncher(id);      
+this.launchers = this.launchers.filter(l =&gt; l.id !== id);      
+this.render();       showToast('Lanceur supprimé', 'success');     }
+catch (error) {       showToast('Erreur lors de la suppression',
+'error');     }   } }  const launcherManager = new LauncherManager();</font></font></font></p>
+<h2 class="western">3.3 Module Modal (modal.js)</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
+modules/modal.js class ModalManager {   constructor() {    
+this.modal = document.getElementById('modal-add');     this.form =
+document.getElementById('form-add-launcher');     this.btnAdd =
+document.getElementById('btn-add-launcher');    
+this.setupListeners();   }    setupListeners() {    
+this.btnAdd.addEventListener('click', () =&gt; this.open());    
+this.form.addEventListener('submit', (e) =&gt; this.handleSubmit(e));
+    document.querySelectorAll('[data-close=&quot;true&quot;]').forEach(btn
+=&gt; {       btn.addEventListener('click', () =&gt; this.close());  
+  });     this.modal.addEventListener('click', (e) =&gt; {       if
+(e.target === this.modal) this.close();     });   }    open() {    
+this.modal.classList.remove('hidden');   }    close() {    
+this.modal.classList.add('hidden');     this.form.reset();   }   
+handleSubmit(e) {     e.preventDefault();     const launcher = {     
+ name: document.getElementById('input-name').value,       target:
+document.getElementById('input-target').value,       type:
+document.getElementById('input-type').value,       icon:
+document.getElementById('input-icon').value ||
+'assets/icons/default.svg'     };     launcherManager.add(launcher); 
+   this.close();   } }  const modalManager = new ModalManager();  //
+Utility: Show Toast Notification function showToast(message, type =
+'info') {   const container =
+document.getElementById('toast-container');   const toast =
+document.createElement('div');   toast.className = `toast ${type}`;  
+toast.textContent = message;   container.appendChild(toast);  
+setTimeout(() =&gt; toast.remove(), 4000); }</font></font></font></p>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">3.4 App Entrypoint (app.js)</h2>
+<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
+app.js // Initialize application on DOM ready
+document.addEventListener('DOMContentLoaded', () =&gt; {  
+console.log('🚀 Initium starting...');      // Initialize launcher
+manager   launcherManager.initialize();      // Setup keyboard
+shortcuts   document.addEventListener('keydown', (e) =&gt; {     if
+((e.ctrlKey || e.metaKey) &amp;&amp; e.key === 'n') {      
+e.preventDefault();       modalManager.open();     }     if (e.key
+=== 'Escape') {       modalManager.close();     }   });     
+console.log('✅ Initium ready'); });</font></font></font></p>
+<h1 class="western">4. TÂCHES DÉTAILLÉES SPRINT 2</h1>
+<h2 class="western">4.1 Tableau des Tâches</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="60"/>
+	<col width="188"/>
+	<col width="167"/>
+	<col width="96"/>
+	<col width="60"/>
+	<tr>
+		<td width="60" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>ID</b></font></p>
+		</td>
+		<td width="188" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Tâche</b></font></p>
+		</td>
+		<td width="167" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Dépendances</b></font></p>
+		</td>
+		<td width="96" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Durée</b></font></p>
+		</td>
+		<td width="60" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Owner</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-001</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Index.html
+			+ structure</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Assets
+			setup</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-002</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">CSS
+			complet + responsive</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-001</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-003</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Grille
+			+ renderer</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-002</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-004</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">API
+			client</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-001
+			complete</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-005</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Modal
+			+ forms</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-004</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-006</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Launcher
+			manager</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-005</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-007</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Notifications</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-006</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA-003</span></font></p>
+		</td>
+		<td width="188" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			UI + E2E</span></font></p>
+		</td>
+		<td width="167" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UI-007</span></font></p>
+		</td>
+		<td width="96" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
+		</td>
+		<td width="60" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h2 class="western">4.2 Calendrier Sprint 2</h2>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="70"/>
+	<col width="261"/>
+	<col width="260"/>
+	<tr>
+		<td width="70" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Semaine</b></font></p>
+		</td>
+		<td width="261" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Focus Technique</b></font></p>
+		</td>
+		<td width="260" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Livrables</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S1</span></font></p>
+		</td>
+		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">HTML
+			+ CSS + Grille responsive</span></font></p>
+		</td>
+		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend
+			statique opérationnel</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S2</span></font></p>
+		</td>
+		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">JavaScript
+			+ API + CRUD + Tests</span></font></p>
+		</td>
+		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Interface
+			complète + fonctionnelle</span></font></p>
+		</td>
+	</tr>
+</table>
+<h1 class="western">5. CRITÈRES D'ACCEPTATION SPRINT 2</h1>
+<h2 class="western">US-002: Afficher Grille d'Icônes</h2>
+<h3 class="western">Critères Fonctionnels</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Grille CSS
+	Grid responsive (3-5 colonnes)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Icônes
+	affichées (64x64px SVG)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Noms
+	visibles sous icônes</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Responsive
+	sur mobile/tablet/desktop</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">✅
+	Animations hover/click</p></li>
+</ul>
+<h2 class="western">US-005: Ajouter Lanceur</h2>
+<h3 class="western">Critères Fonctionnels</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Bouton '+
+	Ajouter' visible en header</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Modal avec
+	formulaire</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Champs:
+	nom, target (URL/chemin), type, icône</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Validation
+	des champs requis</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ API POST
+	/api/add-launcher appelée</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">✅ Nouveau
+	lanceur apparaît dans grille</p></li>
+</ul>
+<h2 class="western">US-006: Supprimer Lanceur</h2>
+<h3 class="western">Critères Fonctionnels</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Bouton
+	delete (×) visible au hover</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅
+	Confirmation avant suppression</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ API DELETE
+	/api/launcher/:id appelée</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.21cm">✅ Lanceur
+	retiré de la grille</p></li>
+</ul>
+<h2 class="western">US-007: Interface Responsive</h2>
+<h3 class="western">Critères Performance</h3>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Aucun lag
+	au scroll (60 FPS)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Temps de
+	chargement &lt; 2s</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Bundle JS &lt;
+	500KB</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✅ Pas de
+	layout thrashing</p></li>
+</ul>
+<h1 class="western">6. RISQUES ET MITIGATION</h1>
+<table width="624" cellpadding="5" cellspacing="0">
+	<col width="95"/>
+	<col width="160"/>
+	<col width="203"/>
+	<col width="124"/>
+	<tr>
+		<td width="95" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Risque</b></font></p>
+		</td>
+		<td width="160" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Impact</b></font></p>
+		</td>
+		<td width="203" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Mitigation</b></font></p>
+		</td>
+		<td width="124" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
+			<font size="2" style="font-size: 10pt"><b>Owner</b></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="95" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Servo
+			rendering issues</span></font></p>
+		</td>
+		<td width="160" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Retard
+			2-3j</span></font></p>
+		</td>
+		<td width="203" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			Servo jour 1</span></font></p>
+		</td>
+		<td width="124" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend
+			Lead</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="95" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">API
+			bottleneck</span></font></p>
+		</td>
+		<td width="160" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Retard
+			1-2j</span></font></p>
+		</td>
+		<td width="203" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Coordination
+			Dev ↔ Frontend</span></font></p>
+		</td>
+		<td width="124" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Scrum
+			Master</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="95" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Performance
+			CSS Grid</span></font></p>
+		</td>
+		<td width="160" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">UX
+			dégradée</span></font></p>
+		</td>
+		<td width="203" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Benchmark
+			jour 3 S1</span></font></p>
+		</td>
+		<td width="124" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Frontend
+			Lead</span></font></p>
+		</td>
+	</tr>
+	<tr>
+		<td width="95" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Cross-browser
+			issues</span></font></p>
+		</td>
+		<td width="160" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Bugs
+			UI</span></font></p>
+		</td>
+		<td width="203" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
+			3 OS parallèles</span></font></p>
+		</td>
+		<td width="124" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
+			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
+		</td>
+	</tr>
+</table>
+<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
+<br/>
+
+</p>
+<h1 class="western">7. DÉFINITION OF DONE</h1>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Code
+	HTML/CSS/JS validé W3C</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Formaté
+	avec Prettier</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ ESLint 0
+	warnings</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Tests E2E
+	passants</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Responsive
+	testé 3 breakpoints</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Performance
+	Lighthouse &gt; 90</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">✅
+	Documentation utilisateur</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✅ Merge
+	vers main via PR</p></li>
+</ul>
+<h1 class="western">8. PHASE 4 - PROCHAINES ÉTAPES</h1>
+<h2 class="western">Sprint 3: QA &amp; Déploiement</h2>
+<ul>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests complets
+	multiplateforme</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Export
+	configuration (US-008)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Build releases
+	(Linux, Windows, macOS)</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0cm">Documentation
+	finalisée</p></li>
+	<li><p style="line-height: 100%; margin-bottom: 0.64cm">Release
+	v0.1.0-alpha</p></li>
+</ul>
+<p class="western" align="center" style="line-height: 100%; margin-bottom: 0cm; border-top: 1px solid #cccccc; border-bottom: none; border-left: none; border-right: none; padding-top: 0.04cm; padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm">
+<font color="#95a5a6"><font size="2" style="font-size: 9pt"><i>Sprint
+2 - Interface &amp; CRUD | Durée: 2 semaines Généré: 06/02/2026
+Repository: https://github.com/initium-dashboard</i></font></font></p>
+</body>
+</html>
