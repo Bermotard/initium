@@ -1,0 +1,93 @@
+[package]
+name = "initium"
+version = "0.1.0-alpha"
+edition = "2021"
+authors = ["Initium Team"]
+description = "Tableau de bord intelligent multi-plateforme pour lancer applications et sites web"
+license = "MIT"
+repository = "https://github.com/initium-dashboard/initium"
+
+[dependencies]
+# UI & Rendering
+servo = "0.1"
+
+# Serialization & Configuration
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async Runtime
+tokio = { version = "1", features = ["full"] }
+
+# Desktop Integration
+tauri = { version = "1.5", features = ["shell-open", "window-all"] }
+
+# Logging
+log = "0.4"
+env_logger = "0.10"
+
+# Conditional Compilation
+cfg-if = "1.0"
+
+# HTTP Server
+hyper = { version = "0.14", features = ["full"] }
+http = "0.2"
+
+# Error Handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Utilities
+dirs = "5.0"
+lazy_static = "1.4"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+# XDG Base Directory Specification
+xdg = "2.4"
+# Desktop Entry Files
+freedesktop_entry_parser = "0.3"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+# Windows Registry Access
+winreg = "0.50"
+# Windows Shell Integration
+windows = { version = "0.48", features = ["Win32_Foundation", "Win32_System_Com"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# macOS Property Lists
+plist = "1.5"
+# Objective-C Runtime
+objc = "0.2"
+objc-foundation = "0.1"
+core-foundation = "0.9"
+
+[dev-dependencies]
+# Testing
+tokio-test = "0.4"
+mockito = "1.2"
+tempfile = "3.8"
+criterion = "0.5"
+
+[[bench]]
+name = "launcher_performance"
+harness = false
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.test]
+opt-level = 1
+
+[lib]
+name = "initium"
+path = "src/lib.rs"
+
+[[bin]]
+name = "initium"
+path = "src/main.rs"

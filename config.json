@@ -1,0 +1,21 @@
+{
+  "version": "0.1.0",
+  "theme": "dark",
+  "autostart": true,
+  "launchers": [
+    {
+      "id": "launcher_001",
+      "name": "Google",
+      "type": "web",
+      "target": "https://google.com",
+      "icon": "assets/icons/google.svg"
+    },
+    {
+      "id": "launcher_002",
+      "name": "GitHub",
+      "type": "web",
+      "target": "https://github.com",
+      "icon": "assets/icons/github.svg"
+    }
+  ]
+}
