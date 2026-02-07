@@ -8,8 +8,10 @@ license = "MIT"
 repository = "https://github.com/Bermotard/initium"
 
 [dependencies]
-# UI & Rendering
-servo = "0.1"
+# UI Framework (Tauri) - Sprint 1/2
+tauri = "2.10"
+
+tauri-build = "2.5.5"
 
 # Serialization & Configuration
 serde = { version = "1.0", features = ["derive"] }
@@ -18,58 +20,46 @@ serde_json = "1.0"
 # Async Runtime
 tokio = { version = "1", features = ["full"] }
 
-# Desktop Integration
-tauri = { version = "1.5", features = ["shell-open", "window-all"] }
-
 # Logging
 log = "0.4"
-env_logger = "0.10"
+env_logger = "0.11"
 
 # Conditional Compilation
 cfg-if = "1.0"
 
 # HTTP Server
-hyper = { version = "0.14", features = ["full"] }
-http = "0.2"
+hyper = { version = "1.8", features = ["full"] }
+http = "1.4"
 
 # Error Handling
 anyhow = "1.0"
-thiserror = "1.0"
+thiserror = "2.0"
 
 # Utilities
-dirs = "5.0"
+dirs = "6.0"
 lazy_static = "1.4"
 
+# Platform-specific
 [target.'cfg(target_os = "linux")'.dependencies]
-# XDG Base Directory Specification
-xdg = "2.4"
-# Desktop Entry Files
-freedesktop_entry_parser = "0.3"
+xdg = "3.0"
+freedesktop_entry_parser = "2.0"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-# Windows Registry Access
-winreg = "0.50"
-# Windows Shell Integration
-windows = { version = "0.48", features = ["Win32_Foundation", "Win32_System_Com"] }
+winreg = "0.55"
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_System_Com"] }
 
 [target.'cfg(target_os = "macos")'.dependencies]
-# macOS Property Lists
 plist = "1.5"
-# Objective-C Runtime
 objc = "0.2"
 objc-foundation = "0.1"
-core-foundation = "0.9"
+core-foundation = "0.10"
 
+# Development Dependencies
 [dev-dependencies]
-# Testing
 tokio-test = "0.4"
 mockito = "1.2"
 tempfile = "3.8"
-criterion = "0.5"
-
-[[bench]]
-name = "launcher_performance"
-harness = false
+criterion = "0.8"
 
 [profile.dev]
 opt-level = 0
@@ -91,3 +81,7 @@ path = "src/lib.rs"
 [[bin]]
 name = "initium"
 path = "src/main.rs"
+
+# Build dependencies for Tauri
+[build-dependencies]
+tauri-build = "2.5.5"
