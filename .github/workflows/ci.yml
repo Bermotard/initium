@@ -49,3 +49,4 @@ jobs:
           path: |
             target/release/initium*
             !target/release/*.d
+            
