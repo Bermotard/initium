@@ -73,10 +73,17 @@ async fn execute_binary(path: &str) -> Result<(), String> {
 
 #[cfg(target_os = "macos")]
 async fn execute_binary(path: &str) -> Result<(), String> {
-    std::process::Command::new(path)
+    let status = std::process::Command::new(path)
         .spawn()
+        .map_err(|e| e.to_string())?
+        .wait()
         .map_err(|e| e.to_string())?;
-    Ok(())
+    
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!("Process failed with status: {}", status))
+    }
 }
 
 #[cfg(test)]
@@ -134,21 +141,21 @@ mod tests {
 
     #[tokio::test]
     async fn test_execute_launcher_app() {
-    // Sur macOS, utiliser 'true' au lieu de '/usr/bin/test'
-    #[cfg(target_os = "macos")]
-    let app_path = "/bin/true";
+        #[cfg(target_os = "macos")]
+        let app_path = "/bin/true";
     
-    #[cfg(not(target_os = "macos"))]
-    let app_path = "/usr/bin/test";
+        #[cfg(not(target_os = "macos"))]
+        let app_path = "/usr/bin/true";
     
-    let launcher = Launcher {
-        id: "test".to_string(),
-        name: "Test".to_string(),
-        launch_type: LaunchType::App,
-        target: app_path.to_string(),
-        icon: "icon.png".to_string(),
-    };
-    let result = execute_launcher(&launcher).await;
-    assert!(result.is_ok());
-}
+        let launcher = Launcher {
+            id: "test".to_string(),
+            name: "Test".to_string(),
+            launch_type: LaunchType::App,
+            target: app_path.to_string(),
+            icon: "icon.png".to_string(),
+        };
+    
+        let result = execute_launcher(&launcher).await;
+        assert!(result.is_ok(), "Failed to execute: {:?}", result); 
+    }
 }
