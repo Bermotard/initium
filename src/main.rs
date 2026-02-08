@@ -1,13 +1,13 @@
 // Initium - Dashboard Intelligent
 // Entry point de l'application
 
+use log::{error, info};
 use std::env;
-use log::{info, error};
 
-mod launcher;
 mod config;
-mod ui;
+mod launcher;
 mod system;
+mod ui;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
