@@ -134,14 +134,21 @@ mod tests {
 
     #[tokio::test]
     async fn test_execute_launcher_app() {
-        let launcher = Launcher {
-            id: "test".to_string(),
-            name: "Test".to_string(),
-            launch_type: LaunchType::App,
-            target: "/usr/bin/test".to_string(),
-            icon: "icon.png".to_string(),
-        };
-        let result = execute_launcher(&launcher).await;
-        assert!(result.is_ok());
-    }
+    // Sur macOS, utiliser 'true' au lieu de '/usr/bin/test'
+    #[cfg(target_os = "macos")]
+    let app_path = "/bin/true";
+    
+    #[cfg(not(target_os = "macos"))]
+    let app_path = "/usr/bin/test";
+    
+    let launcher = Launcher {
+        id: "test".to_string(),
+        name: "Test".to_string(),
+        launch_type: LaunchType::App,
+        target: app_path.to_string(),
+        icon: "icon.png".to_string(),
+    };
+    let result = execute_launcher(&launcher).await;
+    assert!(result.is_ok());
+}
 }
