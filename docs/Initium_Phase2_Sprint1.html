@@ -1,30 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 24.2.7.2 (Linux)"/>
-	<meta name="author" content="Un-named"/>
-	<meta name="created" content="2026-02-06T09:26:50"/>
-	<meta name="changedby" content="Un-named"/>
-	<meta name="changed" content="2026-02-06T09:26:50"/>
-	<meta name="AppVersion" content="15.0000"/>
-	<style type="text/css">
-		@page { size: 21.59cm 27.94cm; margin: 2.54cm }
-		p { color: #000000; line-height: 115%; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.25cm; direction: ltr; background: transparent }
-		p.western { font-family: "Arial", serif; font-size: 11pt; so-language: fr-FR }
-		p.cjk { font-family: "Arial"; font-size: 11pt; so-language: zh-CN }
-		p.ctl { font-family: "Arial"; font-size: 11pt; so-language: hi-IN }
-		h1 { color: #1a1a1a; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.21cm; direction: ltr; background: transparent; page-break-after: avoid }
-		h1.western { font-family: "Arial", sans-serif; font-size: 28pt; so-language: fr-FR; font-weight: bold }
-		h1.cjk { font-family: "Arial"; font-size: 28pt; so-language: zh-CN; font-weight: bold }
-		h1.ctl { font-family: "Arial"; font-size: 28pt; so-language: hi-IN; font-weight: bold }
-		h2 { color: #2c3e50; text-align: left; orphans: 2; widows: 2; margin-top: 0.32cm; margin-bottom: 0.18cm; direction: ltr; background: transparent; page-break-after: avoid }
-		h2.western { font-family: "Arial", sans-serif; font-size: 16pt; so-language: fr-FR; font-weight: bold }
-		h2.cjk { font-family: "Arial"; font-size: 16pt; so-language: zh-CN; font-weight: bold }
-		h2.ctl { font-family: "Arial"; font-size: 16pt; so-language: hi-IN; font-weight: bold }
-		h3 { color: #34495e; text-align: left; orphans: 2; widows: 2; margin-top: 0.21cm; margin-bottom: 0.14cm; direction: ltr; background: transparent; page-break-after: avoid }
-		h3.western { font-family: "Arial", sans-serif; font-size: 13pt; so-language: fr-FR; font-weight: bold }
 		h3.cjk { font-family: "Arial"; font-size: 13pt; so-language: zh-CN; font-weight: bold }
 		h3.ctl { font-family: "Arial"; font-size: 13pt; so-language: hi-IN; font-weight: bold }
 		a:link { color: #0563c1; text-decoration: underline }
@@ -50,820 +23,513 @@ Engine - Logique de Lancement</b></font></font></p>
 	<col width="480"/>
 	<tr>
 		<td width="122" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>OBJECTIF</b></font></p>
-		</td>
-		<td width="480" bgcolor="#e74c3c" style="background: #e74c3c; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western">
-			<font color="#ffffff"><font size="2" style="font-size: 10pt"><b>Implémenter
-			l'architecture core Rust et la logique de lancement
-			multi-plateforme</b></font></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+			<font s<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initium - Phase 2 Sprint 1: Core Engine + Tauri UI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+        .content { padding: 40px 30px; }
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #eee;
+        }
+        .section:last-child { border-bottom: none; }
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .task {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+            border-radius: 5px;
+        }
+        .task-title {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status.completed { background: #d4edda; color: #155724; }
+        .status.in-progress { background: #fff3cd; color: #856404; }
+        .status.pending { background: #f8d7da; color: #721c24; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+        .checklist li.done:before {
+            content: "☑";
+            color: #28a745;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        table tr:hover { background: #f5f5f5; }
+        .note {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+        .warning {
+            background: #ffe7e7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Initium - Phase 2: Sprint 1</h1>
+            <p>Core Engine Rust + Tauri UI Framework Integration</p>
+        </header>
 
-</p>
-<h2 class="western" style="margin-top: 0cm; margin-bottom: 0.21cm">APERÇU
-DU SPRINT</h2>
-<p class="western" align="justify" style="line-height: 100%; margin-bottom: 0.21cm">
-Sprint 1 se concentre sur l'architecture core du projet Initium. Nous
-mettrons en place la structure Cargo, configurerons les dépendances
-Servo, implémenterons les menus système, et développerons la
-logique de lancement d'applications et de sites web sur les trois
-plateformes.</p>
-<h3 class="western">User Stories du Sprint</h3>
-<ul>
-	<li value="1"><p style="line-height: 100%; margin-bottom: 0cm">US-001:
-	Enregistrement autostart OS</p></li>
-</ul>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">US-003: Lancer
-	un site web au clic</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">US-004:
-	Lancer une application locale</p></li>
-</ul>
-<p class="western" align="center" style="line-height: 100%; margin-top: 0.64cm; margin-bottom: 0cm">
-<font color="#7f8c8d"><font size="2" style="font-size: 9pt"><i>Durée:
-2 semaines | Développeurs: Dev Team + QA</i></font></font></p>
-<h1 class="western">1. TÂCHES TECHNIQUES DU SPRINT</h1>
-<h2 class="western">1.1 Configuration du Projet Cargo</h2>
-<h3 class="western">Tâche DEV-001: Initialiser Cargo.toml</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Créer la
-	structure de base du projet</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Ajouter les
-	dépendances critiques</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Configurer
-	les profiles (debug, release)</p></li>
-</ul>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="2" style="font-size: 9pt">[package]
-name = &quot;initium&quot; version = &quot;0.1.0-alpha&quot; edition
-= &quot;2021&quot;  [dependencies] servo = &quot;0.1&quot; serde = {
-version = &quot;1.0&quot;, features = [&quot;derive&quot;] }
-serde_json = &quot;1.0&quot; tokio = { version = &quot;1&quot;,
-features = [&quot;full&quot;] } tauri = &quot;1.5&quot; log = &quot;0.4&quot;
-env_logger = &quot;0.10&quot; cfg-if = &quot;1.0&quot; 
-[target.'cfg(target_os = &quot;linux&quot;)'] dependencies] xdg =
-&quot;2.4&quot;  [target.'cfg(target_os = &quot;windows&quot;)']
-dependencies] winreg = &quot;0.50&quot;  [target.'cfg(target_os =
-&quot;macos&quot;)'] dependencies] plist = &quot;1.5&quot;</font></font></font></p>
-<h3 class="western">Critères d'Acceptation</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ cargo build
-	compile sans erreurs</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ cargo check
-	passe</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Pas de
-	warnings de compilation</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✅
-	Documentation dépendances ajoutée</p></li>
-</ul>
-<h2 class="western">1.2 Architecture du Moteur Core</h2>
-<h3 class="western">Tâche DEV-002: Structure Modules Rust</h3>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="2" style="font-size: 9pt">src/
-├── main.rs              // Entry point ├── config.rs    
-       // Gestion JSON config ├── launcher.rs          // Logic
-lancement ├── ui/ │   ├── mod.rs │   └──
-servo_engine.rs  // Servo intégration └── system/     ├──
-mod.rs     ├── autostart.rs     // Enregistrement OS     └──
-platform.rs      // Abstractions OS</font></font></font></p>
-<h3 class="western">Implémentation des Modules</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">launcher.rs:
-	Structures et traits pour lancement</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">config.rs:
-	Parser JSON + struct de config</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">platform.rs:
-	Abstractions Windows/Linux/macOS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">servo_engine.rs:
-	Initialisation Servo</p></li>
-</ul>
-<h3 class="western">Code Rust - Structures de Base</h3>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-src/launcher.rs use serde::{Deserialize, Serialize};  #[derive(Debug,
-Clone, Serialize, Deserialize)] #[serde(rename_all = &quot;lowercase&quot;)]
-pub enum LaunchType {     Web,     App, }  #[derive(Debug, Clone,
-Serialize, Deserialize)] pub struct Launcher {     pub id: String,   
- pub name: String,     #[serde(rename = &quot;type&quot;)]     pub
-launch_type: LaunchType,     pub target: String,     pub icon:
-String, }  pub async fn execute_launcher(launcher: &amp;Launcher) -&gt;
-Result&lt;(), String&gt; {     match launcher.launch_type {        
-LaunchType::Web =&gt; open_url(&amp;launcher.target).await,        
-LaunchType::App =&gt; execute_binary(&amp;launcher.target).await,    
-} }  #[cfg(target_os = &quot;linux&quot;)] async fn open_url(url:
-&amp;str) -&gt; Result&lt;(), String&gt; {    
-std::process::Command::new(&quot;xdg-open&quot;)         .arg(url)   
-     .spawn()         .map_err(|e| e.to_string())?;     Ok(()) } 
-#[cfg(target_os = &quot;windows&quot;)] async fn open_url(url: &amp;str)
--&gt; Result&lt;(), String&gt; {    
-std::process::Command::new(&quot;cmd&quot;)         .args(&amp;[&quot;/C&quot;,
-&quot;start&quot;, url])         .spawn()         .map_err(|e|
-e.to_string())?;     Ok(()) }</font></font></font></p>
-<h2 class="western">1.3 Implémentation Menus Système</h2>
-<h3 class="western">Tâche DEV-003: Menus File/Edit</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Menu Fichier:
-	Imprimer config + Quitter</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Menu Édition:
-	Ajouter lanceur + Supprimer lanceur</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Intégration
-	native OS (platform-specific)</p></li>
-</ul>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><font color="#34495e"><font face="Courier New, serif"><font size="2" style="font-size: 9pt">//
-src/ui/menu.rs use std::sync::Arc;  pub struct MenuManager {    
-config_path: String, }  impl MenuManager {     pub fn
-new(config_path: String) -&gt; Self {         Self { config_path }   
- }          pub fn setup_menus(&amp;self) -&gt; Result&lt;(), String&gt;
-{         #[cfg(target_os = &quot;windows&quot;)]        
-self.setup_windows_menu()?;                  #[cfg(target_os =
-&quot;linux&quot;)]         self.setup_linux_menu()?;                
- #[cfg(target_os = &quot;macos&quot;)]        
-self.setup_macos_menu()?;                  Ok(())     }          fn
-export_config(&amp;self) -&gt; Result&lt;(), String&gt; {         //
-Génère rapport PDF/HTML         log::info!(&quot;Exporting
-configuration...&quot;);         Ok(())     } }</font></font></font></p>
-<h2 class="western">1.4 Intégration Autostart OS</h2>
-<h3 class="western">Tâche DEV-004: Enregistrement Système</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Linux: XDG
-	autostart (.desktop file)</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Windows:
-	Registry HKLM\Run</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.21cm">macOS:
-	LaunchAgents (.plist)</p></li>
-</ul>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-src/system/autostart.rs use cfg_if::cfg_if;  pub struct
-AutostartManager;  impl AutostartManager {     pub fn enable() -&gt;
-Result&lt;(), String&gt; {         cfg_if! {             if
-#[cfg(target_os = &quot;linux&quot;)] {                
-Self::enable_linux()             } else if #[cfg(target_os =
-&quot;windows&quot;)] {                 Self::enable_windows()       
-     } else if #[cfg(target_os = &quot;macos&quot;)] {               
- Self::enable_macos()             }         }     }         
-#[cfg(target_os = &quot;linux&quot;)]     fn enable_linux() -&gt;
-Result&lt;(), String&gt; {         let desktop_file = r#&quot;[Desktop
-Entry] Type=Application Name=Initium Exec=/usr/local/bin/initium
-Autostart=true &quot;#;                  let path =
-dirs::config_dir()             .ok_or(&quot;Config dir not found&quot;)?;
-        let autostart_path = path.join(&quot;autostart/initium.desktop&quot;);
-                 std::fs::write(&amp;autostart_path, desktop_file)   
-         .map_err(|e| e.to_string())?;                 
-log::info!(&quot;Initium registered for autostart on Linux&quot;);   
-     Ok(())     } }</font></font></font></p>
-<h1 class="western">2. DÉTAIL DES TÂCHES PAR RÔLE</h1>
-<h2 class="western">2.1 Tâches Développeur Principal</h2>
-<table width="624" cellpadding="5" cellspacing="0">
-	<col width="79"/>
-	<col width="216"/>
-	<col width="178"/>
-	<col width="109"/>
-	<tr>
-		<td width="79" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>ID</b></font></p>
-		</td>
-		<td width="216" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Tâche</b></font></p>
-		</td>
-		<td width="178" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Dépendances</b></font></p>
-		</td>
-		<td width="109" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Durée Est.</b></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-001</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Init
-			Cargo.toml + deps</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Phase
-			1 complete</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">1j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-002</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Structure
-			modules Rust</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-001</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-003</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Impl
-			launcher.rs</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-002</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">3j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-004</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Parser
-			config.rs</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-002</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-005</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Platform
-			abstractions</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-003</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">3j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-006</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Menus
-			système</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-002</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-007</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Autostart
-			manager</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-005</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="79" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-008</span></font></p>
-		</td>
-		<td width="216" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
-			unitaires</span></font></p>
-		</td>
-		<td width="178" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DEV-003-007</span></font></p>
-		</td>
-		<td width="109" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">2j</span></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+        <div class="content">
+            <!-- OVERVIEW -->
+            <div class="section">
+                <h2>📋 Vue d'ensemble Sprint 1</h2>
+                <p><strong>Objectif:</strong> Implémenter l'architecture Core Engine Rust avec intégration Tauri pour la base UI.</p>
+                <p><strong>Durée:</strong> 2 semaines</p>
+                <p><strong>Tâches:</strong> 8 (DEV-001 à DEV-008)</p>
+                
+                <div class="highlight">
+                    <strong>🔄 CHANGEMENT IMPORTANT:</strong> Nous utilisons maintenant <strong>Tauri 2.10</strong> pour l'UI framework au lieu de Servo. 
+                    Servo était trop lourd pour être une dépendance Rust. Tauri est plus léger, moderne, et parfait pour un dashboard.
+                </div>
+            </div>
 
-</p>
-<h2 class="western">2.2 Tâches QA</h2>
-<h3 class="western">QA-001: Plan de Test Sprint 1</h3>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests de
-	compilation (cargo build/check)</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests unitaires
-	des modules</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests
-	d'intégration lancement URL</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests
-	d'intégration lancement app</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests parsing
-	JSON</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Tests
-	autostart sur 3 OS</p></li>
-</ul>
-<h3 class="western">QA-002: Matrice de Test</h3>
-<table width="624" cellpadding="5" cellspacing="0">
-	<col width="145"/>
-	<col width="146"/>
-	<col width="146"/>
-	<col width="145"/>
-	<tr>
-		<td width="145" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Fonction</b></font></p>
-		</td>
-		<td width="146" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Linux</b></font></p>
-		</td>
-		<td width="146" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Windows</b></font></p>
-		</td>
-		<td width="145" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>macOS</b></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Lancer
-			URL</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Lancer
-			app</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Autostart</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Config
-			JSON</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="146" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-		<td width="145" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Test</span></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+            <!-- ARCHITECTURE -->
+            <div class="section">
+                <h2>🏗️ Architecture Sprint 1</h2>
+                <h3>Core Engine (Rust)</h3>
+                <pre>src/
+├── main.rs           # Entry point avec Tauri
+├── lib.rs            # Exports modules
+├── launcher.rs       # Logique lancement (DEV-003)
+├── config.rs         # Gestion configuration JSON (DEV-004)
+├── ui/
+│   ├── mod.rs
+│   └── tauri_bridge.rs   # Bridge Rust ↔ Tauri (nouveau)
+└── system/
+    ├── mod.rs
+    ├── platform.rs   # OS abstractions (DEV-005)
+    └── autostart.rs  # Autostart registration (DEV-007)</pre>
 
-</p>
-<h1 class="western">3. ARCHITECTURE DÉTAILLÉE DU CORE</h1>
-<h2 class="western">3.1 Module Config</h2>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-src/config.rs use serde::{Deserialize, Serialize}; use
-std::path::Path;  #[derive(Debug, Serialize, Deserialize, Clone)] pub
-struct Config {     pub version: String,     pub theme: String,    
-pub autostart: bool,     pub launchers: Vec&lt;Launcher&gt;, }  impl
-Config {     pub fn load&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt;
-Result&lt;Self, Box&lt;dyn std::error::Error&gt;&gt; {         let
-content = std::fs::read_to_string(path)?;         let config =
-serde_json::from_str(&amp;content)?;         Ok(config)     }        
- pub fn save&lt;P: AsRef&lt;Path&gt;&gt;(&amp;self, path: P) -&gt;
-Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {         let json
-= serde_json::to_string_pretty(&amp;self)?;        
-std::fs::write(path, json)?;         Ok(())     }          pub fn
-add_launcher(&amp;mut self, launcher: Launcher) {        
-self.launchers.push(launcher);     }          pub fn
-remove_launcher(&amp;mut self, id: &amp;str) {        
-self.launchers.retain(|l| l.id != id);     } }</font></font></font></p>
-<h2 class="western">3.2 Module Platform</h2>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-src/system/platform.rs use cfg_if::cfg_if;  pub trait PlatformManager
-{     fn open_url(&amp;self, url: &amp;str) -&gt; Result&lt;(),
-String&gt;;     fn execute_binary(&amp;self, path: &amp;str) -&gt;
-Result&lt;(), String&gt;;     fn enable_autostart(&amp;self) -&gt;
-Result&lt;(), String&gt;; }  cfg_if! {     if #[cfg(target_os =
-&quot;linux&quot;)] {         pub struct LinuxManager;               
-  impl PlatformManager for LinuxManager {             fn
-open_url(&amp;self, url: &amp;str) -&gt; Result&lt;(), String&gt; {  
-              std::process::Command::new(&quot;xdg-open&quot;)       
-             .arg(url)                     .spawn()                  
-  .map_err(|e| e.to_string())?;                 Ok(())             } 
-                        fn execute_binary(&amp;self, path: &amp;str)
--&gt; Result&lt;(), String&gt; {                
-std::process::Command::new(path)                     .spawn()        
-            .map_err(|e| e.to_string())?;                 Ok(())     
-       }                          fn enable_autostart(&amp;self) -&gt;
-Result&lt;(), String&gt; {                 // XDG autostart
-implementation                 Ok(())             }         }     } }</font></font></font></p>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+                <h3>Tauri Configuration</h3>
+                <pre>tauri.conf.json  # Configuration Tauri
+build.rs          # Build script Tauri
+src-tauri/        # Sera créé en Sprint 2 pour frontend</pre>
 
-</p>
-<h2 class="western">3.3 Flow d'Exécution</h2>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><font color="#34495e"><font face="Courier New, serif"><font size="2" style="font-size: 9pt">main.rs
-  ↓ ConfigManager::load(config.json)   ↓
-MenuManager::setup_menus()   ↓ ServoEngine::init()   ↓
-Autostart::enable()   ↓ Application Running   ├→ Click event on
-launcher   ├→ LaunchManager::execute(launcher)   ├→
-Platform::open_url() OR Platform::execute_binary()   └→
-Application launched</font></font></font></p>
-<h1 class="western">4. SPÉCIFICATIONS API RUST↔JS</h1>
-<h2 class="western">4.1 Endpoints HTTP Interne</h2>
-<table width="624" cellpadding="5" cellspacing="0">
-	<col width="99"/>
-	<col width="137"/>
-	<col width="210"/>
-	<col width="136"/>
-	<tr>
-		<td width="99" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Method</b></font></p>
-		</td>
-		<td width="137" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Endpoint</b></font></p>
-		</td>
-		<td width="210" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Payload</b></font></p>
-		</td>
-		<td width="136" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Response</b></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="99" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">POST</span></font></p>
-		</td>
-		<td width="137" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">/api/execute</span></font></p>
-		</td>
-		<td width="210" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;id&quot;:
-			&quot;launcher_001&quot;}</span></font></p>
-		</td>
-		<td width="136" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;ok&quot;:
-			true}</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="99" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">GET</span></font></p>
-		</td>
-		<td width="137" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">/api/launchers</span></font></p>
-		</td>
-		<td width="210" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">None</span></font></p>
-		</td>
-		<td width="136" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">[{...}]</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="99" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">POST</span></font></p>
-		</td>
-		<td width="137" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">/api/add-launcher</span></font></p>
-		</td>
-		<td width="210" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;name&quot;:
-			&quot;...&quot;, &quot;target&quot;: &quot;...&quot;}</span></font></p>
-		</td>
-		<td width="136" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;id&quot;:
-			&quot;new_001&quot;}</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="99" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">DELETE</span></font></p>
-		</td>
-		<td width="137" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">/api/launcher/:id</span></font></p>
-		</td>
-		<td width="210" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">None</span></font></p>
-		</td>
-		<td width="136" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;ok&quot;:
-			true}</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="99" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">POST</span></font></p>
-		</td>
-		<td width="137" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">/api/export-config</span></font></p>
-		</td>
-		<td width="210" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;format&quot;:
-			&quot;pdf&quot;}</span></font></p>
-		</td>
-		<td width="136" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">{&quot;file&quot;:
-			&quot;config.pdf&quot;}</span></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+                <div class="note">
+                    <strong>💡 Note:</strong> En Sprint 1, on reste avec du code Rust pur + Tauri backend. 
+                    L'interface web (HTML/CSS/JS) sera ajoutée en Sprint 2.
+                </div>
+            </div>
 
-</p>
-<h2 class="western">4.2 Code Rust - Serveur HTTP</h2>
-<p class="western" style="line-height: 100%; margin-bottom: 0.21cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-src/api/server.rs use tokio::net::TcpListener; use std::sync::Arc; 
-pub async fn start_server(config: Arc&lt;Config&gt;) -&gt; Result&lt;(),
-Box&lt;dyn std::error::Error&gt;&gt; {     let listener =
-TcpListener::bind(&quot;127.0.0.1:8080&quot;).await?;    
-log::info!(&quot;API server running on http://127.0.0.1:8080&quot;); 
-        loop {         let (socket, _) = listener.accept().await?;   
-     let config = Arc::clone(&amp;config);                 
-tokio::spawn(async move {             handle_connection(socket,
-config).await         });     } }  async fn handle_connection(socket:
-TcpStream, config: Arc&lt;Config&gt;) {     // HTTP request parsing  
-  // Route to appropriate handler     // Return JSON response }</font></font></font></p>
-<h2 class="western">4.3 Code JavaScript - Appels API</h2>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><font color="#34495e"><font face="Courier New, serif"><font size="1" style="font-size: 8pt">//
-assets/app.js class LauncherManager {   async getLaunchers() {    
-const response = await fetch('/api/launchers');     return
-response.json();   }      async executeLauncher(id) {     const
-response = await fetch('/api/execute', {       method: 'POST',      
-body: JSON.stringify({ id })     });     return response.json();   } 
-    async addLauncher(name, target, icon) {     const response =
-await fetch('/api/add-launcher', {       method: 'POST',       body:
-JSON.stringify({ name, target, icon })     });     return
-response.json();   }      async removeLauncher(id) {     const
-response = await fetch(`/api/launcher/${id}`, {       method:
-'DELETE'     });     return response.json();   } }</font></font></font></p>
-<h1 class="western">5. PLANNING DÉTAILLÉ ET RESSOURCES</h1>
-<h2 class="western">5.1 Calendrier par Semaine</h2>
-<table width="624" cellpadding="5" cellspacing="0">
-	<col width="70"/>
-	<col width="261"/>
-	<col width="260"/>
-	<tr>
-		<td width="70" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Semaine</b></font></p>
-		</td>
-		<td width="261" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Focus Principal</b></font></p>
-		</td>
-		<td width="260" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Livrables</b></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S1</span></font></p>
-		</td>
-		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Cargo
-			setup + structure modules</span></font></p>
-		</td>
-		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Cargo.toml,
-			architecture de base</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="70" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">S2</span></font></p>
-		</td>
-		<td width="261" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Impl
-			launcher + platform + tests</span></font></p>
-		</td>
-		<td width="260" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Modules
-			core, premiers tests</span></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+            <!-- TÂCHES DÉTAILLÉES -->
+            <div class="section">
+                <h2>📝 Tâches détaillées</h2>
 
-</p>
-<h2 class="western">5.2 Équipe et Ressources</h2>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Dev Lead: 1
-	développeur senior Rust</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Dev Standard:
-	1-2 développeurs Rust/JS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">QA: 1 ingénieur
-	QA (cross-platform)</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.21cm">Outils:
-	Cargo, rustfmt, clippy, cargo-test</p></li>
-</ul>
-<h2 class="western">5.3 Dépendances/Blockers</h2>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✓ Phase 1
-	documentation complétée</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✓
-	Environnement dev configuré (Rust 1.70+)</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✓ Accès
-	repo GitHub avec CI/CD</p></li>
-</ul>
-<h1 class="western">6. RISQUES ET MITIGATION</h1>
-<table width="624" cellpadding="5" cellspacing="0">
-	<col width="94"/>
-	<col width="165"/>
-	<col width="193"/>
-	<col width="129"/>
-	<tr>
-		<td width="94" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Risque</b></font></p>
-		</td>
-		<td width="165" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Impact</b></font></p>
-		</td>
-		<td width="193" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Mitigation</b></font></p>
-		</td>
-		<td width="129" bgcolor="#2c3e50" style="background: #2c3e50; border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="center">
-			<font size="2" style="font-size: 10pt"><b>Owner</b></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="94" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Servo
-			intégration complexe</span></font></p>
-		</td>
-		<td width="165" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Retard
-			3-5j</span></font></p>
-		</td>
-		<td width="193" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PoC
-			servo isolé jour 1</span></font></p>
-		</td>
-		<td width="129" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Dev
-			Lead</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="94" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Cross-platform
-			issues</span></font></p>
-		</td>
-		<td width="165" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Retard
-			2-3j</span></font></p>
-		</td>
-		<td width="193" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Tests
-			multiOS quotidiens</span></font></p>
-		</td>
-		<td width="129" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">QA</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="94" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Performance
-			menus</span></font></p>
-		</td>
-		<td width="165" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Refactor
-			Sprint 2</span></font></p>
-		</td>
-		<td width="193" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Benchmark
-			jour 3</span></font></p>
-		</td>
-		<td width="129" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Dev
-			Lead</span></font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="94" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">API
-			spec changes</span></font></p>
-		</td>
-		<td width="165" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Retard
-			1-2j</span></font></p>
-		</td>
-		<td width="193" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">Validation
-			spec jour 1</span></font></p>
-		</td>
-		<td width="129" style="border: 1px solid #cccccc; padding: 0.14cm 0.21cm"><p class="western" align="left">
-			<font size="2" style="font-size: 10pt"><span style="font-weight: normal">PO
-			+ Dev</span></font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" style="line-height: 100%; margin-bottom: 0.42cm"><br/>
-<br/>
+                <div class="task">
+                    <div class="task-title">DEV-001: Cargo.toml Configuration</div>
+                    <div class="status completed">COMPLÉTÉ</div>
+                    <p><strong>Fichier:</strong> Cargo.toml</p>
+                    <p><strong>Tâches:</strong></p>
+                    <ul class="checklist">
+                        <li class="done">Ajouter Tauri 2.10</li>
+                        <li class="done">Configurer dépendances Core Engine</li>
+                        <li class="done">Platform-specific dependencies</li>
+                        <li class="done">Dev dependencies (tokio-test, mockito, etc.)</li>
+                    </ul>
+                </div>
 
-</p>
-<h1 class="western">7. CRITÈRES DE SUCCÈS</h1>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Cargo.toml
-	compile sans warnings</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Lancement
-	URL fonctionnel 3 OS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Lancement
-	app fonctionnel 3 OS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Autostart
-	enregistré 3 OS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Tests
-	unitaires ≥80% coverage</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">✅ Code review
-	approuvé</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">✅
-	Documentation technique écrite</p></li>
-</ul>
-<h1 class="western">8. DEFINITION OF DONE SPRINT 1</h1>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Code Rust écrit
-	avec idiomes Rust</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Formaté avec
-	rustfmt</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Validé avec
-	clippy</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Tests unitaires
-	couvrant ≥80%</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Documentation
-	rustdoc complète</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Code review
-	approuvé 2 reviewers</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Testé sur
-	Linux + Windows + macOS</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Commits avec
-	messages clairs</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">Merge vers
-	main via PR</p></li>
-</ul>
-<h1 class="western">9. PHASE 3 - PROCHAINES ÉTAPES</h1>
-<h2 class="western">Sprint 2: Interface &amp; CRUD</h2>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Développer
-	interface HTML/CSS Servo</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Implémenter
-	grille d'icônes responsive</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">CRUD complet:
-	Add/Edit/Delete lanceurs</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.42cm">Tests
-	d'intégration UI</p></li>
-</ul>
-<h2 class="western">Transitions d'Artefacts</h2>
-<ul>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Documentation
-	architecture → sprints</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0cm">Code core →
-	UI integration</p></li>
-	<li><p style="line-height: 100%; margin-bottom: 0.64cm">Tests unit →
-	tests intégration</p></li>
-</ul>
-<p class="western" align="center" style="line-height: 100%; margin-top: 0.42cm; margin-bottom: 0cm; border-top: 1px solid #cccccc; border-bottom: none; border-left: none; border-right: none; padding-top: 0.04cm; padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm">
-<font color="#95a5a6"><font size="2" style="font-size: 9pt"><i>Sprint
-1 - Core Engine | Durée: 2 semaines Généré: 06/02/2026
-Repository: https://github.com/initium-dashboard</i></font></font></p>
+                <div class="task">
+                    <div class="task-title">DEV-002: Structure Modules Rust</div>
+                    <div class="status in-progress">À FAIRE (1-2 jours)</div>
+                    <p><strong>Fichiers:</strong> src/lib.rs, src/ui/mod.rs, src/system/mod.rs</p>
+                    <p><strong>Objectif:</strong> Créer la structure modulaire Rust.</p>
+                    <p><strong>Code à ajouter:</strong></p>
+                    <pre>// src/lib.rs
+pub mod launcher;
+pub mod config;
+pub mod system;
+pub mod ui;
+
+// src/ui/mod.rs
+pub mod tauri_bridge;
+
+// src/system/mod.rs
+pub mod platform;
+pub mod autostart;</pre>
+                    <p><strong>Critères acceptation:</strong></p>
+                    <ul class="checklist">
+                        <li>Modules compilent sans erreurs</li>
+                        <li>Aucun warning unused</li>
+                        <li>cargo check ✅</li>
+                    </ul>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-003: Impl launcher.rs</div>
+                    <div class="status pending">À FAIRE (2-3 jours)</div>
+                    <p><strong>Fichier:</strong> src/launcher.rs</p>
+                    <p><strong>À implémenter:</strong></p>
+                    <ul>
+                        <li>Enum LaunchType (Web, App)</li>
+                        <li>Struct Launcher (id, name, type, target, icon)</li>
+                        <li>Fonction execute_launcher()</li>
+                        <li>Fonction open_url() (multi-OS)</li>
+                        <li>Fonction execute_binary() (multi-OS)</li>
+                    </ul>
+                    <p><strong>Exemple de code:</strong></p>
+                    <pre>#[derive(Debug, Clone)]
+pub enum LaunchType {
+    Web,
+    App,
+}
+
+#[derive(Debug, Clone)]
+pub struct Launcher {
+    pub id: String,
+    pub name: String,
+    pub launch_type: LaunchType,
+    pub target: String,
+    pub icon: Option<String>,
+}
+
+pub async fn execute_launcher(launcher: &Launcher) -> Result<(), String> {
+    match launcher.launch_type {
+        LaunchType::Web => open_url(&launcher.target).await,
+        LaunchType::App => execute_binary(&launcher.target).await,
+    }
+}</pre>
+                    <p><strong>Tests:</strong></p>
+                    <pre>#[tokio::test]
+async fn test_launcher_creation() {
+    let launcher = Launcher {
+        id: "test".to_string(),
+        name: "Test App".to_string(),
+        launch_type: LaunchType::App,
+        target: "/usr/bin/test".to_string(),
+        icon: None,
+    };
+    assert_eq!(launcher.id, "test");
+}</pre>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-004: Parser config.rs</div>
+                    <div class="status pending">À FAIRE (2-3 jours)</div>
+                    <p><strong>Fichier:</strong> src/config.rs</p>
+                    <p><strong>À implémenter:</strong></p>
+                    <ul>
+                        <li>Struct Config (launchers: Vec&lt;Launcher&gt;)</li>
+                        <li>load(path) - Charger depuis JSON</li>
+                        <li>save(path) - Sauvegarder JSON</li>
+                        <li>add_launcher(launcher)</li>
+                        <li>remove_launcher(id)</li>
+                    </ul>
+                    <p><strong>Exemple JSON:</strong></p>
+                    <pre>{
+  "launchers": [
+    {
+      "id": "chrome",
+      "name": "Google Chrome",
+      "launch_type": "Web",
+      "target": "https://google.com",
+      "icon": "icons/chrome.png"
+    },
+    {
+      "id": "vscode",
+      "name": "Visual Studio Code",
+      "launch_type": "App",
+      "target": "/usr/bin/code",
+      "icon": "icons/vscode.png"
+    }
+  ]
+}</pre>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-005: Platform Abstractions</div>
+                    <div class="status pending">À FAIRE (2-3 jours)</div>
+                    <p><strong>Fichier:</strong> src/system/platform.rs</p>
+                    <p><strong>À implémenter:</strong></p>
+                    <ul>
+                        <li>Trait PlatformManager</li>
+                        <li>Impl pour Linux (xdg)</li>
+                        <li>Impl pour Windows (winreg)</li>
+                        <li>Impl pour macOS (plist)</li>
+                    </ul>
+                    <p><strong>Exemple:</strong></p>
+                    <pre>#[cfg(target_os = "linux")]
+pub fn get_config_dir() -> PathBuf {
+    dirs::config_dir()
+        .map(|p| p.join("initium"))
+        .unwrap_or_else(|| PathBuf::from(".config/initium"))
+}
+
+#[cfg(target_os = "windows")]
+pub fn get_config_dir() -> PathBuf {
+    dirs::config_dir()
+        .map(|p| p.join("initium"))
+        .unwrap_or_else(|| PathBuf::from("AppData/Roaming/initium"))
+}</pre>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-006: Tauri Bridge Integration</div>
+                    <div class="status pending">À FAIRE (1-2 jours)</div>
+                    <p><strong>Fichier:</strong> src/ui/tauri_bridge.rs (nouveau)</p>
+                    <p><strong>À implémenter:</strong></p>
+                    <ul>
+                        <li>Struct TauriState (config, launchers)</li>
+                        <li>Commandes Tauri pour lancer apps</li>
+                        <li>Commandes pour charger config</li>
+                        <li>Événements de communication Rust ↔ Frontend</li>
+                    </ul>
+                    <p><strong>Exemple:</strong></p>
+                    <pre>use tauri::State;
+
+#[tauri::command]
+pub async fn launch_app(
+    id: String,
+    state: State<'_, AppState>,
+) -> Result<(), String> {
+    let config = state.config.lock().await;
+    if let Some(launcher) = config.find_launcher(&id) {
+        execute_launcher(&launcher).await
+    } else {
+        Err("Launcher not found".to_string())
+    }
+}</pre>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-007: Autostart Manager</div>
+                    <div class="status pending">À FAIRE (1-2 jours)</div>
+                    <p><strong>Fichier:</strong> src/system/autostart.rs</p>
+                    <p><strong>À implémenter:</strong></p>
+                    <ul>
+                        <li>Struct AutostartManager</li>
+                        <li>enable() - Lancer au démarrage</li>
+                        <li>disable()</li>
+                        <li>is_enabled()</li>
+                    </ul>
+                </div>
+
+                <div class="task">
+                    <div class="task-title">DEV-008: Tests Unitaires</div>
+                    <div class="status pending">À FAIRE (1-2 jours)</div>
+                    <p><strong>Objectif:</strong> Tester tous les modules</p>
+                    <p><strong>Coverage:</strong> ≥ 80%</p>
+                    <p><strong>Commandes:</strong></p>
+                    <pre>cargo test
+cargo tarpaulin --out Html  # Pour coverage report</pre>
+                </div>
+            </div>
+
+            <!-- WORKFLOW -->
+            <div class="section">
+                <h2>🔄 Workflow développement</h2>
+                <p><strong>Pour chaque tâche (DEV-002 à DEV-008):</strong></p>
+                <pre>1. git checkout -b feature/DEV-XXX-description
+2. Lire la doc (cette page)
+3. Coder dans src/
+4. cargo check
+5. cargo clippy
+6. cargo test
+7. cargo fmt
+8. git add .
+9. git commit -m "feat(DEV-XXX): description"
+10. git push -u origin feature/DEV-XXX-description
+11. GitHub: Create PR → Merge
+12. git checkout sprint/core-engine
+13. git pull origin main</pre>
+            </div>
+
+            <!-- TAURI INTEGRATION -->
+            <div class="section">
+                <h2>⚡ Intégration Tauri</h2>
+                <h3>Pourquoi Tauri au lieu de Servo?</h3>
+                <ul>
+                    <li>✅ <strong>Léger:</strong> Framework UI moderne, pas moteur complet</li>
+                    <li>✅ <strong>Facile à intégrer:</strong> Conçu comme dépendance Rust</li>
+                    <li>✅ <strong>Cross-platform:</strong> Linux/Windows/macOS</li>
+                    <li>✅ <strong>Bridge Rust ↔ JS:</strong> Communication facile</li>
+                    <li>❌ <strong>Servo:</strong> Trop lourd, pas conçu pour être dépendance</li>
+                </ul>
+
+                <h3>Configuration Tauri</h3>
+                <p><strong>Fichier:</strong> tauri.conf.json</p>
+                <pre>{
+  "productName": "Initium",
+  "version": "0.1.0-alpha",
+  "identifier": "com.initium.app",
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "devUrl": "http://localhost:8080",
+    "frontendDist": "../"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Initium - Dashboard Intelligent",
+        "width": 800,
+        "height": 600
+      }
+    ]
+  }
+}</pre>
+
+                <h3>Build Script</h3>
+                <p><strong>Fichier:</strong> build.rs</p>
+                <pre>fn main() {
+  tauri_build::build()
+}</pre>
+
+                <div class="note">
+                    <strong>💡 Sprint 2:</strong> On ajoutera HTML/CSS/JS frontend dans src-tauri/
+                </div>
+            </div>
+
+            <!-- CHECKLIST FINAL -->
+            <div class="section">
+                <h2>✅ Checklist Sprint 1</h2>
+                <ul class="checklist">
+                    <li>Lire cette documentation</li>
+                    <li>Comprendre architecture Tauri</li>
+                    <li>DEV-002: Structure modules</li>
+                    <li>DEV-003: Launcher.rs</li>
+                    <li>DEV-004: Config.rs</li>
+                    <li>DEV-005: Platform abstractions</li>
+                    <li>DEV-006: Tauri bridge</li>
+                    <li>DEV-007: Autostart</li>
+                    <li>DEV-008: Tests (coverage ≥80%)</li>
+                    <li>cargo check ✅</li>
+                    <li>cargo test ✅</li>
+                    <li>Tous les commits pushés</li>
+                    <li>Pull Requests mergées</li>
+                </ul>
+            </div>
+
+            <!-- RESOURCES -->
+            <div class="section">
+                <h2>📚 Ressources</h2>
+                <ul>
+                    <li><strong>Tauri:</strong> https://tauri.app/</li>
+                    <li><strong>Tauri Docs:</strong> https://docs.tauri.app/</li>
+                    <li><strong>Rust Book:</strong> https://doc.rust-lang.org/book/</li>
+                    <li><strong>Cargo:</strong> https://doc.rust-lang.org/cargo/</li>
+                    <li><strong>GitHub:</strong> https://github.com/Bermotard/initium</li>
+                </ul>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="section" style="text-align: center; border: none; padding-top: 20px;">
+                <p><strong>Initium Sprint 1 - Core Engine Rust + Tauri</strong></p>
+                <p>🚀 Prêt à coder! Commencez par DEV-002</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

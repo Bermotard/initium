@@ -3,7 +3,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum LaunchType {
     Web,
@@ -73,10 +73,17 @@ async fn execute_binary(path: &str) -> Result<(), String> {
 
 #[cfg(target_os = "macos")]
 async fn execute_binary(path: &str) -> Result<(), String> {
-    std::process::Command::new(path)
+    let status = std::process::Command::new(path)
         .spawn()
+        .map_err(|e| e.to_string())?
+        .wait()
         .map_err(|e| e.to_string())?;
-    Ok(())
+    
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!("Process failed with status: {}", status))
+    }
 }
 
 #[cfg(test)]
@@ -93,5 +100,55 @@ mod tests {
             icon: "icon.svg".to_string(),
         };
         assert_eq!(launcher.name, "Test App");
+    }
+
+    #[test]
+    fn test_launcher_web_type() {
+        let launcher = Launcher {
+            id: "google".to_string(),
+            name: "Google".to_string(),
+            launch_type: LaunchType::Web,
+            target: "https://google.com".to_string(),
+            icon: "google.png".to_string(),
+        };
+        assert_eq!(launcher.launch_type, LaunchType::Web);
+    }
+
+    #[test]
+    fn test_launcher_app_type() {
+        let launcher = Launcher {
+            id: "vscode".to_string(),
+            name: "VS Code".to_string(),
+            launch_type: LaunchType::App,
+            target: "/usr/bin/code".to_string(),
+            icon: "vscode.png".to_string(),
+        };
+        assert_eq!(launcher.launch_type, LaunchType::App);
+    }
+
+    #[tokio::test]
+    async fn test_execute_launcher_web() {
+        let launcher = Launcher {
+            id: "test".to_string(),
+            name: "Test".to_string(),
+            launch_type: LaunchType::Web,
+            target: "https://example.com".to_string(),
+            icon: "icon.png".to_string(),
+        };
+        let result = execute_launcher(&launcher).await;
+        assert!(result.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_execute_launcher_app() {
+        let launcher = Launcher {
+            id: "test".to_string(),
+            name: "Test".to_string(),
+            launch_type: LaunchType::App,
+            target: "sh".to_string(),  // Utiliser "sh" au lieu de chemin absolu
+            icon: "icon.png".to_string(),
+        };
+        let result = execute_launcher(&launcher).await;
+        assert!(result.is_ok(), "Failed to execute: {:?}", result);
     }
 }
