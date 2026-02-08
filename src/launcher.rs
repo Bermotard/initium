@@ -141,21 +141,14 @@ mod tests {
 
     #[tokio::test]
     async fn test_execute_launcher_app() {
-        #[cfg(target_os = "macos")]
-        let app_path = "/bin/true";
-    
-        #[cfg(not(target_os = "macos"))]
-        let app_path = "/usr/bin/true";
-    
         let launcher = Launcher {
             id: "test".to_string(),
             name: "Test".to_string(),
             launch_type: LaunchType::App,
-            target: app_path.to_string(),
+            target: "sh".to_string(),  // Utiliser "sh" au lieu de chemin absolu
             icon: "icon.png".to_string(),
         };
-    
         let result = execute_launcher(&launcher).await;
-        assert!(result.is_ok(), "Failed to execute: {:?}", result); 
+        assert!(result.is_ok(), "Failed to execute: {:?}", result);
     }
 }
