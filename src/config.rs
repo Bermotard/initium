@@ -1,6 +1,6 @@
 //! Module de gestion de configuration
 //! Charge et sauvegarde la configuration depuis config.json
-use crate::launcher::Launcher;
+use crate::launcher::{LaunchType, Launcher};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
@@ -37,7 +37,6 @@ impl Config {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::launcher::LaunchType;
 
     #[test]
     fn test_config_creation() {
@@ -64,7 +63,8 @@ mod tests {
             name: "Test".to_string(),
             launch_type: LaunchType::Web,
             target: "https://example.com".to_string(),
-            icon: "icon.png".to_string(),
+            icon: Some("icon.png".to_string()),
+            options: None,
         };
 
         config.add_launcher(launcher);
@@ -85,7 +85,8 @@ mod tests {
             name: "Test".to_string(),
             launch_type: LaunchType::Web,
             target: "https://example.com".to_string(),
-            icon: "icon.png".to_string(),
+            icon: Some("icon.png".to_string()),
+            options: None,
         };
 
         config.add_launcher(launcher);
