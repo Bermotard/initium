@@ -8,6 +8,7 @@
 //! - Environment variables support
 //! - Global timeout (default 30 seconds)
 //! - Comprehensive error handling and logging
+//! - Uses shell execution for compatibility with Tauri
 
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -111,17 +112,22 @@ impl Launcher {
     }
 }
 
-/// Open a URL with platform-specific implementation
+/// Open a URL with platform-specific implementation (Linux)
 #[cfg(target_os = "linux")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (Linux): {}", url);
 
-    let mut cmd = tokio::process::Command::new("xdg-open");
-    cmd.arg(url);
-
+    // Build command line: xdg-open URL [args...]
+    let mut cmd_line = format!("xdg-open '{}'", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Executing: sh -c '{}'", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -155,16 +161,22 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
     }
 }
 
+/// Open a URL with platform-specific implementation (Windows)
 #[cfg(target_os = "windows")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (Windows): {}", url);
 
-    let mut cmd = tokio::process::Command::new("cmd");
-    cmd.args(&["/C", "start", url]);
-
+    // Build command line: start URL [args...]
+    let mut cmd_line = format!("start \"\" \"{}\"", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("\"{}\"", arg));
     }
+
+    log::info!("Executing: cmd /C {}", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("cmd");
+    cmd.arg("/C").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -198,16 +210,22 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
     }
 }
 
+/// Open a URL with platform-specific implementation (macOS)
 #[cfg(target_os = "macos")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (macOS): {}", url);
 
-    let mut cmd = tokio::process::Command::new("open");
-    cmd.arg(url);
-
+    // Build command line: open URL [args...]
+    let mut cmd_line = format!("open '{}'", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Executing: sh -c '{}'", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -241,16 +259,22 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
     }
 }
 
-/// Execute an application with platform-specific implementation
+/// Execute an application with platform-specific implementation (Linux)
 #[cfg(target_os = "linux")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (Linux): {}", path);
 
-    let mut cmd = tokio::process::Command::new(path);
-
+    // Build command line: app_path [args...]
+    let mut cmd_line = format!("'{}'", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Executing: sh -c '{}'", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -284,16 +308,22 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
     }
 }
 
+/// Execute an application with platform-specific implementation (Windows)
 #[cfg(target_os = "windows")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (Windows): {}", path);
 
-    let mut cmd = tokio::process::Command::new("cmd");
-    cmd.arg("/C").arg(path);
-
+    // Build command line: app_path [args...]
+    let mut cmd_line = format!("\"{}\"", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("\"{}\"", arg));
     }
+
+    log::info!("Executing: cmd /C {}", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("cmd");
+    cmd.arg("/C").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -327,15 +357,22 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
     }
 }
 
+/// Execute an application with platform-specific implementation (macOS)
 #[cfg(target_os = "macos")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (macOS): {}", path);
 
-    let mut cmd = tokio::process::Command::new(path);
-
+    // Build command line: app_path [args...]
+    let mut cmd_line = format!("'{}'", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Executing: sh -c '{}'", cmd_line);
+
+    let mut cmd = tokio::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
