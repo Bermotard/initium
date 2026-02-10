@@ -9,7 +9,7 @@ repository = "https://github.com/Bermotard/initium"
 
 [dependencies]
 # UI Framework (Tauri) - Sprint 1/2
-tauri = "2.10"
+tauri = { version = "2.10", features = [] }
 
 tauri-build = "2.5.5"
 
