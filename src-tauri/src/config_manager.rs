@@ -231,8 +231,13 @@ mod tests {
     }
 
     #[test]
+#[test]
 fn test_persist_across_reload() {
     cleanup_test_config();
+    
+    // Créer le répertoire config s'il n'existe pas
+    let config_dir = Self::get_config_dir();
+    std::fs::create_dir_all(&config_dir).expect("Failed to create config directory");
     
     // Créer et sauvegarder
     let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
@@ -251,26 +256,20 @@ fn test_persist_across_reload() {
         .config()
         .launchers
         .iter()
-        .any(|l| l.id == "persist_test_12345"));
+        .any(|l| l.id == "persist_test_12345"),
+        "Launcher should be in manager after add");
     
-    // Recharger et vérifier (peut échouer sur Windows en test)
-    match ConfigManager::load_or_default() {
-        Ok(reloaded) => {
-            assert!(reloaded
-                .config()
-                .launchers
-                .iter()
-                .any(|l| l.id == "persist_test_12345"), 
-                "Launcher should persist after reload");
-        }
-        Err(_) => {
-            // Windows en test peut ne pas avoir accès à APPDATA
-            log::warn!("Could not reload config in test (expected on Windows CI)");
-        }
-    }
+    // Recharger et vérifier
+    let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
+    assert!(reloaded
+        .config()
+        .launchers
+        .iter()
+        .any(|l| l.id == "persist_test_12345"), 
+        "Launcher should persist after reload");
     
     cleanup_test_config();
-    }
+}
 
     #[test]
     fn test_config_directory_created() {
