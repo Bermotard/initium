@@ -233,38 +233,36 @@ mod tests {
     #[test]
     fn test_persist_across_reload() {
         cleanup_test_config();
-
-        // Create and save
+    
+        // Créer et sauvegarder
         let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
-
-        let launcher = Launcher {
-            id: "persist_test_12345".to_string(),
-            name: "Persist Test".to_string(),
-            launch_type: LaunchType::App,
-            target: "sh".to_string(),
-            icon: Some("test.png".to_string()),
-            options: None,
-        };
-
+        let launcher = Launcher::new(
+            "persist_test_12345".to_string(),
+            "Persist Test".to_string(),
+            LaunchType::App,
+            "test_app".to_string(),
+        );
         manager
             .add_launcher(launcher)
             .expect("Failed to add launcher");
-
+    
+        // Vérifier que c'est sauvegardé
         assert!(manager
             .config()
             .launchers
             .iter()
             .any(|l| l.id == "persist_test_12345"));
-
-        // Reload and verify
+    
+        // Recharger et vérifier
         let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
-
         assert!(reloaded
             .config()
             .launchers
             .iter()
-            .any(|l| l.id == "persist_test_12345"));
-
+            .any(|l| l.id == "persist_test_12345"), 
+            "Launcher should persist after reload");
+    
+        // Nettoyer APRÈS le test
         cleanup_test_config();
     }
 
