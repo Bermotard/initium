@@ -1,5 +1,6 @@
 # Rust
 /target/
+src-tauri/target/
 Cargo.lock
 **/*.rs.bk
 *.pdb
@@ -30,3 +31,10 @@ npm-debug.log*
 # Build
 /dist/
 /build/
+
+# Compilation targets
+target/
+src-tauri/target/
+*.exe
+*.dll
+*.rlib

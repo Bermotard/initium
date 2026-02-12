@@ -8,6 +8,7 @@
 //! - Environment variables support
 //! - Global timeout (default 30 seconds)
 //! - Comprehensive error handling and logging
+//! - Uses shell execution for compatibility with Tauri
 
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -111,17 +112,21 @@ impl Launcher {
     }
 }
 
-/// Open a URL with platform-specific implementation
+/// Open a URL with platform-specific implementation (Linux)
 #[cfg(target_os = "linux")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (Linux): {}", url);
 
-    let mut cmd = tokio::process::Command::new("xdg-open");
-    cmd.arg(url);
-
+    let mut cmd_line = format!("xdg-open '{}'", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Spawning: sh -c '{}'", cmd_line);
+
+    let mut cmd = std::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -129,42 +134,34 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("URL opened successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("URL launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
     }
 }
 
+/// Open a URL with platform-specific implementation (Windows)
 #[cfg(target_os = "windows")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (Windows): {}", url);
 
-    let mut cmd = tokio::process::Command::new("cmd");
-    cmd.args(&["/C", "start", url]);
-
+    let mut cmd_line = format!("start \"\" \"{}\"", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("\"{}\"", arg));
     }
+
+    log::info!("Spawning: cmd /C {}", cmd_line);
+
+    let mut cmd = std::process::Command::new("cmd");
+    cmd.arg("/C").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -172,42 +169,34 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("URL opened successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("URL launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
     }
 }
 
+/// Open a URL with platform-specific implementation (macOS)
 #[cfg(target_os = "macos")]
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (macOS): {}", url);
 
-    let mut cmd = tokio::process::Command::new("open");
-    cmd.arg(url);
-
+    let mut cmd_line = format!("open '{}'", url);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("'{}'", arg));
     }
+
+    log::info!("Spawning: sh -c '{}'", cmd_line);
+
+    let mut cmd = std::process::Command::new("sh");
+    cmd.arg("-c").arg(&cmd_line);
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -215,84 +204,89 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("URL opened successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("URL launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
     }
 }
 
-/// Execute an application with platform-specific implementation
+/// Execute an application with platform-specific implementation (Linux)
 #[cfg(target_os = "linux")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (Linux): {}", path);
 
-    let mut cmd = tokio::process::Command::new(path);
-
+    // Construire la commande complète avec nohup et & pour détacher
+    let mut cmd_line = format!("nohup {} > /dev/null 2>&1 &", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.insert_str(cmd_line.len() - 2, &format!(" '{}'", arg));
     }
 
+    log::info!("Spawning: bash -c '{}'", cmd_line);
+
+    let mut cmd = std::process::Command::new("bash");
+    cmd.arg("-c").arg(&cmd_line);
+
+    // Passer le PATH et autres variables d'environnement système
+    if let Ok(path_env) = std::env::var("PATH") {
+        cmd.env("PATH", path_env);
+    }
+    if let Ok(home) = std::env::var("HOME") {
+        cmd.env("HOME", home);
+    }
+    if let Ok(user) = std::env::var("USER") {
+        cmd.env("USER", user);
+    }
+
+    // Ajouter les LaunchOptions env vars
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
             cmd.env(key, value);
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("Application executed successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("App launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
     }
 }
 
+/// Execute an application with platform-specific implementation (Windows)
 #[cfg(target_os = "windows")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (Windows): {}", path);
 
-    let mut cmd = tokio::process::Command::new("cmd");
-    cmd.arg("/C").arg(path);
-
+    // Utiliser 'start' pour Windows avec détachement
+    let mut cmd_line = format!("start \"\" \"{}\"", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.push(' ');
+        cmd_line.push_str(&format!("\"{}\"", arg));
+    }
+
+    log::info!("Spawning: cmd /C {}", cmd_line);
+
+    let mut cmd = std::process::Command::new("cmd");
+    cmd.arg("/C").arg(&cmd_line);
+
+    // Passer les variables d'environnement système
+    if let Ok(path_env) = std::env::var("PATH") {
+        cmd.env("PATH", path_env);
+    }
+    if let Ok(userprofile) = std::env::var("USERPROFILE") {
+        cmd.env("USERPROFILE", userprofile);
     }
 
     if let Some(env_vars) = &options.env_vars {
@@ -301,40 +295,44 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("Application executed successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("App launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
     }
 }
 
+/// Execute an application with platform-specific implementation (macOS)
 #[cfg(target_os = "macos")]
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (macOS): {}", path);
 
-    let mut cmd = tokio::process::Command::new(path);
-
+    // Utiliser 'open' pour macOS avec détachement en arrière-plan
+    let mut cmd_line = format!("nohup {} > /dev/null 2>&1 &", path);
     for arg in &options.args {
-        cmd.arg(arg);
+        cmd_line.insert_str(cmd_line.len() - 2, &format!(" '{}'", arg));
+    }
+
+    log::info!("Spawning: bash -c '{}'", cmd_line);
+
+    let mut cmd = std::process::Command::new("bash");
+    cmd.arg("-c").arg(&cmd_line);
+
+    // Passer les variables d'environnement système
+    if let Ok(path_env) = std::env::var("PATH") {
+        cmd.env("PATH", path_env);
+    }
+    if let Ok(home) = std::env::var("HOME") {
+        cmd.env("HOME", home);
+    }
+    if let Ok(user) = std::env::var("USER") {
+        cmd.env("USER", user);
     }
 
     if let Some(env_vars) = &options.env_vars {
@@ -343,26 +341,13 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
         }
     }
 
-    let timeout = Duration::from_secs(options.timeout_secs);
-
-    match tokio::time::timeout(timeout, cmd.spawn().map_err(|e| e.to_string())?.wait()).await {
-        Ok(Ok(status)) => {
-            if status.success() {
-                log::info!("Application executed successfully");
-                Ok(())
-            } else {
-                let msg = format!("Process exited with status: {}", status);
-                log::error!("{}", msg);
-                Err(msg)
-            }
+    match cmd.spawn() {
+        Ok(_) => {
+            log::info!("App launcher spawned successfully");
+            Ok(())
         }
-        Ok(Err(e)) => {
-            let msg = format!("Execution error: {}", e);
-            log::error!("{}", msg);
-            Err(msg)
-        }
-        Err(_) => {
-            let msg = format!("Timeout exceeded ({} seconds)", options.timeout_secs);
+        Err(e) => {
+            let msg = format!("Failed to spawn launcher: {}", e);
             log::error!("{}", msg);
             Err(msg)
         }
@@ -455,17 +440,6 @@ mod tests {
         );
         let result = launcher.execute().await;
         let _ = result;
-    }
-
-    #[tokio::test]
-    async fn test_timeout_exceeded() {
-        let options = LaunchOptions {
-            args: vec!["-c".to_string(), "sleep 10".to_string()],
-            timeout_secs: 1,
-            env_vars: None,
-        };
-        let result = execute_app("sh", &options).await;
-        assert!(result.is_err(), "Should timeout");
     }
 
     #[tokio::test]
