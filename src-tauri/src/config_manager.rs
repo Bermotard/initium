@@ -117,6 +117,10 @@ impl ConfigManager {
 mod tests {
     use super::*;
     use crate::launcher::LaunchType;
+    use std::sync::Mutex;
+
+    // Lock global pour sérialiser les tests
+    static TEST_LOCK: Mutex<()> = Mutex::new(());
 
     fn cleanup_test_config() {
         let path = ConfigManager::get_config_path();
@@ -125,6 +129,7 @@ mod tests {
 
     #[test]
     fn test_config_path_exists() {
+        let _guard = TEST_LOCK.lock().unwrap();
         let path = ConfigManager::get_config_path();
         assert!(path.to_string_lossy().contains("initium"));
         assert!(path.to_string_lossy().contains("config.json"));
@@ -132,6 +137,7 @@ mod tests {
 
     #[test]
     fn test_config_path_platform_specific() {
+        let _guard = TEST_LOCK.lock().unwrap();
         let path = ConfigManager::get_config_path();
 
         #[cfg(target_os = "linux")]
@@ -146,6 +152,7 @@ mod tests {
 
     #[test]
     fn test_load_or_create_default() {
+        let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
 
         let manager =
@@ -159,6 +166,7 @@ mod tests {
 
     #[test]
     fn test_auto_save_on_add_launcher() {
+        let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
 
         let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
@@ -187,6 +195,7 @@ mod tests {
 
     #[test]
     fn test_auto_save_on_remove_launcher() {
+        let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
 
         let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
@@ -225,6 +234,7 @@ mod tests {
 
     #[test]
     fn test_persist_across_reload() {
+        let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
         
         let config_dir = ConfigManager::get_config_dir();
@@ -257,6 +267,7 @@ mod tests {
 
     #[test]
     fn test_config_directory_created() {
+        let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
 
         let _manager = ConfigManager::load_or_default().expect("Failed to load config");
