@@ -53,28 +53,24 @@ impl ConfigManager {
 
     /// Load configuration or create default if not exists
     pub fn load_or_default() -> Result<Self, String> {
-        let config_path = Self::get_config_path();
-        let config_dir = config_path.parent().unwrap_or_else(|| Path::new("."));
-
-        // Create config directory if it doesn't exist
-        if !config_dir.exists() {
-            std::fs::create_dir_all(config_dir)
-                .map_err(|e| format!("Failed to create config directory: {}", e))?;
-        }
-
-        // Load config if exists, otherwise use default
-        let config = if config_path.exists() {
-            Config::load(&config_path).map_err(|e| format!("Failed to load config: {}", e))?
-        } else {
-            Self::default_config()
-        };
-
-        Ok(ConfigManager {
-            config_path,
-            config,
-        })
+    let config_path = Self::get_config_path();
+    let config_dir = config_path.parent().unwrap_or_else(|| Path::new("."));
+    
+    if !config_dir.exists() {
+        std::fs::create_dir_all(config_dir)?;
     }
-
+    
+    let config = if config_path.exists() {
+        Config::load(&config_path)?
+    } else {
+        let default = Self::default_config();
+        // SAUVEGARDER la config par défaut!
+        default.save(&config_path)?;
+        default
+    };
+    
+    Ok(ConfigManager { config_path, config })
+}
     /// Save configuration to disk
     pub fn save(&self) -> Result<(), String> {
         self.config
