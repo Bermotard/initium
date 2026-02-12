@@ -235,7 +235,7 @@ fn test_persist_across_reload() {
     cleanup_test_config();
     
     // Créer le répertoire config s'il n'existe pas
-    let config_dir = ConfigManager::get_config_dir();  
+    let config_dir = ConfigManager::get_config_dir();
     std::fs::create_dir_all(&config_dir).expect("Failed to create config directory");
     
     // Créer et sauvegarder
@@ -250,13 +250,12 @@ fn test_persist_across_reload() {
         .add_launcher(launcher)
         .expect("Failed to add launcher");
     
-    // Vérifier que c'est sauvegardé
-    assert!(manager
-        .config()
-        .launchers
-        .iter()
-        .any(|l| l.id == "persist_test_12345"),
-        "Launcher should be in manager after add");
+    // Forcer la sauvegarde
+    manager.save().expect("Failed to save config");
+    
+    // Vérifier le fichier existe
+    let config_path = ConfigManager::get_config_path();
+    assert!(config_path.exists(), "Config file should exist after save");
     
     // Recharger et vérifier
     let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
