@@ -230,13 +230,12 @@ mod tests {
         cleanup_test_config();
     }
 
-    #[test]
 #[test]
 fn test_persist_across_reload() {
     cleanup_test_config();
     
     // Créer le répertoire config s'il n'existe pas
-    let config_dir = Self::get_config_dir();
+    let config_dirConfigManager::get_config_dir();   
     std::fs::create_dir_all(&config_dir).expect("Failed to create config directory");
     
     // Créer et sauvegarder
