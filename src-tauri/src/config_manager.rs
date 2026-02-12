@@ -53,24 +53,27 @@ impl ConfigManager {
 
     /// Load configuration or create default if not exists
     pub fn load_or_default() -> Result<Self, String> {
-    let config_path = Self::get_config_path();
-    let config_dir = config_path.parent().unwrap_or_else(|| Path::new("."));
-    
-    if !config_dir.exists() {
-        std::fs::create_dir_all(config_dir)?;
+        let config_path = Self::get_config_path();
+        let config_dir = config_path.parent().unwrap_or_else(|| Path::new("."));
+        
+        if !config_dir.exists() {
+            std::fs::create_dir_all(config_dir)
+                .map_err(|e| format!("Failed to create config directory: {}", e))?;
+        }
+        
+        let config = if config_path.exists() {
+            Config::load(&config_path)
+                .map_err(|e| format!("Failed to load config: {}", e))?
+        } else {
+            let default = Self::default_config();
+            default.save(&config_path)
+                .map_err(|e| format!("Failed to save default config: {}", e))?;
+            default
+        };
+        
+        Ok(ConfigManager { config_path, config })
     }
-    
-    let config = if config_path.exists() {
-        Config::load(&config_path)?
-    } else {
-        let default = Self::default_config();
-        // SAUVEGARDER la config par défaut!
-        default.save(&config_path)?;
-        default
-    };
-    
-    Ok(ConfigManager { config_path, config })
-}
+
     /// Save configuration to disk
     pub fn save(&self) -> Result<(), String> {
         self.config
@@ -115,14 +118,6 @@ mod tests {
     use super::*;
     use crate::launcher::LaunchType;
 
-    fn get_test_config_path() -> PathBuf {
-        std::env::temp_dir().join(format!("initium_test_{}.json", std::process::id()))
-    }
-
-    fn cleanup_test_file(path: &PathBuf) {
-        let _ = std::fs::remove_file(path);
-    }
-
     fn cleanup_test_config() {
         let path = ConfigManager::get_config_path();
         let _ = std::fs::remove_file(&path);
@@ -158,6 +153,8 @@ mod tests {
 
         assert_eq!(manager.config().version, "0.1.0");
         assert_eq!(manager.config().theme, "light");
+        
+        cleanup_test_config();
     }
 
     #[test]
@@ -226,44 +223,37 @@ mod tests {
         cleanup_test_config();
     }
 
-#[test]
-fn test_persist_across_reload() {
-    cleanup_test_config();
-    
-    // Créer le répertoire config s'il n'existe pas
-    let config_dir = ConfigManager::get_config_dir();
-    std::fs::create_dir_all(&config_dir).expect("Failed to create config directory");
-    
-    // Créer et sauvegarder
-    let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
-    let launcher = Launcher::new(
-        "persist_test_12345".to_string(),
-        "Persist Test".to_string(),
-        LaunchType::App,
-        "test_app".to_string(),
-    );
-    manager
-        .add_launcher(launcher)
-        .expect("Failed to add launcher");
-    
-    // Forcer la sauvegarde
-    manager.save().expect("Failed to save config");
-    
-    // Vérifier le fichier existe
-    let config_path = ConfigManager::get_config_path();
-    assert!(config_path.exists(), "Config file should exist after save");
-    
-    // Recharger et vérifier
-    let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
-    assert!(reloaded
-        .config()
-        .launchers
-        .iter()
-        .any(|l| l.id == "persist_test_12345"), 
-        "Launcher should persist after reload");
-    
-    cleanup_test_config();
-}
+    #[test]
+    fn test_persist_across_reload() {
+        cleanup_test_config();
+        
+        let config_dir = ConfigManager::get_config_dir();
+        std::fs::create_dir_all(&config_dir).expect("Failed to create config directory");
+        
+        let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
+        let launcher = Launcher::new(
+            "persist_test_12345".to_string(),
+            "Persist Test".to_string(),
+            LaunchType::App,
+            "test_app".to_string(),
+        );
+        manager
+            .add_launcher(launcher)
+            .expect("Failed to add launcher");
+        
+        let config_path = ConfigManager::get_config_path();
+        assert!(config_path.exists(), "Config file should exist after add_launcher");
+        
+        let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
+        assert!(reloaded
+            .config()
+            .launchers
+            .iter()
+            .any(|l| l.id == "persist_test_12345"), 
+            "Launcher should persist after reload");
+        
+        cleanup_test_config();
+    }
 
     #[test]
     fn test_config_directory_created() {
