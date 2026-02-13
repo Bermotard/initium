@@ -3,7 +3,6 @@
 //! Provides platform-specific command execution abstraction
 //! Supports: execute, execute_with_output, kill_process, is_process_running
 
-use std::time::Duration;
 
 /// Output from a command execution
 #[derive(Debug, Clone)]
@@ -44,7 +43,7 @@ pub struct LinuxCommandRunner;
 
 #[cfg(target_os = "linux")]
 impl OSCommandRunner for LinuxCommandRunner {
-    fn execute(&self, program: &str, args: &[&str], timeout_secs: u64) -> Result<(), String> {
+    fn execute(&self, program: &str, args: &[&str], _timeout_secs: u64) -> Result<(), String> {
         log::info!("Executing (Linux): {} {:?}", program, args);
 
         let mut cmd = std::process::Command::new(program);
@@ -72,7 +71,7 @@ impl OSCommandRunner for LinuxCommandRunner {
         &self,
         program: &str,
         args: &[&str],
-        timeout_secs: u64,
+        _timeout_secs: u64,
     ) -> Result<CommandOutput, String> {
         log::info!("Executing with output (Linux): {} {:?}", program, args);
 

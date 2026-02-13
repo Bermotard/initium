@@ -11,7 +11,6 @@
 //! - Uses shell execution for compatibility with Tauri
 
 use serde::{Deserialize, Serialize};
-use std::time::Duration;
 
 /// Type of launcher target
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
