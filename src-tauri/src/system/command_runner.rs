@@ -424,4 +424,52 @@ mod tests {
         // PID 99999 très probablement inexistant
         assert!(!runner.is_process_running(99999));
     }
+    #[test]
+fn test_kill_process_nonexistent() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    // Tuer un PID inexistant doit échouer
+    let result = runner.kill_process(99999);
+    assert!(result.is_err());
+}
+
+#[test]
+fn test_execute_failing_command() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    let result = runner.execute("false", &[], 5);
+    assert!(result.is_err());
+}
+
+#[test]
+fn test_execute_with_output_failing_command() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    #[cfg(target_os = "linux")]
+    let result = runner.execute_with_output("sh", &["-c", "exit 1"], 5);
+    #[cfg(target_os = "windows")]
+    let result = runner.execute_with_output("cmd", &["/C", "exit 1"], 5);
+    #[cfg(target_os = "macos")]
+    let result = runner.execute_with_output("sh", &["-c", "exit 1"], 5);
+
+    assert!(result.is_ok());
+    let output = result.unwrap();
+    assert!(!output.success);
+    assert_eq!(output.status_code, 1);
+    }
 }
