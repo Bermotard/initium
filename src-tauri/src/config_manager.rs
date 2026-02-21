@@ -293,27 +293,29 @@ mod tests {
     }
 
     #[test]
-    fn test_export_to_json() {
-        cleanup_test_config();
-        let mut manager = ConfigManager::load_or_default().expect("Failed to load config");
+fn test_export_to_json() {
+    let _guard = TEST_LOCK.lock().unwrap();
     
-        let launcher = Launcher {
-            id: "export_test".to_string(),
-            name: "Export Test".to_string(),
-            launch_type: LaunchType::App,
-            target: "/bin/app".to_string(),
-            icon: None,
-            options: None,
-        };
+    let mut manager = ConfigManager::load_or_default().expect("Failed to load");
     
-        manager.add_launcher(launcher).expect("Failed to add launcher");
-        let json = manager.export_to_json().expect("Failed to export");
+    let launcher = Launcher {
+        id: "export_test".to_string(),
+        name: "Export Test".to_string(),
+        launch_type: LaunchType::App,
+        target: "/bin/app".to_string(),
+        icon: None,
+        options: None,
+    };
     
-        assert!(json.contains("export_test"));
-        assert!(json.contains("Export Test"));
+    manager.add_launcher(launcher).expect("Failed to add");
+    manager.save().expect("Failed to save");
     
-        cleanup_test_config();
-    }
+    let json = manager.export_to_json().expect("Failed to export");
+    assert!(json.contains("export_test"));
+    assert!(json.contains("Export Test"));
+    
+    cleanup_test_config();
+}
 
     #[test]
     fn test_import_from_json() {
