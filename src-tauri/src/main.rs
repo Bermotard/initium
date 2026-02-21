@@ -9,6 +9,8 @@ pub fn run() {
             add_launcher_cmd,
             remove_launcher_cmd,
             execute_launcher_cmd,
+            export_config,     
+            import_config,      
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -75,6 +77,18 @@ async fn execute_launcher_cmd(id: String) -> Result<String, String> {
     
     launcher.execute().await?;
     Ok(format!("Launcher '{}' executed", launcher.name))
+}
+
+#[tauri::command]
+fn export_config() -> Result<String, String> {
+    let manager = ConfigManager::load_or_default()?;
+    manager.export_to_json()
+}
+
+#[tauri::command]
+fn import_config(json: String) -> Result<(), String> {
+    let manager = ConfigManager::import_from_json(&json)?;
+    manager.save()
 }
 
 #[cfg(not(target_os = "macos"))]

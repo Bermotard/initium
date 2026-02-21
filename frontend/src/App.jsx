@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import './App.css'
 
@@ -15,6 +15,7 @@ function App() {
     target: '',
     icon: ''
   })
+  const fileInputRef = useRef(null)
 
   // Load launchers on mount
   useEffect(() => {
@@ -35,21 +36,19 @@ function App() {
   }
 
   async function addLauncher(e) {
-  e.preventDefault()
-  try {
-    // Si on édite, supprimer l'ancien d'abord
-    if (selectedLauncher) {
-      await invoke('remove_launcher_cmd', { id: selectedLauncher.id })
-    }
-    
-    // Puis ajouter le nouveau
-    await invoke('add_launcher_cmd', {
-      id: formData.id,
-      name: formData.name,
-      launchType: formData.type,
-      target: formData.target,
-      icon: formData.icon || null,
-    })
+    e.preventDefault()
+    try {
+      if (selectedLauncher) {
+        await invoke('remove_launcher_cmd', { id: selectedLauncher.id })
+      }
+      
+      await invoke('add_launcher_cmd', {
+        id: formData.id,
+        name: formData.name,
+        launchType: formData.type,
+        target: formData.target,
+        icon: formData.icon || null,
+      })
       setFormData({ id: '', name: '', type: 'app', target: '', icon: '' })
       setShowModal(false)
       setSelectedLauncher(null)
@@ -76,6 +75,34 @@ function App() {
       console.log(result)
     } catch (err) {
       setError('Error executing launcher: ' + err.toString())
+    }
+  }
+
+  async function handleExport() {
+    try {
+      const json = await invoke('export_config')
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'initium-config.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      setError(err.toString())
+    }
+  }
+
+  async function handleImport(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    
+    try {
+      const json = await file.text()
+      await invoke('import_config', { json })
+      await loadLaunchers()
+    } catch (err) {
+      setError(err.toString())
     }
   }
 
@@ -128,6 +155,25 @@ function App() {
             onClick={openAddModal}
           >
             ➕ Add Launcher
+          </button>
+          <button 
+            className="btn-export"
+            onClick={handleExport}
+          >
+            📥 Export
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImport}
+            accept=".json"
+            style={{ display: 'none' }}
+          />
+          <button 
+            className="btn-import"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            📤 Import
           </button>
           <button className="btn-settings">⚙️</button>
         </div>
