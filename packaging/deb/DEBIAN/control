@@ -1,0 +1,8 @@
+Package: initium
+Version: 0.1.0-alpha
+Architecture: amd64
+Maintainer: Bernard <bernard@initium.dev>
+Description: Initium Dashboard - Application Launcher
+ Manage and launch your applications from a beautiful dashboard.
+ Features: Icon upload, configuration export/import, multi-platform support.
+Homepage: https://github.com/Bermotard/initium
