@@ -38,6 +38,7 @@ fn add_launcher_cmd(
     name: String,
     launch_type: String,
     target: String,
+    icon: Option<String>,
 ) -> Result<(), String> {
     let mut manager = ConfigManager::load_or_default()?;
     
@@ -47,7 +48,8 @@ fn add_launcher_cmd(
         LaunchType::App
     };
     
-    let launcher = Launcher::new(id, name, ltype, target);
+    let mut launcher = Launcher::new(id, name, ltype, target);
+    launcher.icon = icon;
     manager.add_launcher(launcher)?;
     
     Ok(())

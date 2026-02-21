@@ -3,7 +3,6 @@
 //! Provides platform-specific command execution abstraction
 //! Supports: execute, execute_with_output, kill_process, is_process_running
 
-use std::time::Duration;
 
 /// Output from a command execution
 #[derive(Debug, Clone)]
@@ -44,7 +43,7 @@ pub struct LinuxCommandRunner;
 
 #[cfg(target_os = "linux")]
 impl OSCommandRunner for LinuxCommandRunner {
-    fn execute(&self, program: &str, args: &[&str], timeout_secs: u64) -> Result<(), String> {
+    fn execute(&self, program: &str, args: &[&str], _timeout_secs: u64) -> Result<(), String> {
         log::info!("Executing (Linux): {} {:?}", program, args);
 
         let mut cmd = std::process::Command::new(program);
@@ -72,7 +71,7 @@ impl OSCommandRunner for LinuxCommandRunner {
         &self,
         program: &str,
         args: &[&str],
-        timeout_secs: u64,
+        _timeout_secs: u64,
     ) -> Result<CommandOutput, String> {
         log::info!("Executing with output (Linux): {} {:?}", program, args);
 
@@ -424,5 +423,53 @@ mod tests {
 
         // PID 99999 très probablement inexistant
         assert!(!runner.is_process_running(99999));
+    }
+    #[test]
+fn test_kill_process_nonexistent() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    // Tuer un PID inexistant doit échouer
+    let result = runner.kill_process(99999);
+    assert!(result.is_err());
+}
+
+#[test]
+fn test_execute_failing_command() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    let result = runner.execute("false", &[], 5);
+    assert!(result.is_err());
+}
+
+#[test]
+fn test_execute_with_output_failing_command() {
+    #[cfg(target_os = "linux")]
+    let runner = LinuxCommandRunner;
+    #[cfg(target_os = "windows")]
+    let runner = WindowsCommandRunner;
+    #[cfg(target_os = "macos")]
+    let runner = MacOSCommandRunner;
+
+    #[cfg(target_os = "linux")]
+    let result = runner.execute_with_output("sh", &["-c", "exit 1"], 5);
+    #[cfg(target_os = "windows")]
+    let result = runner.execute_with_output("cmd", &["/C", "exit 1"], 5);
+    #[cfg(target_os = "macos")]
+    let result = runner.execute_with_output("sh", &["-c", "exit 1"], 5);
+
+    assert!(result.is_ok());
+    let output = result.unwrap();
+    assert!(!output.success);
+    assert_eq!(output.status_code, 1);
     }
 }
