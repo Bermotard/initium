@@ -111,6 +111,20 @@ impl ConfigManager {
     pub fn config_path(&self) -> &Path {
         &self.config_path
     }
+
+    pub fn export_to_json(&self) -> Result<String, String> {
+    serde_json::to_string_pretty(&self.config)
+        .map_err(|e| format!("Export failed: {}", e))
+    }
+
+    pub fn import_from_json(json: &str) -> Result<Self, String> {
+        let config: Config = serde_json::from_str(json)
+            .map_err(|e| format!("Import failed: {}", e))?;
+        Ok(ConfigManager {
+            config_path: Self::get_config_path(),
+            config,
+     })
+    }
 }
 
 #[cfg(test)]
@@ -276,5 +290,53 @@ mod tests {
         assert!(dir.exists(), "Config directory should be created");
 
         cleanup_test_config();
+    }
+
+    #[test]
+fn test_export_to_json() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    
+    let mut manager = ConfigManager::load_or_default().expect("Failed to load");
+    
+    let launcher = Launcher {
+        id: "export_test".to_string(),
+        name: "Export Test".to_string(),
+        launch_type: LaunchType::App,
+        target: "/bin/app".to_string(),
+        icon: None,
+        options: None,
+    };
+    
+    manager.add_launcher(launcher).expect("Failed to add");
+    manager.save().expect("Failed to save");
+    
+    let json = manager.export_to_json().expect("Failed to export");
+    assert!(json.contains("export_test"));
+    assert!(json.contains("Export Test"));
+    
+    cleanup_test_config();
+}
+
+    #[test]
+    fn test_import_from_json() {
+        let json = r#"{
+            "version": "0.1.0",
+            "theme": "light",
+            "autostart": false,
+            "launchers": [
+                {
+                    "id": "import_test",
+                    "name": "Import Test",
+                    "type": "app",
+                    "target": "/bin/app",
+                    "icon": null,
+                    "options": null
+               }
+            ]
+        }"#;
+    
+        let manager = ConfigManager::import_from_json(json).expect("Failed to import");
+        assert_eq!(manager.config().launchers.len(), 1);
+        assert_eq!(manager.config().launchers[0].id, "import_test");
     }
 }
