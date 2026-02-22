@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Initium - Phase 5 Sprint 4: Multi-plateforme & Améliorations</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .feature { background: #ecf0f1; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db; }
+        .feature-title { font-weight: bold; color: #2c3e50; }
+        .feature-desc { margin-top: 8px; color: #555; }
+        .priority { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 10px; }
+        .high { background: #e74c3c; color: white; }
+        .medium { background: #f39c12; color: white; }
+        .timeline { background: #d5f4e6; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #3498db; color: white; }
+        tr:hover { background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Initium - Phase 5 Sprint 4</h1>
+        <h2>Multi-plateforme & Améliorations Utilisateur</h2>
+
+        <div class="timeline">
+            <strong>Durée estimée:</strong> 2-3 semaines<br>
+            <strong>Objectif principal:</strong> Rendre Initium production-ready sur Linux/Windows/macOS
+        </div>
+
+        <h2>📋 Fonctionnalités à Implémenter</h2>
+
+        <div class="feature">
+            <div class="feature-title">DEV-012: Auto-génération d'ID launcher</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Supprimer le champ ID saisi par l'opérateur, générer automatiquement<br>
+                <strong>Approche:</strong>
+                <ul>
+                    <li>Backend génère slug depuis le nom (YouTube → youtube)</li>
+                    <li>Vérifier l'unicité, ajouter numéro si doublon (youtube-2)</li>
+                    <li>Frontend: masquer le champ ID</li>
+                    <li>Backend: générer UUID ou slug</li>
+                </ul>
+                <strong>Fichiers à modifier:</strong> App.jsx, config_manager.rs, main.rs<br>
+                <span class="priority high">HAUTE PRIORITÉ</span>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-title">DEV-013: Gestion du fond d'écran</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Permettre de changer le fond de l'application<br>
+                <strong>Fonctionnalités:</strong>
+                <ul>
+                    <li>Sélectionner gradient prédéfinis (bleu, violet, vert, etc)</li>
+                    <li>Upload d'image personnalisée</li>
+                    <li>Sauvegarder la préférence en config</li>
+                    <li>UI: bouton "Apparence" dans settings</li>
+                </ul>
+                <strong>Fichiers à modifier:</strong> App.jsx, App.css, config.rs<br>
+                <span class="priority high">HAUTE PRIORITÉ</span>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-title">DEV-014: Gestion des répertoires applicatifs</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Centraliser icônes et configurations dans répertoires d'application<br>
+                <strong>Structure:</strong>
+                <ul>
+                    <li><code>~/.config/initium/</code> - configurations JSON</li>
+                    <li><code>~/.config/initium/icons/</code> - icônes utilisateur</li>
+                    <li><code>~/.config/initium/settings/</code> - paramètres app</li>
+                </ul>
+                <strong>Modifications:</strong>
+                <ul>
+                    <li>ConfigManager: utiliser ces chemins</li>
+                    <li>Créer répertoires au premier lancement</li>
+                    <li>Migrer les configs existantes</li>
+                </ul>
+                <span class="priority high">HAUTE PRIORITÉ</span>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-title">DEV-015: Démarrage avec launcher web initial</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Ajouter launcher web prédéfini au premier lancement<br>
+                <strong>Launcher:</strong>
+                <ul>
+                    <li>Nom: "Rhône Digital"</li>
+                    <li>URL: http://www.rhone-digital.fr</li>
+                    <li>Type: Web</li>
+                </ul>
+                <strong>Implémentation:</strong>
+                <ul>
+                    <li>Vérifier si config vide au premier lancement</li>
+                    <li>Ajouter le launcher automatiquement</li>
+                    <li>Sauvegarder la config</li>
+                </ul>
+                <span class="priority medium">PRIORITÉ MOYENNE</span>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-title">DEV-016: Paramètres application</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Interface de gestion des paramètres utilisateur<br>
+                <strong>Paramètres à gérer:</strong>
+                <ul>
+                    <li>Répertoire des icônes (chemin personnalisé)</li>
+                    <li>Répertoire des configurations</li>
+                    <li>Apparence (gradient/image de fond)</li>
+                    <li>Langue (placeholder pour future localisation)</li>
+                    <li>Auto-save interval</li>
+                </ul>
+                <strong>UI:</strong>
+                <ul>
+                    <li>Modal "Paramètres" accessible via ⚙️</li>
+                    <li>Formulaire avec les paramètres</li>
+                    <li>Boutons Save/Reset</li>
+                </ul>
+                <span class="priority high">HAUTE PRIORITÉ</span>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-title">DEV-017: Support multi-plateforme (Linux/Windows/macOS)</div>
+            <div class="feature-desc">
+                <strong>Description:</strong> Générer et tester builds pour toutes les plateformes<br>
+                <strong>Tâches:</strong>
+                <ul>
+                    <li>Build Linux: cargo tauri build (déjà fait ✅)</li>
+                    <li>Build Windows: cargo tauri build --target x86_64-pc-windows-gnu</li>
+                    <li>Build macOS: cargo tauri build (macOS host required)</li>
+                    <li>Tester sur chaque plateforme</li>
+                    <li>Créer releases GitHub pour chaque plateforme</li>
+                </ul>
+                <strong>Path handling:</strong>
+                <ul>
+                    <li>Utiliser std::path::Path pour OS-agnostic paths</li>
+                    <li>Tester chemins spéciaux (%APPDATA%, ~/.config, ~/Library)</li>
+                </ul>
+                <span class="priority high">HAUTE PRIORITÉ</span>
+            </div>
+        </div>
+
+        <h2>📊 Cronogramme Estimé</h2>
+        <table>
+            <tr>
+                <th>Tâche</th>
+                <th>Durée</th>
+                <th>Dépendances</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>DEV-012: Auto-génération ID</td>
+                <td>2 jours</td>
+                <td>—</td>
+                <td>À faire</td>
+            </tr>
+            <tr>
+                <td>DEV-013: Gestion fond</td>
+                <td>2 jours</td>
+                <td>DEV-012</td>
+                <td>À faire</td>
+            </tr>
+            <tr>
+                <td>DEV-014: Répertoires app</td>
+                <td>2 jours</td>
+                <td>—</td>
+                <td>À faire</td>
+            </tr>
+            <tr>
+                <td>DEV-015: Launcher web initial</td>
+                <td>1 jour</td>
+                <td>DEV-012</td>
+                <td>À faire</td>
+            </tr>
+            <tr>
+                <td>DEV-016: Paramètres app</td>
+                <td>3 jours</td>
+                <td>DEV-013, DEV-014</td>
+                <td>À faire</td>
+            </tr>
+            <tr>
+                <td>DEV-017: Multi-plateforme</td>
+                <td>3 jours</td>
+                <td>Tous les DEV précédents</td>
+                <td>À faire</td>
+            </tr>
+        </table>
+
+        <h2>🎯 Critères d'Acceptance</h2>
+        <ul>
+            <li>✅ ID généré automatiquement, jamais saisi par l'utilisateur</li>
+            <li>✅ Fond d'écran changeable via paramètres</li>
+            <li>✅ Tous les fichiers dans ~/.config/initium/</li>
+            <li>✅ Launcher "Rhône Digital" présent au premier lancement</li>
+            <li>✅ Modal Paramètres fonctionnel</li>
+            <li>✅ Builds Linux, Windows, macOS fonctionnels</li>
+            <li>✅ Tests: 30+ unit tests passing</li>
+            <li>✅ Coverage: ≥81% (testable modules)</li>
+        </ul>
+
+        <h2>📝 Notes</h2>
+        <ul>
+            <li>Maintenir la compatibilité avec configs existantes</li>
+            <li>Tester migration données v0.1.0 → v0.2.0</li>
+            <li>Documenter les nouvelles fonctionnalités dans README</li>
+            <li>Créer v0.2.0-alpha release sur GitHub</li>
+        </ul>
+
+        <hr>
+        <p><strong>Initium Phase 5 Sprint 4</strong> | Multi-plateforme & Production-Ready</p>
+    </div>
+</body>
+</html>
