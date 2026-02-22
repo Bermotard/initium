@@ -9,7 +9,6 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [selectedLauncher, setSelectedLauncher] = useState(null)
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     type: 'app',
     target: '',
@@ -17,7 +16,6 @@ function App() {
   })
   const fileInputRef = useRef(null)
 
-  // Load launchers on mount
   useEffect(() => {
     loadLaunchers()
   }, [])
@@ -43,13 +41,12 @@ function App() {
       }
       
       await invoke('add_launcher_cmd', {
-        id: formData.id,
         name: formData.name,
         launchType: formData.type,
         target: formData.target,
         icon: formData.icon || null,
       })
-      setFormData({ id: '', name: '', type: 'app', target: '', icon: '' })
+      setFormData({ name: '', type: 'app', target: '', icon: '' })
       setShowModal(false)
       setSelectedLauncher(null)
       await loadLaunchers()
@@ -119,14 +116,13 @@ function App() {
 
   const openAddModal = () => {
     setSelectedLauncher(null)
-    setFormData({ id: '', name: '', type: 'app', target: '', icon: '' })
+    setFormData({ name: '', type: 'app', target: '', icon: '' })
     setShowModal(true)
   }
 
   const openEditModal = (launcher) => {
     setSelectedLauncher(launcher)
     setFormData({
-      id: launcher.id,
       name: launcher.name,
       type: launcher.launch_type,
       target: launcher.target,
@@ -138,12 +134,11 @@ function App() {
   const closeModal = () => {
     setShowModal(false)
     setSelectedLauncher(null)
-    setFormData({ id: '', name: '', type: 'app', target: '', icon: '' })
+    setFormData({ name: '', type: 'app', target: '', icon: '' })
   }
 
   return (
     <div className="app">
-      {/* Header */}
       <header className="header">
         <div className="header-content">
           <h1>🚀 Initium Dashboard</h1>
@@ -179,7 +174,6 @@ function App() {
         </div>
       </header>
 
-      {/* Error Message */}
       {error && (
         <div className="error-banner">
           <span>❌ {error}</span>
@@ -187,7 +181,6 @@ function App() {
         </div>
       )}
 
-      {/* Main Content */}
       <main className="main-content">
         {loading ? (
           <div className="loading">Loading launchers...</div>
@@ -250,7 +243,6 @@ function App() {
         )}
       </main>
 
-      {/* Modal Add/Edit Launcher */}
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -265,18 +257,6 @@ function App() {
             </div>
 
             <form onSubmit={addLauncher} className="modal-form">
-              <div className="form-group">
-                <label>ID</label>
-                <input
-                  type="text"
-                  placeholder="launcher-id"
-                  value={formData.id}
-                  onChange={(e) => setFormData({...formData, id: e.target.value})}
-                  disabled={selectedLauncher !== null}
-                  required
-                />
-              </div>
-
               <div className="form-group">
                 <label>Name</label>
                 <input

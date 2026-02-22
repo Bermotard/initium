@@ -353,6 +353,37 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
     }
 }
 
+/// Generate a URL-friendly slug from a name
+pub fn generate_slug(name: &str) -> String {
+    name
+        .to_lowercase()
+        .trim()
+        .replace(" ", "-")
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '-')
+        .collect::<String>()
+        .trim_matches('-')
+        .to_string()
+}
+
+/// Generate unique launcher ID, avoiding conflicts
+pub fn generate_unique_id(name: &str, existing_ids: &[String]) -> String {
+    let base_slug = generate_slug(name);
+    
+    if !existing_ids.contains(&base_slug) {
+        return base_slug;
+    }
+    
+    for i in 2..1000 {
+        let candidate = format!("{}-{}", base_slug, i);
+        if !existing_ids.contains(&candidate) {
+            return candidate;
+        }
+    }
+    
+    base_slug
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -450,5 +481,47 @@ mod tests {
         };
         let result = execute_app("sh", &options).await;
         assert!(result.is_ok(), "Failed: {:?}", result);
+    }
+
+    #[test]
+    fn test_generate_slug_simple() {
+        assert_eq!(generate_slug("YouTube"), "youtube");
+    }
+
+    #[test]
+    fn test_generate_slug_spaces() {
+        assert_eq!(generate_slug("Google Chrome"), "google-chrome");
+    }
+
+    #[test]
+    fn test_generate_slug_special_chars() {
+        assert_eq!(generate_slug("Visual Studio Code!"), "visual-studio-code");
+    }
+
+    #[test]
+    fn test_generate_slug_trim() {
+        assert_eq!(generate_slug("  Firefox  "), "firefox");
+    }
+
+    #[test]
+    fn test_generate_unique_id_no_conflict() {
+        let existing = vec!["youtube".to_string(), "firefox".to_string()];
+        assert_eq!(generate_unique_id("Chrome", &existing), "chrome");
+    }
+
+    #[test]
+    fn test_generate_unique_id_with_conflict() {
+        let existing = vec!["youtube".to_string()];
+        assert_eq!(generate_unique_id("YouTube", &existing), "youtube-2");
+    }
+
+    #[test]
+    fn test_generate_unique_id_multiple_conflicts() {
+        let existing = vec![
+            "youtube".to_string(),
+            "youtube-2".to_string(),
+            "youtube-3".to_string(),
+        ];
+        assert_eq!(generate_unique_id("YouTube", &existing), "youtube-4");
     }
 }

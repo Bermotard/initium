@@ -1,5 +1,5 @@
 use initium::config_manager::ConfigManager;
-use initium::launcher::{Launcher, LaunchType};
+use initium::launcher::{Launcher, LaunchType, generate_unique_id};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -36,12 +36,11 @@ fn get_launchers() -> Result<Vec<serde_json::Value>, String> {
 /// Add a new launcher
 #[tauri::command]
 fn add_launcher_cmd(
-    id: String,
     name: String,
     launch_type: String,
     target: String,
     icon: Option<String>,
-) -> Result<(), String> {
+) -> Result<(), String> {  // NOTE: plus de paramètre 'id'!
     let mut manager = ConfigManager::load_or_default()?;
     
     let ltype = if launch_type == "web" {
@@ -50,11 +49,18 @@ fn add_launcher_cmd(
         LaunchType::App
     };
     
+    // Générer l'ID automatiquement
+    let existing_ids: Vec<String> = manager.config()
+        .launchers
+        .iter()
+        .map(|l| l.id.clone())
+        .collect();
+    let id = generate_unique_id(&name, &existing_ids);    
     let mut launcher = Launcher::new(id, name, ltype, target);
     launcher.icon = icon;
-    manager.add_launcher(launcher)?;
     
-    Ok(())
+    manager.add_launcher(launcher)?;
+    manager.save()
 }
 
 /// Remove a launcher
