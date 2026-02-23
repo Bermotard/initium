@@ -1,17 +1,33 @@
 use initium::config_manager::ConfigManager;
 use initium::launcher::{Launcher, LaunchType, generate_unique_id};
 
+
+#[tauri::command]
+fn set_background(background: String) -> Result<(), String> {
+    let mut manager = ConfigManager::load_or_default()?;
+    manager.config_mut().background = Some(background);
+    manager.save()
+}
+
+#[tauri::command]
+fn get_background() -> Result<Option<String>, String> {
+    let manager = ConfigManager::load_or_default()?;
+    Ok(manager.config().background.clone())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            get_launchers,
-            add_launcher_cmd,
-            remove_launcher_cmd,
-            execute_launcher_cmd,
-            export_config,     
-            import_config,      
-        ])
+        get_launchers,
+        add_launcher_cmd,
+        remove_launcher_cmd,
+        execute_launcher_cmd,
+        export_config,     
+        import_config,
+        set_background,    
+        get_background,    
+    ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

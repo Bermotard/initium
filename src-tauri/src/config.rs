@@ -4,12 +4,14 @@ use crate::launcher::Launcher;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub version: String,
     pub theme: String,
     pub autostart: bool,
     pub launchers: Vec<Launcher>,
+    #[serde(default)]
+    pub background: Option<String>, 
 }
 
 impl Config {
