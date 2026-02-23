@@ -48,6 +48,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
         assert_eq!(config.launchers.len(), 0);
     }
@@ -59,6 +60,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let launcher = Launcher {
@@ -81,6 +83,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let launcher = Launcher {
@@ -106,6 +109,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let path = "test_config.json";
