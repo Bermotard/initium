@@ -47,7 +47,8 @@ impl ConfigManager {
             version: "0.1.0".to_string(),
             theme: "light".to_string(),
             autostart: false,
-            launchers: vec![],
+            launchers: Vec::new(),
+            background: None,
         }
     }
 

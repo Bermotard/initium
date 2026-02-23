@@ -4,12 +4,14 @@ use crate::launcher::Launcher;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub version: String,
     pub theme: String,
     pub autostart: bool,
     pub launchers: Vec<Launcher>,
+    #[serde(default)]
+    pub background: Option<String>, 
 }
 
 impl Config {
@@ -46,6 +48,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
         assert_eq!(config.launchers.len(), 0);
     }
@@ -57,6 +60,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let launcher = Launcher {
@@ -79,6 +83,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let launcher = Launcher {
@@ -104,6 +109,7 @@ mod tests {
             theme: "light".to_string(),
             autostart: false,
             launchers: vec![],
+            background: None,
         };
 
         let path = "test_config.json";
