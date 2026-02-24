@@ -41,6 +41,33 @@ impl ConfigManager {
         Self::get_config_dir().join("config.json")
     }
 
+    /// Get icons directory
+    pub fn get_icons_dir() -> PathBuf {
+        Self::get_config_dir().join("icons")
+    }
+
+    /// Get settings directory
+    pub fn get_settings_dir() -> PathBuf {
+        Self::get_config_dir().join("settings")
+    }
+
+    /// Create all necessary directories
+    fn create_directories() -> Result<(), String> {
+        let config_dir = Self::get_config_dir();
+        let icons_dir = Self::get_icons_dir();
+        let settings_dir = Self::get_settings_dir();
+
+        std::fs::create_dir_all(&config_dir)
+            .map_err(|e| format!("Failed to create config directory: {}", e))?;
+        std::fs::create_dir_all(&icons_dir)
+            .map_err(|e| format!("Failed to create icons directory: {}", e))?;
+        std::fs::create_dir_all(&settings_dir)
+            .map_err(|e| format!("Failed to create settings directory: {}", e))?;
+
+        log::info!("Config directories created at: {}", config_dir.display());
+        Ok(())
+    }
+
     /// Create default configuration
     fn default_config() -> Config {
         Config {
@@ -54,13 +81,8 @@ impl ConfigManager {
 
     /// Load configuration or create default if not exists
     pub fn load_or_default() -> Result<Self, String> {
+        Self::create_directories()?;
         let config_path = Self::get_config_path();
-        let config_dir = config_path.parent().unwrap_or_else(|| Path::new("."));
-        
-        if !config_dir.exists() {
-            std::fs::create_dir_all(config_dir)
-                .map_err(|e| format!("Failed to create config directory: {}", e))?;
-        }
         
         let config = if config_path.exists() {
             Config::load(&config_path)
@@ -289,6 +311,24 @@ mod tests {
 
         let dir = ConfigManager::get_config_dir();
         assert!(dir.exists(), "Config directory should be created");
+
+        cleanup_test_config();
+    }
+
+    #[test]
+    fn test_all_directories_created() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let _manager = ConfigManager::load_or_default().expect("Failed to load config");
+
+        let config_dir = ConfigManager::get_config_dir();
+        let icons_dir = ConfigManager::get_icons_dir();
+        let settings_dir = ConfigManager::get_settings_dir();
+
+        assert!(config_dir.exists(), "Config directory should be created");
+        assert!(icons_dir.exists(), "Icons directory should be created");
+        assert!(settings_dir.exists(), "Settings directory should be created");
 
         cleanup_test_config();
     }
