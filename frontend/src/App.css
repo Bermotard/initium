@@ -584,3 +584,31 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
 }
+
+.app {
+  min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+.app.bg-gradient1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.app.bg-gradient2 {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.app.bg-gradient3 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.app.bg-gradient4 {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+:root {
+  --bg-gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient2: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --bg-gradient3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --bg-gradient4: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
