@@ -68,13 +68,30 @@ impl ConfigManager {
         Ok(())
     }
 
-    /// Create default configuration
+    /// Create default launcher from file
+    fn create_default_launcher() -> Launcher {
+        let initial_launcher_json = include_str!("../initial-launcher.json");
+        match serde_json::from_str::<Launcher>(initial_launcher_json) {
+            Ok(launcher) => launcher,
+            Err(_) => {
+                log::warn!("Failed to parse initial-launcher.json, using fallback");
+                Launcher::new(
+                    "rhone_digital".to_string(),
+                    "Rhône Digital".to_string(),
+                    crate::launcher::LaunchType::Web,
+                    "http://www.rhone-digital.fr".to_string(),
+                )
+            }
+        }
+    }
+
+    /// Create default configuration with initial launcher
     fn default_config() -> Config {
         Config {
             version: "0.1.0".to_string(),
             theme: "light".to_string(),
             autostart: false,
-            launchers: Vec::new(),
+            launchers: vec![Self::create_default_launcher()],
             background: None,
         }
     }
@@ -136,8 +153,8 @@ impl ConfigManager {
     }
 
     pub fn export_to_json(&self) -> Result<String, String> {
-    serde_json::to_string_pretty(&self.config)
-        .map_err(|e| format!("Export failed: {}", e))
+        serde_json::to_string_pretty(&self.config)
+            .map_err(|e| format!("Export failed: {}", e))
     }
 
     pub fn import_from_json(json: &str) -> Result<Self, String> {
@@ -146,7 +163,7 @@ impl ConfigManager {
         Ok(ConfigManager {
             config_path: Self::get_config_path(),
             config,
-     })
+        })
     }
 }
 
@@ -156,7 +173,6 @@ mod tests {
     use crate::launcher::LaunchType;
     use std::sync::Mutex;
 
-    // Lock global pour sérialiser les tests
     static TEST_LOCK: Mutex<()> = Mutex::new(());
 
     fn cleanup_test_config() {
@@ -192,11 +208,11 @@ mod tests {
         let _guard = TEST_LOCK.lock().unwrap();
         cleanup_test_config();
 
-        let manager =
-            ConfigManager::load_or_default().expect("Failed to load or create default config");
-
+        let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
         assert_eq!(manager.config().version, "0.1.0");
         assert_eq!(manager.config().theme, "light");
+        assert_eq!(manager.config().launchers.len(), 1);
+        assert_eq!(manager.config().launchers[0].id, "rhone_digital");
         
         cleanup_test_config();
     }
@@ -217,15 +233,8 @@ mod tests {
             options: None,
         };
 
-        manager
-            .add_launcher(launcher)
-            .expect("Failed to add launcher");
-
-        assert!(manager
-            .config()
-            .launchers
-            .iter()
-            .any(|l| l.id == "test_add_12345"));
+        manager.add_launcher(launcher).expect("Failed to add launcher");
+        assert!(manager.config().launchers.iter().any(|l| l.id == "test_add_12345"));
 
         cleanup_test_config();
     }
@@ -246,25 +255,11 @@ mod tests {
             options: None,
         };
 
-        manager
-            .add_launcher(launcher)
-            .expect("Failed to add launcher");
+        manager.add_launcher(launcher).expect("Failed to add launcher");
+        assert!(manager.config().launchers.iter().any(|l| l.id == "test_remove_12345"));
 
-        assert!(manager
-            .config()
-            .launchers
-            .iter()
-            .any(|l| l.id == "test_remove_12345"));
-
-        manager
-            .remove_launcher("test_remove_12345")
-            .expect("Failed to remove launcher");
-
-        assert!(!manager
-            .config()
-            .launchers
-            .iter()
-            .any(|l| l.id == "test_remove_12345"));
+        manager.remove_launcher("test_remove_12345").expect("Failed to remove launcher");
+        assert!(!manager.config().launchers.iter().any(|l| l.id == "test_remove_12345"));
 
         cleanup_test_config();
     }
@@ -284,20 +279,13 @@ mod tests {
             LaunchType::App,
             "test_app".to_string(),
         );
-        manager
-            .add_launcher(launcher)
-            .expect("Failed to add launcher");
+        manager.add_launcher(launcher).expect("Failed to add launcher");
         
         let config_path = ConfigManager::get_config_path();
-        assert!(config_path.exists(), "Config file should exist after add_launcher");
+        assert!(config_path.exists());
         
         let reloaded = ConfigManager::load_or_default().expect("Failed to reload config");
-        assert!(reloaded
-            .config()
-            .launchers
-            .iter()
-            .any(|l| l.id == "persist_test_12345"), 
-            "Launcher should persist after reload");
+        assert!(reloaded.config().launchers.iter().any(|l| l.id == "persist_test_12345"));
         
         cleanup_test_config();
     }
@@ -308,9 +296,8 @@ mod tests {
         cleanup_test_config();
 
         let _manager = ConfigManager::load_or_default().expect("Failed to load config");
-
         let dir = ConfigManager::get_config_dir();
-        assert!(dir.exists(), "Config directory should be created");
+        assert!(dir.exists());
 
         cleanup_test_config();
     }
@@ -326,37 +313,38 @@ mod tests {
         let icons_dir = ConfigManager::get_icons_dir();
         let settings_dir = ConfigManager::get_settings_dir();
 
-        assert!(config_dir.exists(), "Config directory should be created");
-        assert!(icons_dir.exists(), "Icons directory should be created");
-        assert!(settings_dir.exists(), "Settings directory should be created");
+        assert!(config_dir.exists());
+        assert!(icons_dir.exists());
+        assert!(settings_dir.exists());
 
         cleanup_test_config();
     }
 
     #[test]
-fn test_export_to_json() {
-    let _guard = TEST_LOCK.lock().unwrap();
-    
-    let mut manager = ConfigManager::load_or_default().expect("Failed to load");
-    
-    let launcher = Launcher {
-        id: "export_test".to_string(),
-        name: "Export Test".to_string(),
-        launch_type: LaunchType::App,
-        target: "/bin/app".to_string(),
-        icon: None,
-        options: None,
-    };
-    
-    manager.add_launcher(launcher).expect("Failed to add");
-    manager.save().expect("Failed to save");
-    
-    let json = manager.export_to_json().expect("Failed to export");
-    assert!(json.contains("export_test"));
-    assert!(json.contains("Export Test"));
-    
-    cleanup_test_config();
-}
+    fn test_export_to_json() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+        
+        let mut manager = ConfigManager::load_or_default().expect("Failed to load");
+        
+        let launcher = Launcher {
+            id: "export_test".to_string(),
+            name: "Export Test".to_string(),
+            launch_type: LaunchType::App,
+            target: "/bin/app".to_string(),
+            icon: None,
+            options: None,
+        };
+        
+        manager.add_launcher(launcher).expect("Failed to add");
+        manager.save().expect("Failed to save");
+        
+        let json = manager.export_to_json().expect("Failed to export");
+        assert!(json.contains("export_test"));
+        assert!(json.contains("Export Test"));
+        
+        cleanup_test_config();
+    }
 
     #[test]
     fn test_import_from_json() {
@@ -372,12 +360,25 @@ fn test_export_to_json() {
                     "target": "/bin/app",
                     "icon": null,
                     "options": null
-               }
+                }
             ]
         }"#;
     
         let manager = ConfigManager::import_from_json(json).expect("Failed to import");
         assert_eq!(manager.config().launchers.len(), 1);
         assert_eq!(manager.config().launchers[0].id, "import_test");
+    }
+
+    #[test]
+    fn test_default_launcher_created() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let manager = ConfigManager::load_or_default().expect("Failed to load");
+        assert_eq!(manager.config().launchers.len(), 1);
+        assert_eq!(manager.config().launchers[0].id, "rhone_digital");
+        assert_eq!(manager.config().launchers[0].name, "Rhône Digital");
+
+        cleanup_test_config();
     }
 }
