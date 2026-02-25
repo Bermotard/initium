@@ -2,7 +2,7 @@
    ERROR BANNER
 ==========================*/
 
-error-banner {
+.error-banner {
   background: rgba(239, 68, 68, 0.1);
   border-left: 4px solid var(--danger);
   padding: 1rem 1.5rem;
@@ -13,7 +13,7 @@ error-banner {
   font-size: 0.9rem;
 }
 
-error-banner button {
+.error-banner button {
   background: transparent;
   border: none;
   color: #fca5a5;
@@ -22,7 +22,7 @@ error-banner button {
   padding: 0;
 }
 
-error-banner button:hover {
+.error-banner button:hover {
   color: white;
 }
 /*
