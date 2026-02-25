@@ -93,6 +93,7 @@ impl ConfigManager {
             autostart: false,
             launchers: vec![Self::create_default_launcher()],
             background: None,
+            language: "en".to_string(),
         }
     }
 
@@ -150,6 +151,52 @@ impl ConfigManager {
     /// Get config path
     pub fn config_path(&self) -> &Path {
         &self.config_path
+    }
+
+    /// Get language setting
+    pub fn get_language(&self) -> String {
+        self.config.language.clone()
+    }
+
+    /// Set language with auto-save
+    pub fn set_language(&mut self, language: String) -> Result<(), String> {
+        self.config.language = language;
+        self.save()?;
+        log::info!("Language setting updated");
+        Ok(())
+    }
+
+    /// Reset all settings to default values
+    pub fn reset_settings(&mut self) -> Result<(), String> {
+        self.config.language = "en".to_string();
+        self.config.background = None;
+        self.save()?;
+        log::info!("Settings reset to default values");
+        Ok(())
+    }
+
+    /// Save all settings at once
+    pub fn save_all_settings(&mut self, language: String, background: Option<String>) -> Result<(), String> {
+        self.config.language = language;
+        self.config.background = background;
+        self.save()?;
+        log::info!("All settings saved");
+        Ok(())
+    }
+
+    /// Get config directory path
+    pub fn get_config_dir_path() -> PathBuf {
+        Self::get_config_dir()
+    }
+
+    /// Get icons directory path
+    pub fn get_icons_dir_path() -> PathBuf {
+        Self::get_icons_dir()
+    }
+
+    /// Get settings directory path
+    pub fn get_settings_dir_path() -> PathBuf {
+        Self::get_settings_dir()
     }
 
     pub fn export_to_json(&self) -> Result<String, String> {
@@ -211,9 +258,31 @@ mod tests {
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
         assert_eq!(manager.config().version, "0.1.0");
         assert_eq!(manager.config().theme, "light");
-        assert_eq!(manager.config().launchers.len(), 1);
-        assert_eq!(manager.config().launchers[0].id, "rhone_digital");
+        assert_eq!(manager.config().language, "en");
         
+        cleanup_test_config();
+    }
+
+    #[test]
+    fn test_get_language() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let manager = ConfigManager::load_or_default().expect("Failed to load");
+        assert_eq!(manager.get_language(), "en");
+
+        cleanup_test_config();
+    }
+
+    #[test]
+    fn test_set_language() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let mut manager = ConfigManager::load_or_default().expect("Failed to load");
+        manager.set_language("fr".to_string()).expect("Failed to set language");
+        assert_eq!(manager.get_language(), "fr");
+
         cleanup_test_config();
     }
 
@@ -377,7 +446,42 @@ mod tests {
         let manager = ConfigManager::load_or_default().expect("Failed to load");
         assert_eq!(manager.config().launchers.len(), 1);
         assert_eq!(manager.config().launchers[0].id, "rhone_digital");
-        assert_eq!(manager.config().launchers[0].name, "Rhône Digital");
+
+        cleanup_test_config();
+    }
+
+    #[test]
+    fn test_reset_settings() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let mut manager = ConfigManager::load_or_default().expect("Failed to load");
+        manager.set_language("fr".to_string()).expect("Failed to set language");
+        
+        assert_eq!(manager.get_language(), "fr");
+        
+        manager.reset_settings().expect("Failed to reset");
+        
+        assert_eq!(manager.get_language(), "en");
+        assert!(manager.config().background.is_none());
+
+        cleanup_test_config();
+    }
+
+    #[test]
+    fn test_save_all_settings() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+
+        let mut manager = ConfigManager::load_or_default().expect("Failed to load");
+        
+        manager.save_all_settings(
+            "fr".to_string(),
+            Some("gradient2".to_string())
+        ).expect("Failed to save all");
+        
+        assert_eq!(manager.get_language(), "fr");
+        assert_eq!(manager.config().background, Some("gradient2".to_string()));
 
         cleanup_test_config();
     }

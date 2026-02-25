@@ -10,12 +10,14 @@ function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [selectedLauncher, setSelectedLauncher] = useState(null)
   const [backgroundColor, setBackgroundColor] = useState(null)
+  const [settings, setSettings] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     type: 'app',
     target: '',
     icon: ''
   })
+  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' })
   const fileInputRef = useRef(null)
   const backgroundFileInputRef = useRef(null)
 
@@ -151,8 +153,18 @@ function App() {
     setFormData({ name: '', type: 'app', target: '', icon: '' })
   }
 
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type })
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: 'success' })
+    }, 3000)
+  }
+
   async function openSettingsModal() {
     try {
+      const settingsData = await invoke('get_settings')
+      setSettings(settingsData)
+      
       const bg = await invoke('get_background')
       if (bg) {
         try {
@@ -170,12 +182,48 @@ function App() {
     }
   }
 
+  async function saveLanguage(language) {
+    try {
+      await invoke('set_language', { language })
+      setSettings({ ...settings, language })
+    } catch (err) {
+      setError(err.toString())
+    }
+  }
+
   async function saveBackground() {
     try {
       await invoke('set_background', { background: JSON.stringify(backgroundColor) })
-      setShowSettings(false)
+      showNotification('Background saved successfully!')
     } catch (err) {
       setError(err.toString())
+    }
+  }
+
+  async function saveAllSettings() {
+    try {
+      await invoke('save_all_settings', {
+        language: settings.language,
+        background: JSON.stringify(backgroundColor)
+      })
+      showNotification('All settings saved successfully!')
+    } catch (err) {
+      setError(err.toString())
+    }
+  }
+
+  async function resetSettings() {
+    if (window.confirm('Are you sure you want to reset all settings to default values?')) {
+      try {
+        await invoke('reset_settings')
+        // Reload settings to reflect the reset
+        const settingsData = await invoke('get_settings')
+        setSettings(settingsData)
+        setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+        showNotification('Settings reset to default!')
+      } catch (err) {
+        setError(err.toString())
+      }
     }
   }
 
@@ -224,13 +272,126 @@ function App() {
 
       {error && (<div className="error-banner"><span>❌ {error}</span><button onClick={() => setError(null)}>✕</button></div>)}
 
+      {notification.show && (<div className={`notification-banner ${notification.type}`}><span>{notification.message}</span><button onClick={() => setNotification({ show: false, message: '', type: 'success' })}>✕</button></div>)}
+
       <main className="main-content">
         {loading ? (<div className="loading">Loading launchers...</div>) : launchers.length === 0 ? (<div className="empty-state"><div className="empty-icon">📭</div><h2>No Launchers Yet</h2><p>Create your first launcher to get started</p><button className="btn-add-large" onClick={openAddModal}>➕ Add Your First Launcher</button></div>) : (<div className="launchers-grid">{launchers.map((launcher) => (<div key={launcher.id} className="launcher-card"><div className="card-icon">{launcher.icon ? (<img src={launcher.icon} alt={launcher.name} />) : (<div className="icon-placeholder">{launcher.launch_type === 'web' ? '🌐' : '⚙️'}</div>)}</div><div className="card-content"><h3>{launcher.name}</h3><p className="card-type">{launcher.launch_type.toUpperCase()}</p><p className="card-target" title={launcher.target}>{launcher.target}</p></div><div className="card-actions"><button className="btn-execute" onClick={() => executeLauncher(launcher.id)}>▶</button><button className="btn-edit" onClick={() => openEditModal(launcher)}>✏️</button><button className="btn-delete" onClick={() => removeLauncher(launcher.id)}>🗑</button></div></div>))}</div>)}
       </main>
 
-      {showModal && (<div className="modal-overlay" onClick={closeModal}><div className="modal" onClick={(e) => e.stopPropagation()}><div className="modal-header"><h2>{selectedLauncher ? 'Edit Launcher' : 'Add New Launcher'}</h2><button className="modal-close" onClick={closeModal}>✕</button></div><form onSubmit={addLauncher} className="modal-form"><div className="form-group"><label>Name</label><input type="text" placeholder="My App" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required /></div><div className="form-group"><label>Type</label><select value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}><option value="app">Application</option><option value="web">Website</option></select></div><div className="form-group"><label>Target (URL or Path)</label><input type="text" placeholder="/usr/bin/app or https://example.com" value={formData.target} onChange={(e) => setFormData({...formData, target: e.target.value})} required /></div><div className="form-group"><label>Icon (Optional)</label><input type="file" accept="image/*" onChange={handleIconUpload} />{formData.icon && (<div className="icon-preview"><img src={formData.icon} alt="Preview" /></div>)}</div><div className="modal-actions"><button type="submit" className="btn-submit">{selectedLauncher ? 'Update' : 'Create'} Launcher</button><button type="button" className="btn-cancel" onClick={closeModal}>Cancel</button></div></form></div></div>)}
+      {showModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{selectedLauncher ? 'Edit Launcher' : 'Add New Launcher'}</h2>
+              <button className="modal-close" onClick={closeModal}>✕</button>
+            </div>
+            <form onSubmit={addLauncher} className="modal-form">
+              <div className="form-group">
+                <label>Name</label>
+                <input type="text" placeholder="My App" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+              </div>
+              <div className="form-group">
+                <label>Type</label>
+                <select value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}>
+                  <option value="app">Application</option>
+                  <option value="web">Website</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Target (URL or Path)</label>
+                <input type="text" placeholder="/usr/bin/app or https://example.com" value={formData.target} onChange={(e) => setFormData({...formData, target: e.target.value})} required />
+              </div>
+              <div className="form-group">
+                <label>Icon (Optional)</label>
+                <input type="file" accept="image/*" onChange={handleIconUpload} />
+                {formData.icon && (<div className="icon-preview"><img src={formData.icon} alt="Preview" /></div>)}
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="btn-submit">{selectedLauncher ? 'Update' : 'Create'} Launcher</button>
+                <button type="button" className="btn-cancel" onClick={closeModal}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
-      {showSettings && (<div className="modal-overlay" onClick={closeSettings}><div className="modal" onClick={(e) => e.stopPropagation()}><div className="modal-header"><h2>Settings</h2><button className="modal-close" onClick={closeSettings}>✕</button></div><div className="modal-form"><div className="form-group"><label>Background Type</label><select value={backgroundColor?.type || 'gradient'} onChange={(e) => { if (e.target.value === 'gradient') { setBackgroundColor({ type: 'gradient', value: 'gradient1' }) } else { setBackgroundColor({ type: 'image', value: null }) } }}><option value="gradient">Gradient</option><option value="image">Custom Image</option></select></div>{backgroundColor?.type === 'gradient' && (<div className="form-group"><label>Gradient Style</label><select value={backgroundColor.value || 'gradient1'} onChange={(e) => setBackgroundColor({ ...backgroundColor, value: e.target.value })}><option value="gradient1">Blue-Purple</option><option value="gradient2">Green</option><option value="gradient3">Pink-Red</option><option value="gradient4">Dark Blue</option></select></div>)}{backgroundColor?.type === 'image' && (<div className="form-group"><label>Upload Image</label><input type="file" accept="image/*" ref={backgroundFileInputRef} onChange={handleBackgroundImageUpload} />{backgroundColor.value && (<div className="icon-preview"><img src={backgroundColor.value} alt="Background Preview" /></div>)}</div>)}<div className="modal-actions"><button type="button" className="btn-submit" onClick={saveBackground}>Save Settings</button><button type="button" className="btn-cancel" onClick={closeSettings}>Cancel</button></div></div></div></div>)}
+      {showSettings && (
+        <div className="modal-overlay" onClick={closeSettings}>
+          <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="modal-header">
+              <h2>⚙️ Settings</h2>
+              <button className="modal-close" onClick={closeSettings}>✕</button>
+            </div>
+            <div className="modal-form">
+              <div className="form-group">
+                <label>Language</label>
+                <select value={settings?.language || 'en'} onChange={(e) => saveLanguage(e.target.value)}>
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
+                  <option value="es">Español</option>
+                </select>
+              </div>
+
+              <hr style={{ margin: '20px 0', borderColor: '#ddd' }} />
+
+              <div className="form-group">
+                <label>Background Type</label>
+                <select value={backgroundColor?.type || 'gradient'} onChange={(e) => {
+                  if (e.target.value === 'gradient') {
+                    setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+                  } else {
+                    setBackgroundColor({ type: 'image', value: null })
+                  }
+                }}>
+                  <option value="gradient">Gradient</option>
+                  <option value="image">Custom Image</option>
+                </select>
+              </div>
+
+              {backgroundColor?.type === 'gradient' && (
+                <div className="form-group">
+                  <label>Gradient Style</label>
+                  <select value={backgroundColor.value || 'gradient1'} onChange={(e) => setBackgroundColor({ ...backgroundColor, value: e.target.value })}>
+                    <option value="gradient1">Blue-Purple</option>
+                    <option value="gradient2">Green</option>
+                    <option value="gradient3">Pink-Red</option>
+                    <option value="gradient4">Dark Blue</option>
+                  </select>
+                </div>
+              )}
+
+              {backgroundColor?.type === 'image' && (
+                <div className="form-group">
+                  <label>Upload Image</label>
+                  <input type="file" accept="image/*" ref={backgroundFileInputRef} onChange={handleBackgroundImageUpload} />
+                  {backgroundColor.value && (
+                    <div className="icon-preview">
+                      <img src={backgroundColor.value} alt="Background Preview" />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <hr style={{ margin: '20px 0', borderColor: '#ddd' }} />
+
+              <div className="form-group">
+                <label>📁 Application Directories</label>
+                <div style={{ fontSize: '0.9em', color: '#666', padding: '12px', backgroundColor: '#f9f9f9', borderRadius: '4px', fontFamily: 'monospace' }}>
+                  <p style={{ margin: '8px 0' }}><strong>Config:</strong> {settings?.config_dir}</p>
+                  <p style={{ margin: '8px 0' }}><strong>Icons:</strong> {settings?.icons_dir}</p>
+                  <p style={{ margin: '8px 0' }}><strong>Settings:</strong> {settings?.settings_dir}</p>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-submit" onClick={saveAllSettings}>Save All Settings</button>
+                <button type="button" className="btn-warning" onClick={resetSettings}>Reset to Default</button>
+                <button type="button" className="btn-cancel" onClick={closeSettings}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

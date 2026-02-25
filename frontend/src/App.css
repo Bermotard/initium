@@ -1,6 +1,90 @@
-/* ===========================
+/*===========================
+   ERROR BANNER
+==========================*/
+
+error-banner {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid var(--danger);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fca5a5;
+  font-size: 0.9rem;
+}
+
+error-banner button {
+  background: transparent;
+  border: none;
+  color: #fca5a5;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+error-banner button:hover {
+  color: white;
+}
+/*
+   NOTIFICATION BANNER
+==========================*/
+
+.notification-banner {
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 4px solid var(--success);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #6ee7b7;
+  font-size: 0.9rem;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  max-width: 400px;
+  animation: slideInRight 0.3s ease;
+}
+
+.notification-banner.success {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: var(--success);
+  color: #6ee7b7;
+}
+
+.notification-banner.error {
+  background: rgba(239, 68, 68, 0.1);
+  border-left-color: var(--danger);
+  color: #fca5a5;
+}
+
+.notification-banner button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.notification-banner button:hover {
+  opacity: 0.7;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+/*===========================
    INITIUM DASHBOARD - STYLING
-   =========================== */
+==========================*/
 
 :root {
   --primary: #6366f1;
@@ -14,6 +98,10 @@
   --success: #10b981;
   --danger: #ef4444;
   --warning: #f59e0b;
+  --bg-gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient2: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --bg-gradient3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --bg-gradient4: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
 * {
@@ -39,9 +127,9 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* ===========================
+/*
    HEADER
-   =========================== */
+==========================*/
 
 .header {
   background: rgba(15, 23, 42, 0.95);
@@ -106,37 +194,9 @@ body {
   color: var(--text-primary);
 }
 
-/* ===========================
-   ERROR BANNER
-   =========================== */
-
-.error-banner {
-  background: rgba(239, 68, 68, 0.1);
-  border-left: 4px solid var(--danger);
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #fca5a5;
-  font-size: 0.9rem;
-}
-
-.error-banner button {
-  background: transparent;
-  border: none;
-  color: #fca5a5;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0;
-}
-
-.error-banner button:hover {
-  color: white;
-}
-
-/* ===========================
+/*
    MAIN CONTENT
-   =========================== */
+==========================*/
 
 .main-content {
   flex: 1;
@@ -152,10 +212,9 @@ body {
   color: var(--text-secondary);
   font-size: 1.1rem;
 }
-
-/* ===========================
+/*
    EMPTY STATE
-   =========================== */
+==========================*/
 
 .empty-state {
   text-align: center;
@@ -197,10 +256,9 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(99, 102, 241, 0.4);
 }
-
-/* ===========================
+/*
    LAUNCHERS GRID
-   =========================== */
+==========================*/
 
 .launchers-grid {
   display: grid;
@@ -226,10 +284,9 @@ body {
     grid-template-columns: repeat(4, 1fr);
   }
 }
-
-/* ===========================
+/*
    LAUNCHER CARD
-   =========================== */
+==========================*/
 
 .launcher-card {
   background: rgba(15, 23, 42, 0.7);
@@ -374,10 +431,9 @@ body {
   border-color: var(--danger);
   color: white;
 }
-
-/* ===========================
+/*===========================
    MODAL
-   =========================== */
+/==========================*/
 
 .modal-overlay {
   position: fixed;
@@ -459,10 +515,9 @@ body {
 .modal-close:hover {
   color: var(--text-primary);
 }
-
-/* ===========================
+/*===========================
    FORM
-   =========================== */
+==========================*/
 
 .modal-form {
   display: flex;
@@ -531,7 +586,8 @@ body {
 }
 
 .btn-submit,
-.btn-cancel {
+.btn-cancel,
+.btn-warning {
   flex: 1;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -564,9 +620,18 @@ body {
   color: var(--text-primary);
 }
 
-/* ===========================
+.btn-warning {
+  background: linear-gradient(135deg, var(--warning), #d97706);
+  color: white;
+}
+
+.btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+/*===========================
    SCROLLBAR
-   =========================== */
+==========================*/
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -604,11 +669,4 @@ body {
 
 .app.bg-gradient4 {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-}
-
-:root {
-  --bg-gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --bg-gradient2: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  --bg-gradient3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --bg-gradient4: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
