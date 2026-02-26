@@ -11,7 +11,9 @@ pub struct Config {
     pub autostart: bool,
     pub launchers: Vec<Launcher>,
     #[serde(default)]
-    pub background: Option<String>, 
+    pub background: Option<String>,
+    #[serde(default)]
+    pub language: String,
 }
 
 impl Config {
@@ -49,6 +51,7 @@ mod tests {
             autostart: false,
             launchers: vec![],
             background: None,
+            language: "en".to_string(),
         };
         assert_eq!(config.launchers.len(), 0);
     }
@@ -61,8 +64,8 @@ mod tests {
             autostart: false,
             launchers: vec![],
             background: None,
+            language: "en".to_string(),
         };
-
         let launcher = Launcher {
             id: "test".to_string(),
             name: "Test".to_string(),
@@ -71,7 +74,6 @@ mod tests {
             icon: Some("icon.png".to_string()),
             options: None,
         };
-
         config.add_launcher(launcher);
         assert_eq!(config.launchers.len(), 1);
     }
@@ -84,8 +86,8 @@ mod tests {
             autostart: false,
             launchers: vec![],
             background: None,
+            language: "en".to_string(),
         };
-
         let launcher = Launcher {
             id: "test".to_string(),
             name: "Test".to_string(),
@@ -94,10 +96,8 @@ mod tests {
             icon: Some("icon.png".to_string()),
             options: None,
         };
-
         config.add_launcher(launcher);
         assert_eq!(config.launchers.len(), 1);
-
         config.remove_launcher("test");
         assert_eq!(config.launchers.len(), 0);
     }
@@ -110,14 +110,13 @@ mod tests {
             autostart: false,
             launchers: vec![],
             background: None,
+            language: "en".to_string(),
         };
-
         let path = "test_config.json";
         config.save(path).expect("Failed to save");
-
         let loaded = Config::load(path).expect("Failed to load");
         assert_eq!(loaded.version, "0.1.0");
-
+        assert_eq!(loaded.language, "en");
         std::fs::remove_file(path).ok();
     }
 }

@@ -1,6 +1,6 @@
 use initium::config_manager::ConfigManager;
 use initium::launcher::{Launcher, LaunchType, generate_unique_id};
-
+use serde_json::json;
 
 #[tauri::command]
 fn set_background(background: String) -> Result<(), String> {
@@ -15,19 +15,61 @@ fn get_background() -> Result<Option<String>, String> {
     Ok(manager.config().background.clone())
 }
 
+#[tauri::command]
+fn set_language(language: String) -> Result<(), String> {
+    let mut manager = ConfigManager::load_or_default()?;
+    manager.set_language(language)
+}
+
+#[tauri::command]
+fn get_language() -> Result<String, String> {
+    let manager = ConfigManager::load_or_default()?;
+    Ok(manager.get_language())
+}
+
+#[tauri::command]
+fn get_settings() -> Result<serde_json::Value, String> {
+    let manager = ConfigManager::load_or_default()?;
+    Ok(json!({
+        "language": manager.get_language(),
+        "background": manager.config().background.clone(),
+        "theme": manager.config().theme,
+        "config_dir": ConfigManager::get_config_dir_path().to_string_lossy().to_string(),
+        "icons_dir": ConfigManager::get_icons_dir_path().to_string_lossy().to_string(),
+        "settings_dir": ConfigManager::get_settings_dir_path().to_string_lossy().to_string(),
+    }))
+}
+
+#[tauri::command]
+fn reset_settings() -> Result<(), String> {
+    let mut manager = ConfigManager::load_or_default()?;
+    manager.reset_settings()
+}
+
+#[tauri::command]
+fn save_all_settings(language: String, background: Option<String>) -> Result<(), String> {
+    let mut manager = ConfigManager::load_or_default()?;
+    manager.save_all_settings(language, background)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-        get_launchers,
-        add_launcher_cmd,
-        remove_launcher_cmd,
-        execute_launcher_cmd,
-        export_config,     
-        import_config,
-        set_background,    
-        get_background,    
-    ])
+            get_launchers,
+            add_launcher_cmd,
+            remove_launcher_cmd,
+            execute_launcher_cmd,
+            export_config,
+            import_config,
+            set_background,
+            get_background,
+            set_language,
+            get_language,
+            get_settings,
+            reset_settings,
+            save_all_settings,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -56,7 +98,7 @@ fn add_launcher_cmd(
     launch_type: String,
     target: String,
     icon: Option<String>,
-) -> Result<(), String> {  // NOTE: plus de paramètre 'id'!
+) -> Result<(), String> {
     let mut manager = ConfigManager::load_or_default()?;
     
     let ltype = if launch_type == "web" {
@@ -71,7 +113,7 @@ fn add_launcher_cmd(
         .iter()
         .map(|l| l.id.clone())
         .collect();
-    let id = generate_unique_id(&name, &existing_ids);    
+    let id = generate_unique_id(&name, &existing_ids);
     let mut launcher = Launcher::new(id, name, ltype, target);
     launcher.icon = icon;
     
