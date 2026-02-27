@@ -151,16 +151,12 @@ pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), Strin
 pub async fn execute_url(url: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Opening URL (Windows): {}", url);
 
-    let mut cmd_line = format!("start \"\" \"{}\"", url);
-    for arg in &options.args {
-        cmd_line.push(' ');
-        cmd_line.push_str(&format!("\"{}\"", arg));
-    }
+    log::info!("Spawning: powershell Start-Process '{}'", url);
 
-    log::info!("Spawning: cmd /C {}", cmd_line);
-
-    let mut cmd = std::process::Command::new("cmd");
-    cmd.arg("/C").arg(&cmd_line);
+    let mut cmd = std::process::Command::new("powershell");
+    cmd.arg("-WindowStyle").arg("Hidden")
+       .arg("-Command")
+       .arg(format!("Start-Process '{}'", url));
 
     if let Some(env_vars) = &options.env_vars {
         for (key, value) in env_vars {
@@ -268,17 +264,12 @@ pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), Stri
 pub async fn execute_app(path: &str, options: &LaunchOptions) -> Result<(), String> {
     log::info!("Executing app (Windows): {}", path);
 
-    // Utiliser 'start' pour Windows avec détachement
-    let mut cmd_line = format!("start \"\" \"{}\"", path);
-    for arg in &options.args {
-        cmd_line.push(' ');
-        cmd_line.push_str(&format!("\"{}\"", arg));
-    }
+    log::info!("Spawning: powershell Start-Process '{}'", path);
 
-    log::info!("Spawning: cmd /C {}", cmd_line);
-
-    let mut cmd = std::process::Command::new("cmd");
-    cmd.arg("/C").arg(&cmd_line);
+    let mut cmd = std::process::Command::new("powershell");
+    cmd.arg("-WindowStyle").arg("Hidden")
+       .arg("-Command")
+       .arg(format!("Start-Process '{}'", path));
 
     // Passer les variables d'environnement système
     if let Ok(path_env) = std::env::var("PATH") {

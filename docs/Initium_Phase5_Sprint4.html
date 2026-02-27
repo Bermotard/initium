@@ -14,6 +14,7 @@
         .priority { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 10px; }
         .high { background: #e74c3c; color: white; }
         .medium { background: #f39c12; color: white; }
+        .deferred { background: #95a5a6; color: white; }
         .timeline { background: #d5f4e6; padding: 15px; border-radius: 4px; margin: 20px 0; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
@@ -28,7 +29,7 @@
 
         <div class="timeline">
             <strong>Durée estimée:</strong> 2-3 semaines<br>
-            <strong>Objectif principal:</strong> Rendre Initium production-ready sur Linux/Windows/macOS
+            <strong>Objectif principal:</strong> Rendre Initium production-ready sur Linux/Windows (macOS reporté sprint suivant)
         </div>
 
         <h2>📋 Fonctionnalités à Implémenter</h2>
@@ -106,7 +107,7 @@
         </div>
 
         <div class="feature">
-            <div class="feature-title">DEV-016: Paramètres application</div>
+            <div class="feature-title">DEV-016: Paramètres application ✅</div>
             <div class="feature-desc">
                 <strong>Description:</strong> Interface de gestion des paramètres utilisateur<br>
                 <strong>Paramètres à gérer:</strong>
@@ -123,28 +124,33 @@
                     <li>Formulaire avec les paramètres</li>
                     <li>Boutons Save/Reset</li>
                 </ul>
+                <strong>Statut:</strong> Mergé dans main — PR #16 (26 février 2026)<br>
                 <span class="priority high">HAUTE PRIORITÉ</span>
             </div>
         </div>
 
         <div class="feature">
-            <div class="feature-title">DEV-017: Support multi-plateforme (Linux/Windows/macOS)</div>
+            <div class="feature-title">DEV-017: Support multi-plateforme (Linux/Windows)</div>
             <div class="feature-desc">
-                <strong>Description:</strong> Générer et tester builds pour toutes les plateformes<br>
+                <strong>Description:</strong> Générer et tester builds pour Linux et Windows<br>
                 <strong>Tâches:</strong>
                 <ul>
                     <li>Build Linux: cargo tauri build (déjà fait ✅)</li>
                     <li>Build Windows: cargo tauri build --target x86_64-pc-windows-gnu</li>
-                    <li>Build macOS: cargo tauri build (macOS host required)</li>
-                    <li>Tester sur chaque plateforme</li>
-                    <li>Créer releases GitHub pour chaque plateforme</li>
+                    <li>Tester sur Linux et Windows</li>
+                    <li>Créer releases GitHub pour Linux et Windows</li>
                 </ul>
                 <strong>Path handling:</strong>
                 <ul>
                     <li>Utiliser std::path::Path pour OS-agnostic paths</li>
-                    <li>Tester chemins spéciaux (%APPDATA%, ~/.config, ~/Library)</li>
+                    <li>Tester chemins spéciaux (%APPDATA%, ~/.config)</li>
                 </ul>
+                <strong>⚠️ macOS reporté au sprint suivant:</strong> Le support macOS nécessite un host macOS pour le build.
+                L'architecture du code reste entièrement compatible macOS
+                (std::path::Path, dirs::config_dir, ~/Library/Application Support)
+                pour faciliter l'intégration dans un sprint futur dédié.<br><br>
                 <span class="priority high">HAUTE PRIORITÉ</span>
+                <span class="priority deferred">macOS → SPRINT SUIVANT</span>
             </div>
         </div>
 
@@ -160,37 +166,43 @@
                 <td>DEV-012: Auto-génération ID</td>
                 <td>2 jours</td>
                 <td>—</td>
-                <td>À faire</td>
+                <td>✅ Fait</td>
             </tr>
             <tr>
                 <td>DEV-013: Gestion fond</td>
                 <td>2 jours</td>
                 <td>DEV-012</td>
-                <td>À faire</td>
+                <td>✅ Fait</td>
             </tr>
             <tr>
                 <td>DEV-014: Répertoires app</td>
                 <td>2 jours</td>
                 <td>—</td>
-                <td>À faire</td>
+                <td>✅ Fait</td>
             </tr>
             <tr>
                 <td>DEV-015: Launcher web initial</td>
                 <td>1 jour</td>
                 <td>DEV-012</td>
-                <td>À faire</td>
+                <td>✅ Fait</td>
             </tr>
             <tr>
                 <td>DEV-016: Paramètres app</td>
                 <td>3 jours</td>
                 <td>DEV-013, DEV-014</td>
-                <td>À faire</td>
+                <td>✅ Mergé PR #16</td>
             </tr>
             <tr>
-                <td>DEV-017: Multi-plateforme</td>
+                <td>DEV-017: Multi-plateforme (Linux/Windows)</td>
                 <td>3 jours</td>
                 <td>Tous les DEV précédents</td>
-                <td>À faire</td>
+                <td>🔄 En cours</td>
+            </tr>
+            <tr>
+                <td>DEV-017b: Support macOS</td>
+                <td>2 jours</td>
+                <td>DEV-017</td>
+                <td>⏭️ Reporté sprint suivant</td>
             </tr>
         </table>
 
@@ -201,7 +213,8 @@
             <li>✅ Tous les fichiers dans ~/.config/initium/</li>
             <li>✅ Launcher "Rhône Digital" présent au premier lancement</li>
             <li>✅ Modal Paramètres fonctionnel</li>
-            <li>✅ Builds Linux, Windows, macOS fonctionnels</li>
+            <li>✅ Builds Linux et Windows fonctionnels</li>
+            <li>⏭️ Build macOS reporté au sprint suivant (architecture compatible)</li>
             <li>✅ Tests: 30+ unit tests passing</li>
             <li>✅ Coverage: ≥81% (testable modules)</li>
         </ul>
@@ -212,6 +225,7 @@
             <li>Tester migration données v0.1.0 → v0.2.0</li>
             <li>Documenter les nouvelles fonctionnalités dans README</li>
             <li>Créer v0.2.0-alpha release sur GitHub</li>
+            <li>Le support macOS sera traité dans un sprint dédié nécessitant un host macOS</li>
         </ul>
 
         <hr>
