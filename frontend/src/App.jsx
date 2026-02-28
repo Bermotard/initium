@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { invoke } from '@tauri-apps/api/core'
-import { open } from '@tauri-apps/plugin-dialog'
+import { open, save } from '@tauri-apps/plugin-dialog'
 import './App.css'
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 
   useEffect(() => {
     loadLaunchers()
+    invoke("get_settings").then(s => setSettings(s)).catch(() => {})
   }, [])
 
   async function loadLaunchers() {
@@ -84,26 +85,31 @@ function App() {
   async function handleExport() {
     try {
       const json = await invoke('export_config')
-      const blob = new Blob([json], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'initium-config.json'
-      a.click()
-      URL.revokeObjectURL(url)
+      const filePath = await save({
+        defaultPath: '/home/bernard/.config/initium/initium-config.json',
+        filters: [{ name: 'JSON', extensions: ['json'] }]
+      })
+      if (filePath) {
+        await invoke('write_file', { path: filePath, content: json })
+        showNotification('Config exported successfully!')
+      }
     } catch (err) {
       setError(err.toString())
     }
   }
 
-  async function handleImport(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    
+  async function handleImport() {
     try {
-      const json = await file.text()
-      await invoke('import_config', { json })
-      await loadLaunchers()
+      const filePath = await open({
+        defaultPath: '/home/bernard/.config/initium',
+        filters: [{ name: 'JSON', extensions: ['json'] }]
+      })
+      if (filePath) {
+        const json = await invoke('read_file_as_text', { path: filePath })
+        await invoke('import_config', { json })
+        await loadLaunchers()
+        showNotification('Config imported successfully!')
+      }
     } catch (err) {
       setError(err.toString())
     }
@@ -265,8 +271,7 @@ function App() {
         <div className="header-actions">
           <button className="btn-add" onClick={openAddModal}>➕ Add Launcher</button>
           <button className="btn-export" onClick={handleExport}>📥 Export</button>
-          <input type="file" ref={fileInputRef} onChange={handleImport} accept=".json" style={{ display: 'none' }} />
-          <button className="btn-import" onClick={() => fileInputRef.current?.click()}>📤 Import</button>
+          <button className="btn-import" onClick={handleImport}>📤 Import</button>
           <button className="btn-settings" onClick={openSettingsModal}>⚙️</button>
         </div>
       </header>

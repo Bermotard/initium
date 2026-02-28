@@ -47,6 +47,16 @@ fn reset_settings() -> Result<(), String> {
 }
 
 #[tauri::command]
+fn read_file_as_text(path: String) -> Result<String, String> {
+    std::fs::read_to_string(&path).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn write_file(path: String, content: String) -> Result<(), String> {
+    std::fs::write(&path, content).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 fn read_file_as_base64(path: String) -> Result<String, String> {
     use std::io::Read;
     let mut file = std::fs::File::open(&path).map_err(|e| e.to_string())?;
@@ -105,6 +115,8 @@ pub fn run() {
             save_all_settings,
             open_directory,
             read_file_as_base64,
+            write_file,
+            read_file_as_text,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
