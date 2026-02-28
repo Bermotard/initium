@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initium — Phase 6 Sprint 5 · Amélioration Ergonomie</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #6ee7b7;
+    --accent2: #818cf8;
+    --accent3: #f472b6;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --done: #22c55e;
+    --warn: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(110,231,183,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(110,231,183,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 64px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(110,231,183,0.25);
+    background: rgba(110,231,183,0.05);
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 58px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(110,231,183,0.4);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+
+  /* Tasks */
+  .tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .task {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid transparent;
+    padding: 28px 32px;
+    transition: all 0.2s ease;
+    animation: fadeUp 0.5s ease both;
+    cursor: default;
+  }
+
+  .task:hover {
+    border-color: var(--border);
+    border-left-color: var(--accent);
+    background: #14141f;
+    transform: translateX(4px);
+  }
+
+  .task:nth-child(1) { animation-delay: 0.1s; border-left-color: var(--accent); }
+  .task:nth-child(2) { animation-delay: 0.15s; }
+  .task:nth-child(3) { animation-delay: 0.2s; }
+  .task:nth-child(4) { animation-delay: 0.25s; }
+  .task:nth-child(5) { animation-delay: 0.3s; }
+  .task:nth-child(6) { animation-delay: 0.35s; }
+  .task:nth-child(7) { animation-delay: 0.4s; }
+  .task:nth-child(8) { animation-delay: 0.45s; }
+  .task:nth-child(9) { animation-delay: 0.5s; }
+
+  .task-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .task-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(110,231,183,0.08);
+    padding: 3px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+
+  .task-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .task-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .task-desc {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    padding-left: 0;
+  }
+
+  .task-desc strong {
+    color: rgba(226,232,240,0.7);
+    font-weight: 500;
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    padding: 16px 0 8px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 16px;
+    animation: fadeUp 0.5s 0.6s ease both;
+  }
+
+  .footer-brand {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .count-bar {
+    display: flex;
+    gap: 8px;
+    margin-top: 48px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.5s 0.05s ease both;
+  }
+
+  .count-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .count-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .count-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Tags by category */
+  .tag-ui     { color: var(--accent2); border-color: rgba(129,140,248,0.3); background: rgba(129,140,248,0.06); }
+  .tag-ux     { color: var(--accent);  border-color: rgba(110,231,183,0.3); background: rgba(110,231,183,0.06); }
+  .tag-i18n   { color: var(--accent3); border-color: rgba(244,114,182,0.3); background: rgba(244,114,182,0.06); }
+  .tag-perf   { color: var(--warn);    border-color: rgba(245,158,11,0.3);  background: rgba(245,158,11,0.06); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="badge">Initium Dashboard · Roadmap</div>
+    <h1>Phase 6<br><span>Sprint 5</span></h1>
+    <p class="subtitle">Amélioration Ergonomie</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Phase</span>
+        <span class="meta-value">6 — Ergonomie</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Sprint</span>
+        <span class="meta-value">5</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Tickets</span>
+        <span class="meta-value">DEV-018 → DEV-026</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Statut</span>
+        <span class="meta-value" style="color: var(--warn);">À faire</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Summary -->
+  <div class="count-bar">
+    <div class="count-card">
+      <span class="count-num">9</span>
+      <span class="count-label">Tickets</span>
+    </div>
+    <div class="count-card">
+      <span class="count-num">4</span>
+      <span class="count-label">Catégories</span>
+    </div>
+    <div class="count-card">
+      <span class="count-num">3</span>
+      <span class="count-label">Langues</span>
+    </div>
+    <div class="count-card">
+      <span class="count-num">0</span>
+      <span class="count-label">Terminés</span>
+    </div>
+  </div>
+
+  <!-- Tasks -->
+  <p class="section-label">// Tickets du sprint</p>
+  <div class="tasks">
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-018</span>
+          <h2 class="task-title" style="margin-top:10px;">Suppression champ Autosave Interval</h2>
+        </div>
+        <span class="task-tag tag-ui">UI</span>
+      </div>
+      <p class="task-desc">Supprimer le champ <strong>"Autosave Interval (seconds)"</strong> et son label du popup Settings. Ce paramètre n'existe pas dans le backend et ne doit plus apparaître dans l'interface.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-019</span>
+          <h2 class="task-title" style="margin-top:10px;">Settings : clic sur "Application Directories" ouvre le répertoire</h2>
+        </div>
+        <span class="task-tag tag-ux">UX</span>
+      </div>
+      <p class="task-desc">Dans le popup Settings, chaque entrée de la section <strong>"Application Directories"</strong> doit être cliquable et ouvrir le répertoire correspondant dans le gestionnaire de fichiers système (Nemo, Nautilus, Explorer selon la plateforme).</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-020</span>
+          <h2 class="task-title" style="margin-top:10px;">Settings : réduction de la taille des champs de saisie</h2>
+        </div>
+        <span class="task-tag tag-ui">UI</span>
+      </div>
+      <p class="task-desc">Revoir le CSS des champs de saisie du popup Settings pour les rendre plus <strong>compacts et lisibles</strong> — réduire padding, font-size et hauteur des inputs.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-021</span>
+          <h2 class="task-title" style="margin-top:10px;">Add Launcher : "Choose file" ouvre ~/.config/initium/icons</h2>
+        </div>
+        <span class="task-tag tag-ux">UX</span>
+      </div>
+      <p class="task-desc">Dans le popup "Add Launcher", le bouton <strong>"Choose file"</strong> du champ "Icon (optional)" doit ouvrir directement le répertoire <strong>~/.config/initium/icons</strong> au lieu du répertoire par défaut.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-022</span>
+          <h2 class="task-title" style="margin-top:10px;">Réduction taille des launchers (×0.5)</h2>
+        </div>
+        <span class="task-tag tag-ui">UI</span>
+      </div>
+      <p class="task-desc">Réduire la taille des launchers de <strong>moitié</strong> afin de doubler le nombre de launchers visibles en largeur et en hauteur. Adapter la taille des icônes, labels et espacements en conséquence.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-023</span>
+          <h2 class="task-title" style="margin-top:10px;">Launcher : clic sur l'icône lance l'application</h2>
+        </div>
+        <span class="task-tag tag-ux">UX</span>
+      </div>
+      <p class="task-desc">Le <strong>clic sur l'icône</strong> d'un launcher (et non sur un bouton séparé) doit déclencher le lancement de l'application ou l'ouverture du site web associé.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-024</span>
+          <h2 class="task-title" style="margin-top:10px;">Export : ouvre l'explorateur dans ~/.config/initium</h2>
+        </div>
+        <span class="task-tag tag-ux">UX</span>
+      </div>
+      <p class="task-desc">Le clic sur le bouton <strong>"Export"</strong> doit ouvrir l'explorateur de fichiers directement dans <strong>~/.config/initium</strong> pour permettre à l'utilisateur de récupérer facilement le fichier exporté.</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-025</span>
+          <h2 class="task-title" style="margin-top:10px;">Fenêtre redimensionnable jusqu'à la taille de l'écran</h2>
+        </div>
+        <span class="task-tag tag-perf">Config</span>
+      </div>
+      <p class="task-desc">Permettre à l'utilisateur d'étendre la fenêtre Initium jusqu'à la <strong>taille maximale de l'écran physique</strong>. Configurer les contraintes de taille dans <strong>tauri.conf.json</strong> en conséquence (supprimer ou augmenter maxWidth/maxHeight).</p>
+    </div>
+
+    <div class="task">
+      <div class="task-header">
+        <div>
+          <span class="task-id">DEV-026</span>
+          <h2 class="task-title" style="margin-top:10px;">Localisation : Anglais / Français / Espagnol</h2>
+        </div>
+        <span class="task-tag tag-i18n">i18n</span>
+      </div>
+      <p class="task-desc">Implémenter l'internationalisation (i18n) de l'application en <strong>anglais, français et espagnol</strong>. Rendre le sélecteur "Language" dans les Settings opérationnel — le changement de langue doit s'appliquer immédiatement à toute l'interface sans redémarrage.</p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-brand">Initium</span>
+    <span class="footer-meta">Phase 6 · Sprint 5 · Amélioration Ergonomie · DEV-018→026</span>
+  </footer>
+
+</div>
+</body>
+</html>
