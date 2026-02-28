@@ -377,9 +377,9 @@ function App() {
               <div className="form-group">
                 <label>📁 Application Directories</label>
                 <div style={{ fontSize: '0.9em', color: '#666', padding: '12px', backgroundColor: '#f9f9f9', borderRadius: '4px', fontFamily: 'monospace' }}>
-                  <p style={{ margin: '8px 0' }}><strong>Config:</strong> {settings?.config_dir}</p>
-                  <p style={{ margin: '8px 0' }}><strong>Icons:</strong> {settings?.icons_dir}</p>
-                  <p style={{ margin: '8px 0' }}><strong>Settings:</strong> {settings?.settings_dir}</p>
+                  <p style={{ margin: '8px 0', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => invoke('open_directory', { path: settings?.config_dir })}><strong>Config:</strong> {settings?.config_dir}</p>
+                  <p style={{ margin: '8px 0', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => invoke('open_directory', { path: settings?.icons_dir })}><strong>Icons:</strong> {settings?.icons_dir}</p>
+                  <p style={{ margin: '8px 0', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => invoke('open_directory', { path: settings?.settings_dir })}><strong>Settings:</strong> {settings?.settings_dir}</p>
                 </div>
               </div>
 

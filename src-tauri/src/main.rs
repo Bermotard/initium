@@ -47,6 +47,15 @@ fn reset_settings() -> Result<(), String> {
 }
 
 #[tauri::command]
+fn open_directory(path: String) -> Result<(), String> {
+    #[cfg(target_os = "linux")]
+    std::process::Command::new("xdg-open").arg(&path).spawn().map_err(|e| e.to_string())?;
+    #[cfg(target_os = "windows")]
+    std::process::Command::new("explorer").arg(&path).spawn().map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
 fn save_all_settings(language: String, background: Option<String>) -> Result<(), String> {
     let mut manager = ConfigManager::load_or_default()?;
     manager.save_all_settings(language, background)
@@ -69,6 +78,7 @@ pub fn run() {
             get_settings,
             reset_settings,
             save_all_settings,
+            open_directory,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
