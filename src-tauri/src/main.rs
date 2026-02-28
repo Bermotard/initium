@@ -47,6 +47,30 @@ fn reset_settings() -> Result<(), String> {
 }
 
 #[tauri::command]
+fn read_file_as_base64(path: String) -> Result<String, String> {
+    use std::io::Read;
+    let mut file = std::fs::File::open(&path).map_err(|e| e.to_string())?;
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
+    let ext = std::path::Path::new(&path).extension().and_then(|e| e.to_str()).unwrap_or("png");
+    let mime = match ext { "svg" => "image/svg+xml", "jpg" | "jpeg" => "image/jpeg", "ico" => "image/x-icon", _ => "image/png" };
+    Ok(format!("data:{};base64,{}", mime, base64_encode(&buffer)))
+}
+
+fn base64_encode(data: &[u8]) -> String {
+    use std::fmt::Write;
+    const CHARS: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut result = String::new();
+    for chunk in data.chunks(3) {
+        let b0 = chunk[0] as usize;
+        let b1 = if chunk.len() > 1 { chunk[1] as usize } else { 0 };
+        let b2 = if chunk.len() > 2 { chunk[2] as usize } else { 0 };
+        let _ = write!(result, "{}{}{}{}", CHARS[b0>>2] as char, CHARS[((b0&3)<<4)|(b1>>4)] as char, if chunk.len()>1 {CHARS[((b1&15)<<2)|(b2>>6)] as char} else {'='}, if chunk.len()>2 {CHARS[b2&63] as char} else {'='});
+    }
+    result
+}
+
+#[tauri::command]
 fn open_directory(path: String) -> Result<(), String> {
     #[cfg(target_os = "linux")]
     std::process::Command::new("xdg-open").arg(&path).spawn().map_err(|e| e.to_string())?;
@@ -64,6 +88,7 @@ fn save_all_settings(language: String, background: Option<String>) -> Result<(),
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             get_launchers,
             add_launcher_cmd,
@@ -79,6 +104,7 @@ pub fn run() {
             reset_settings,
             save_all_settings,
             open_directory,
+            read_file_as_base64,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

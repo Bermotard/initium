@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { open } from '@tauri-apps/plugin-dialog'
 import './App.css'
 
 function App() {
@@ -303,7 +304,7 @@ function App() {
               </div>
               <div className="form-group">
                 <label>Icon (Optional)</label>
-                <input type="file" accept="image/*" onChange={handleIconUpload} />
+                <button type="button" onClick={async () => { const selected = await open({ directory: false, multiple: false, defaultPath: '/home/bernard/.config/initium/icons', filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'svg', 'ico'] }] }); if (selected) { const base64 = await invoke("read_file_as_base64", { path: selected }); setFormData({...formData, icon: base64}); } }}>Choose File</button>
                 {formData.icon && (<div className="icon-preview"><img src={formData.icon} alt="Preview" /></div>)}
               </div>
               <div className="modal-actions">
