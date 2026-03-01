@@ -1,188 +1,100 @@
 # 🚀 Initium - Dashboard Intelligent
-Un tableau de bord intelligent multi-plateforme pour lancer vos applications et sites web préférés au démarrage de votre ordinateur.
 
-## 🎯 Caractéristiques
-- ✅ Interface élégante et responsive avec grille d'icônes
-- ✅ Grille d'icônes pour lancer applications et sites web
-- ✅ Multi-plateforme: Linux, Windows, macOS
-- ✅ Gestion de configuration via JSON
-- ✅ Import/Export de configurations
-- ✅ Upload d'icônes personnalisées
-- ✅ Architecture modulaire et extensible
+> Tableau de bord intelligent multi-plateforme pour lancer vos applications et sites web préférés.
+
+![Initium Dashboard](docs/screenshot.png)
+
+## ✨ Caractéristiques
+
+- 🖥️ Interface élégante avec fond personnalisable (image ou dégradé)
+- 🚀 Lancement d'applications et de sites web en un clic
+- 🌍 Multi-plateforme : Linux, Windows, macOS
+- 🌐 Localisation : Français, English, Español
+- 📁 Gestion d'icônes personnalisées
+- 💾 Import/Export de configurations
+- ⚙️ Paramètres persistants
 
 ## 🛠️ Technologie
-- **Backend:** Rust 1.70+ avec Tauri
-- **Frontend:** React avec CSS moderne
-- **Desktop:** Tauri 2.x
-- **Build:** Cargo + npm
+
+- **Backend:** Rust avec Tauri 2.x
+- **Frontend:** React + Vite + i18next
+- **Packaging:** .deb (Linux), NSIS (Windows), .dmg (macOS)
 
 ## 📦 Installation
 
-### Linux Mint / Ubuntu / Debian
-
-1. **Téléchargez le package:**
-   - Allez sur [Releases](https://github.com/Bermotard/initium/releases)
-   - Téléchargez `initium_0.1.0-alpha_amd64.deb`
-
-2. **Double-cliquez sur le fichier .deb**
-   - Ou installez via terminal:
+### Linux (Ubuntu / Debian / Mint)
 ```bash
-   sudo dpkg -i initium_0.1.0-alpha_amd64.deb
+sudo dpkg -i Initium_0.9.1_amd64.deb
 ```
 
-3. **Lancez Initium:**
-   - Via menu Applications (cherchez "Initium Dashboard")
-   - Ou terminal: `initium`
+### Windows
 
-### Windows (Coming Soon)
-```bash
-initium_0.1.0-alpha_x64.msi
-```
+Téléchargez et exécutez `Initium_0.9.1_x64-setup.exe`
 
-### macOS (Coming Soon)
-```bash
-Initium_0.1.0-alpha_amd64.dmgcat >> README.md << 'EOF'
+### macOS
 
-## 🔧 Générer le Package .deb
+Téléchargez et ouvrez `Initium_0.9.1_x64.dmg`
 
-### Prérequis
-```bash
-sudo apt install dpkg-deb imagemagick
-```
+👉 Tous les binaires sont disponibles sur la page [Releases](https://github.com/Bermotard/initium/releases)
 
 ## 🔨 Développement
 
 ### Prérequis
-- Rust 1.70+ ([Install](https://rustup.rs/))
-- Node.js 18+ ([Install](https://nodejs.org/))
-- Cargo
 
-### Quick Start
+- Rust 1.70+ ([Install](https://rustup.rs/))
+- Node.js 20+ ([Install](https://nodejs.org/))
+
+### Démarrage rapide
 ```bash
 git clone https://github.com/Bermotard/initium.git
 cd initium
 
-# Build frontend
+# Frontend
 cd frontend
 npm install
 npm run build
 
-# Build backend
+# Lancer en mode dev
 cd ../src-tauri
-cargo tauri build
-```
-
-### Development Mode
-```bash
-# Terminal 1: Frontend dev server
-cd frontend
-npm run dev
-
-# Terminal 2: Tauri dev
-cd src-tauri
 cargo tauri dev
 ```
 
-### Commands
+### Build production
 ```bash
-cargo test              # Run unit tests
-cargo tarpaulin        # Check code coverage
-cargo clippy           # Lint
-cargo fmt              # Format code
+# Linux
+cd frontend && npm run build
+cd ../src-tauri && cargo tauri build
+
+# Windows (cross-compilation depuis Linux)
+cargo tauri build --target x86_64-pc-windows-gnu
+```
+
+### Commandes utiles
+```bash
+cargo test       # Tests unitaires
+cargo clippy     # Lint
+cargo fmt        # Formatage
 ```
 
 ## 📚 Documentation
-- [USER_GUIDE.md](docs/USER_GUIDE.md) - Guide utilisateur
-- [INSTALLATION.md](docs/INSTALLATION.md) - Instructions détaillées
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Architecture technique
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Guide contribution
+
+- [CHANGELOG.md](CHANGELOG.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [LICENSE](LICENSE)
 
 ## 🤝 Contributions
-Les contributions sont bienvenues!
-- Fork le repository
-- Create une branche: `git checkout -b feature/my-feature`
-- Commit: `git commit -am 'feat: add feature'`
-- Push: `git push origin feature/my-feature`
-- Pull Request
 
-Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour plus de détails.
-
-## 📄 Licence
-MIT License - voir [LICENSE](LICENSE)
+1. Fork le repository
+2. Créez une branche : `git checkout -b feature/ma-feature`
+3. Committez : `git commit -am 'feat: description'`
+4. Poussez : `git push origin feature/ma-feature`
+5. Ouvrez une Pull Request
 
 ## 📞 Support
+
 - **Issues:** https://github.com/Bermotard/initium/issues
 - **Discussions:** https://github.com/Bermotard/initium/discussions
 
 ---
-**Initium v0.1.0-alpha** | [Changelog](CHANGELOG.md)
 
-## 🔧 Générer le Package .deb
-
-### Prérequis
-```bash
-sudo apt install dpkg-deb imagemagick
-```
-
-### Build du .deb
-```bash
-# 1. Build le binaire Linux
-cd src-tauri
-cargo tauri build
-
-# 2. Créer la structure du paquet
-mkdir -p packaging/deb/{DEBIAN,usr/bin,usr/share/applications,usr/share/icons/hicolor/256x256/apps}
-
-# 3. Copier les fichiers
-cp target/release/initium packaging/deb/usr/bin/
-chmod 755 packaging/deb/usr/bin/initium
-
-# 4. Créer les scripts
-cat > packaging/deb/DEBIAN/control << 'CONTROL'
-Package: initium
-Version: 0.1.0-alpha
-Architecture: amd64
-Maintainer: Bernard <bernard@initium.dev>
-Description: Initium Dashboard - Application Launcher
- Manage and launch your applications from a beautiful dashboard.
-Homepage: https://github.com/Bermotard/initium
-CONTROL
-
-cat > packaging/deb/DEBIAN/postinst << 'POSTINST'
-#!/bin/bash
-set -e
-update-desktop-database /usr/share/applications 2>/dev/null || true
-gtk-update-icon-cache /usr/share/icons/hicolor 2>/dev/null || true
-POSTINST
-chmod 755 packaging/deb/DEBIAN/postinst
-
-cat > packaging/deb/DEBIAN/prerm << 'PRERM'
-#!/bin/bash
-set -e
-exit 0
-PRERM
-chmod 755 packaging/deb/DEBIAN/prerm
-
-cat > packaging/deb/usr/share/applications/initium.desktop << 'DESKTOP'
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Initium Dashboard
-Comment=Application Launcher
-Exec=/usr/bin/initium
-Icon=initium
-Categories=Utility;
-Terminal=false
-DESKTOP
-
-# 5. Créer l'icône
-convert -size 256x256 xc:blue -fill white -gravity center -pointsize 40 -annotate +0+0 "I" packaging/deb/usr/share/icons/hicolor/256x256/apps/initium.png
-
-# 6. Build le .deb
-dpkg-deb --build packaging/deb initium_0.1.0-alpha_amd64.deb
-
-# 7. Tester l'installation
-sudo dpkg -i initium_0.1.0-alpha_amd64.deb
-initium
-```
-
+**Initium v0.9.1** | MIT License | [Changelog](CHANGELOG.md)
