@@ -37,6 +37,7 @@ fn get_settings() -> Result<serde_json::Value, String> {
         "config_dir": ConfigManager::get_config_dir_path().to_string_lossy().to_string(),
         "icons_dir": ConfigManager::get_icons_dir_path().to_string_lossy().to_string(),
         "settings_dir": ConfigManager::get_settings_dir_path().to_string_lossy().to_string(),
+        "version": env!("CARGO_PKG_VERSION"),
     }))
 }
 

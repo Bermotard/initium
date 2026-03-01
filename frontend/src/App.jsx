@@ -316,6 +316,7 @@ function App() {
                 <button type="button" onClick={async () => { const selected = await open({ directory: false, multiple: false, defaultPath: '/home/bernard/.config/initium/icons', filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'svg', 'ico'] }] }); if (selected) { const base64 = await invoke("read_file_as_base64", { path: selected }); setFormData({...formData, icon: base64}); } }}>{t('chooseFile')}</button>
                 {formData.icon && (<div className="icon-preview"><img src={formData.icon} alt="Preview" /></div>)}
               </div>
+              <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', marginBottom: '12px' }}>Initium v{settings?.version}</div>
               <div className="modal-actions">
                 <button type="submit" className="btn-submit">{selectedLauncher ? 'Update' : 'Create'} Launcher</button>
                 <button type="button" className="btn-cancel" onClick={closeModal}>Cancel</button>
@@ -393,6 +394,7 @@ function App() {
                 </div>
               </div>
 
+              <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', marginBottom: '12px' }}>Initium v{settings?.version}</div>
               <div className="modal-actions">
                 <button type="button" className="btn-submit" onClick={saveAllSettings}>{t('saveAllSettings')}</button>
                 <button type="button" className="btn-warning" onClick={resetSettings}>{t('resetDefault')}</button>
