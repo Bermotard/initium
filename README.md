@@ -24,16 +24,16 @@
 
 ### Linux (Ubuntu / Debian / Mint)
 ```bash
-sudo dpkg -i Initium_0.9.1_amd64.deb
+sudo dpkg -i Initium_0.9.3_amd64.deb
 ```
 
 ### Windows
 
-Téléchargez et exécutez `Initium_0.9.1_x64-setup.exe`
+Téléchargez et exécutez `Initium_0.9.3_x64-setup.exe`
 
 ### macOS
 
-Téléchargez et ouvrez `Initium_0.9.1_x64.dmg`
+Téléchargez et ouvrez `Initium_0.9.3_x64.dmg`
 
 👉 Tous les binaires sont disponibles sur la page [Releases](https://github.com/Bermotard/initium/releases)
 
@@ -97,4 +97,4 @@ cargo fmt        # Formatage
 
 ---
 
-**Initium v0.9.1** | MIT License | [Changelog](CHANGELOG.md)
+**Initium v0.9.3** | MIT License | [Changelog](CHANGELOG.md)
