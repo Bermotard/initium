@@ -1,6 +1,6 @@
 [package]
 name = "initium"
-version = "0.9.3"
+version = "1.0.0"
 edition = "2021"
 authors = ["Initium Team"]
 description = "Tableau de bord intelligent multi-plateforme pour lancer applications et sites web"

@@ -1,0 +1,5 @@
+# Ignorer les fichiers CSS des statistiques
+*.css linguist-vendored
+
+# Forcer la détection du Rust comme langage principal si besoin
+src-tauri/**/*.rs linguist-detectable

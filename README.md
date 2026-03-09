@@ -97,4 +97,4 @@ cargo fmt        # Formatage
 
 ---
 
-**Initium v0.9.3** | MIT License | [Changelog](CHANGELOG.md)
+**Initium v1.0.0** | MIT License | [Changelog](CHANGELOG.md)
