@@ -28,6 +28,21 @@ function App() {
   useEffect(() => {
     loadLaunchers()
     invoke("get_settings").then(s => setSettings(s)).catch(() => {})
+    // Charger le fond d'écran au démarrage
+    invoke('get_background').then(bg => {
+      if (bg) {
+        try {
+          const parsed = JSON.parse(bg)
+          setBackgroundColor(parsed)
+        } catch {
+          setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+        }
+      } else {
+        setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+      }
+    }).catch(() => {
+      setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+    })
   }, [])
 
   async function loadLaunchers() {
