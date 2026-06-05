@@ -49,6 +49,12 @@ const resources = {
       settingsReset: 'Settings reset to default!',
       exportSuccess: 'Config exported successfully!',
       importSuccess: 'Config imported successfully!',
+      // Drag & Drop
+      unsupportedFileType: 'Unsupported file type. Please drop an executable or URL.',
+      launcherAlreadyExists: 'A launcher for "{{name}}" already exists. Replace it?',
+      errorProcessingFile: 'Error processing the file.',
+      dropToCreateLauncher: 'Drop here to create a launcher',
+      dropExecutableOrUrl: 'Drop an application or URL',
     }
   },
   fr: {
@@ -98,6 +104,12 @@ const resources = {
       settingsReset: 'Paramètres réinitialisés !',
       exportSuccess: 'Configuration exportée avec succès !',
       importSuccess: 'Configuration importée avec succès !',
+      // Glisser-Déposer
+      unsupportedFileType: 'Type de fichier non supporté. Glissez-déposez un exécutable ou une URL.',
+      launcherAlreadyExists: 'Un lanceur pour "{{name}}" existe déjà. Voulez-vous le remplacer ?',
+      errorProcessingFile: 'Erreur lors du traitement du fichier.',
+      dropToCreateLauncher: 'Déposez ici pour créer un lanceur',
+      dropExecutableOrUrl: 'Déposez une application ou une URL',
     }
   },
   es: {
@@ -147,6 +159,12 @@ const resources = {
       settingsReset: '¡Ajustes restablecidos!',
       exportSuccess: '¡Configuración exportada con éxito!',
       importSuccess: '¡Configuración importada con éxito!',
+      // Arrastrar y Soltar
+      unsupportedFileType: 'Tipo de archivo no compatible. Arrastre un ejecutable o una URL.',
+      launcherAlreadyExists: 'Ya existe un lanzador para "{{name}}". ¿Desea reemplazarlo?',
+      errorProcessingFile: 'Error al procesar el archivo.',
+      dropToCreateLauncher: 'Suelte aquí para crear un lanzador',
+      dropExecutableOrUrl: 'Arrastre una aplicación o URL',
     }
   }
 }
