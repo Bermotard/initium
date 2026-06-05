@@ -21,6 +21,18 @@
     ],
     "security": {
       "csp": null
+    },
+    "permissions": {
+      "fs": {
+        "read": true,
+        "write": false,
+        "scope": [
+          {"name": "Downloads", "path": "$DOWNLOAD"},
+          {"name": "Documents", "path": "$DOCUMENT"},
+          {"name": "Desktop", "path": "$DESKTOP"},
+          {"name": "Home", "path": "$HOME"}
+        ]
+      }
     }
   },
   "bundle": {
