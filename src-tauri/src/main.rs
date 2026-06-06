@@ -1,7 +1,6 @@
 use initium::config_manager::ConfigManager;
 use initium::launcher::{Launcher, LaunchType, generate_unique_id};
 use serde_json::json;
-use std::path::Path;
 
 #[tauri::command]
 fn set_background(background: String) -> Result<(), String> {
@@ -119,15 +118,9 @@ pub fn run() {
             read_file_as_base64,
             write_file,
             read_file_as_text,
-            // Drag & Drop commands
-            is_executable,
+            // Drag & Drop commands - URL only
             is_valid_url,
             extract_domain,
-            is_desktop_file,
-            is_url_file,
-            parse_desktop_file,
-            parse_url_file,
-            extract_name_from_path,
             launcher_exists,
         ])
         .run(tauri::generate_context!())
@@ -203,41 +196,7 @@ async fn execute_launcher_cmd(id: String) -> Result<String, String> {
     Ok(format!("Launcher '{}' executed", launcher.name))
 }
 
-// ==================== Drag & Drop Commands ====================
-
-/// Check if a file is executable
-#[tauri::command]
-fn is_executable(path: String) -> Result<bool, String> {
-    let metadata = std::fs::metadata(&path).map_err(|e| e.to_string())?;
-    
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::PermissionsExt;
-        Ok(metadata.permissions().mode() & 0o111 != 0)
-    }
-    
-    #[cfg(windows)]
-    {
-        // On Windows, check if it's a .exe, .bat, .cmd, .lnk, or .msi file
-        let path_lower = path.to_lowercase();
-        let is_exe = path_lower.ends_with(".exe") || 
-                     path_lower.ends_with(".bat") || 
-                     path_lower.ends_with(".cmd") || 
-                     path_lower.ends_with(".lnk") ||
-                     path_lower.ends_with(".msi");
-        Ok(is_exe)
-    }
-    
-    #[cfg(target_os = "macos")]
-    {
-        // On macOS, check if it's an .app bundle or has execute permissions
-        if path.ends_with(".app") {
-            return Ok(true);
-        }
-        use std::os::unix::fs::PermissionsExt;
-        Ok(metadata.permissions().mode() & 0o111 != 0)
-    }
-}
+// ==================== Drag & Drop Commands (URL only) ====================
 
 /// Validate if a string is a valid URL
 #[tauri::command]
@@ -261,82 +220,6 @@ fn extract_domain(url: String) -> String {
         .to_string()
 }
 
-/// Check if a file is a .desktop file (Linux)
-#[tauri::command]
-fn is_desktop_file(path: String) -> bool {
-    path.ends_with(".desktop")
-}
-
-/// Check if a file is a .url file (Windows)
-#[tauri::command]
-fn is_url_file(path: String) -> bool {
-    path.to_lowercase().ends_with(".url")
-}
-
-/// Parse a .desktop file and extract Name, Exec, and Icon
-#[tauri::command]
-fn parse_desktop_file(path: String) -> Result<serde_json::Value, String> {
-    let content = std::fs::read_to_string(&path).map_err(|e| e.to_string())?;
-    
-    let mut name = String::new();
-    let mut exec = String::new();
-    let mut icon = String::new();
-    
-    for line in content.lines() {
-        let line = line.trim();
-        if line.starts_with("Name=") {
-            name = line[5..].trim().to_string();
-        } else if line.starts_with("Exec=") {
-            // Extract the command and remove %U, %F, etc. placeholders
-            let cmd = line[5..].trim();
-            exec = cmd.split_whitespace().next().unwrap_or("").to_string();
-            // Remove %U, %F, %u, %f, etc.
-            exec = exec.replace("%U", "").replace("%F", "").replace("%u", "").replace("%f", "");
-        } else if line.starts_with("Icon=") {
-            icon = line[5..].trim().to_string();
-        }
-    }
-    
-    Ok(json!({
-        "name": name,
-        "exec": exec,
-        "icon": icon
-    }))
-}
-
-/// Parse a .url file and extract the URL
-#[tauri::command]
-fn parse_url_file(path: String) -> Result<String, String> {
-    let content = std::fs::read_to_string(&path).map_err(|e| e.to_string())?;
-    
-    // Windows .url files have format: [InternetShortcut]
-    // URL=https://example.com
-    for line in content.lines() {
-        let line = line.trim();
-        if line.to_uppercase().starts_with("URL=") {
-            return Ok(line[4..].trim().to_string());
-        }
-    }
-    
-    Err("No URL found in .url file".to_string())
-}
-
-/// Extract name from file path
-#[tauri::command]
-fn extract_name_from_path(path: String) -> String {
-    let path_obj = Path::new(&path);
-    let file_name = path_obj.file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("unknown");
-    
-    // Remove extension
-    let stem = Path::new(file_name).file_stem()
-        .and_then(|s| s.to_str())
-        .unwrap_or(file_name);
-    
-    stem.to_string()
-}
-
 /// Check if a launcher with the same target already exists
 #[tauri::command]
 fn launcher_exists(target: String) -> Result<bool, String> {
@@ -358,7 +241,7 @@ fn import_config(json: String) -> Result<(), String> {
     manager.save()
 }
 
-// ==================== Drag & Drop Tests ====================
+// ==================== Drag & Drop Tests (URL only) ====================
 
 #[cfg(test)]
 mod drag_drop_tests {
@@ -379,27 +262,6 @@ mod drag_drop_tests {
         assert_eq!(extract_domain("http://localhost:3000".to_string()), "localhost:3000");
         assert_eq!(extract_domain("https://example.com/path?query=1".to_string()), "example.com");
         assert_eq!(extract_domain("ftp://ftp.example.com/file".to_string()), "ftp.example.com");
-    }
-    
-    #[test]
-    fn test_is_desktop_file() {
-        assert!(is_desktop_file("/path/to/app.desktop".to_string()));
-        assert!(!is_desktop_file("/path/to/app.exe".to_string()));
-    }
-    
-    #[test]
-    fn test_is_url_file() {
-        assert!(is_url_file("/path/to/link.url".to_string()));
-        assert!(is_url_file("/path/to/LINK.URL".to_string()));
-        assert!(!is_url_file("/path/to/link.txt".to_string()));
-    }
-    
-    #[test]
-    fn test_extract_name_from_path() {
-        assert_eq!(extract_name_from_path("/usr/bin/firefox".to_string()), "firefox");
-        assert_eq!(extract_name_from_path("/path/to/MyApp.exe".to_string()), "MyApp");
-        assert_eq!(extract_name_from_path("firefox.desktop".to_string()), "firefox");
-        assert_eq!(extract_name_from_path("no_extension".to_string()), "no_extension");
     }
 }
 
