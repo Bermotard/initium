@@ -55,6 +55,7 @@ const resources = {
       errorProcessingFile: 'Error processing the file.',
       dropToCreateLauncher: 'Drop here to create a launcher',
       dropExecutableOrUrl: 'Drop an application or URL',
+      executablePathPrompt: 'Enter full path for {{name}}:'
     }
   },
   fr: {
@@ -110,6 +111,7 @@ const resources = {
       errorProcessingFile: 'Erreur lors du traitement du fichier.',
       dropToCreateLauncher: 'Déposez ici pour créer un lanceur',
       dropExecutableOrUrl: 'Déposez une application ou une URL',
+      executablePathPrompt: 'Entrez le chemin complet pour {{name}} :'
     }
   },
   es: {
@@ -165,6 +167,7 @@ const resources = {
       errorProcessingFile: 'Error al procesar el archivo.',
       dropToCreateLauncher: 'Suelte aquí para crear un lanzador',
       dropExecutableOrUrl: 'Arrastre una aplicación o URL',
+      executablePathPrompt: 'Ingrese la ruta completa para {{name}}:'
     }
   }
 }

@@ -231,107 +231,11 @@ function App() {
       for (let i = 0; i < items.length; i++) {
         const item = items[i]
         
-        // Handle file drop
-        if (item.kind === 'file') {
-          const file = item.getAsFile()
-          
-          // Get the full path of the dropped file
-          // In Tauri v2 with fs permissions, file.path is available
-          const filePath = file?.path || file?.name
-          
-          // Check if it's a .desktop file (Linux)
-          const isDesktop = await invoke('is_desktop_file', { path: filePath })
-          if (isDesktop) {
-            const desktopData = await invoke('parse_desktop_file', { path: filePath })
-            const name = desktopData.name || await invoke('extract_name_from_path', { path: filePath })
-            const execPath = desktopData.exec || filePath
-            const icon = desktopData.icon || null
-            
-            // Check if launcher already exists
-            const exists = await invoke('launcher_exists', { target: execPath })
-            if (exists) {
-              if (window.confirm(t('launcherAlreadyExists', { name }))) {
-                // User wants to replace, so we'll let them edit it
-                openEditModalWithData(name, 'app', execPath, icon)
-              }
-              return
-            }
-            
-            openEditModalWithData(name, 'app', execPath, icon)
-            return
-          }
-          
-          // Check if it's a .url file (Windows)
-          const isUrl = await invoke('is_url_file', { path: filePath })
-          if (isUrl) {
-            const url = await invoke('parse_url_file', { path: filePath })
-            const domain = await invoke('extract_domain', { url })
-            
-            // Check if launcher already exists
-            const exists = await invoke('launcher_exists', { target: url })
-            if (exists) {
-              if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
-                openEditModalWithData(domain, 'web', url, null)
-              }
-              return
-            }
-            
-            openEditModalWithData(domain, 'web', url, null)
-            return
-          }
-          
-          // Check if it's an executable file
-          const isExec = await invoke('is_executable', { path: filePath })
-          if (isExec) {
-            const name = await invoke('extract_name_from_path', { path: filePath })
-            
-            // Check if launcher already exists
-            const exists = await invoke('launcher_exists', { target: filePath })
-            if (exists) {
-              if (window.confirm(t('launcherAlreadyExists', { name }))) {
-                openEditModalWithData(name, 'app', filePath, null)
-              }
-              return
-            }
-            
-            openEditModalWithData(name, 'app', filePath, null)
-            return
-          }
-          
-          // Check if it's a URL text file
-          if (file.name.endsWith('.url') || file.name.endsWith('.webloc')) {
-            // Try to read as text and extract URL
-            const content = await file.text()
-            const urlMatch = content.match(/URL=(.+)/i)
-            if (urlMatch) {
-              const url = urlMatch[1].trim()
-              const domain = await invoke('extract_domain', { url })
-              
-              const exists = await invoke('launcher_exists', { target: url })
-              if (exists) {
-                if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
-                  openEditModalWithData(domain, 'web', url, null)
-                }
-                return
-              }
-              
-              openEditModalWithData(domain, 'web', url, null)
-              return
-            }
-          }
-          
-          // Not a supported file type
-          showNotification(t('unsupportedFileType'), 'error')
-          return
-        }
-        
-        // Handle text/URL drop (from browser)
+        // Handle text/URL drop (from browser) - HIGH PRIORITY as this works well
         if (item.kind === 'string' && item.type === 'text/uri-list') {
           const url = e.dataTransfer.getData('text/uri-list')
           if (url && await invoke('is_valid_url', { url })) {
             const domain = await invoke('extract_domain', { url })
-            
-            // Check if launcher already exists
             const exists = await invoke('launcher_exists', { target: url })
             if (exists) {
               if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
@@ -339,7 +243,6 @@ function App() {
               }
               return
             }
-            
             openEditModalWithData(domain, 'web', url, null)
             return
           }
@@ -350,7 +253,6 @@ function App() {
           const text = e.dataTransfer.getData('text/plain')
           if (text && await invoke('is_valid_url', { url: text })) {
             const domain = await invoke('extract_domain', { url: text })
-            
             const exists = await invoke('launcher_exists', { target: text })
             if (exists) {
               if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
@@ -358,10 +260,101 @@ function App() {
               }
               return
             }
-            
             openEditModalWithData(domain, 'web', text, null)
             return
           }
+        }
+        
+        // Handle file drop
+        if (item.kind === 'file') {
+          const file = item.getAsFile()
+          
+          // For Tauri v2, file.path is NOT available due to browser security restrictions
+          // We need to use a different approach: read file content and parse it
+          
+          // Check if it's a .desktop file (Linux) by name first
+          if (file.name.endsWith('.desktop')) {
+            try {
+              const content = await file.text()
+              const execMatch = content.match(/^Exec=(.+)$/m)
+              const nameMatch = content.match(/^Name=(.+)$/m)
+              const iconMatch = content.match(/^Icon=(.+)$/m)
+              
+              const execPath = execMatch ? execMatch[1].trim().split(' ')[0].replace(/%[Uu]/g, ' ') : file.name
+              const name = nameMatch ? nameMatch[1].trim() : file.name.replace('.desktop', '')
+              const icon = iconMatch ? iconMatch[1].trim() : null
+              
+              const exists = await invoke('launcher_exists', { target: execPath })
+              if (exists) {
+                if (window.confirm(t('launcherAlreadyExists', { name }))) {
+                  openEditModalWithData(name, 'app', execPath, icon)
+                }
+                return
+              }
+              openEditModalWithData(name, 'app', execPath, icon)
+              return
+            } catch (err) {
+              console.error('Error reading .desktop file:', err)
+            }
+          }
+          
+          // Check if it's a .url file (Windows) by name
+          if (file.name.endsWith('.url') || file.name.endsWith('.webloc')) {
+            try {
+              const content = await file.text()
+              // Windows .url file format
+              const urlMatch = content.match(/^URL=(.+)$/mi)
+              // Mac .webloc format (plist)
+              const plistUrlMatch = content.match(/<key>URL<\/key>\s*<string>(.+)<\/string>/i)
+              
+              const url = (urlMatch || plistUrlMatch)?.[1]?.trim()
+              
+              if (url && await invoke('is_valid_url', { url })) {
+                const domain = await invoke('extract_domain', { url })
+                const exists = await invoke('launcher_exists', { target: url })
+                if (exists) {
+                  if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
+                    openEditModalWithData(domain, 'web', url, null)
+                  }
+                  return
+                }
+                openEditModalWithData(domain, 'web', url, null)
+                return
+              }
+            } catch (err) {
+              console.error('Error reading .url file:', err)
+            }
+          }
+          
+          // For other files, we can only get the name, not the full path
+          // This is a Tauri v2 limitation - browser doesn't expose file.path for security
+          // So we'll create a launcher with the filename and let user edit the path
+          const name = file.name.replace(/\.[^.]+$/, '')
+          const isPotentialExecutable = /\.(exe|sh|bin|app|cmd|bat|com)$/i.test(file.name)
+          
+          if (isPotentialExecutable) {
+            // Ask user to provide the full path since we can't get it from browser
+            const userPath = window.prompt(
+              t('executablePathPrompt', { name: file.name }),
+              `/usr/bin/${file.name}`
+            )
+            
+            if (userPath) {
+              const exists = await invoke('launcher_exists', { target: userPath })
+              if (exists) {
+                if (window.confirm(t('launcherAlreadyExists', { name }))) {
+                  openEditModalWithData(name, 'app', userPath, null)
+                }
+              } else {
+                openEditModalWithData(name, 'app', userPath, null)
+              }
+            }
+            return
+          }
+          
+          // Not a supported file type
+          showNotification(t('unsupportedFileType'), 'error')
+          return
         }
       }
       
