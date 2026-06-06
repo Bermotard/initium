@@ -50,12 +50,10 @@ const resources = {
       exportSuccess: 'Config exported successfully!',
       importSuccess: 'Config imported successfully!',
       // Drag & Drop
-      unsupportedFileType: 'Unsupported file type. Please drop an executable or URL.',
-      launcherAlreadyExists: 'A launcher for "{{name}}" already exists. Replace it?',
-      errorProcessingFile: 'Error processing the file.',
       dropToCreateLauncher: 'Drop here to create a launcher',
-      dropExecutableOrUrl: 'Drop an application or URL',
-      executablePathPrompt: 'Enter full path for {{name}}:'
+      dropUrlHere: 'Drop a URL here to create a launcher',
+      launcherAlreadyExists: 'A launcher for "{{name}}" already exists. Replace it?',
+      errorProcessingFile: 'Error processing the URL.'
     }
   },
   fr: {
@@ -106,12 +104,10 @@ const resources = {
       exportSuccess: 'Configuration exportée avec succès !',
       importSuccess: 'Configuration importée avec succès !',
       // Glisser-Déposer
-      unsupportedFileType: 'Type de fichier non supporté. Glissez-déposez un exécutable ou une URL.',
-      launcherAlreadyExists: 'Un lanceur pour "{{name}}" existe déjà. Voulez-vous le remplacer ?',
-      errorProcessingFile: 'Erreur lors du traitement du fichier.',
       dropToCreateLauncher: 'Déposez ici pour créer un lanceur',
-      dropExecutableOrUrl: 'Déposez une application ou une URL',
-      executablePathPrompt: 'Entrez le chemin complet pour {{name}} :'
+      dropUrlHere: 'Déposez une URL ici pour créer un lanceur',
+      launcherAlreadyExists: 'Un lanceur pour "{{name}}" existe déjà. Voulez-vous le remplacer ?',
+      errorProcessingFile: 'Erreur lors du traitement de l\'URL.'
     }
   },
   es: {
@@ -162,12 +158,10 @@ const resources = {
       exportSuccess: '¡Configuración exportada con éxito!',
       importSuccess: '¡Configuración importada con éxito!',
       // Arrastrar y Soltar
-      unsupportedFileType: 'Tipo de archivo no compatible. Arrastre un ejecutable o una URL.',
-      launcherAlreadyExists: 'Ya existe un lanzador para "{{name}}". ¿Desea reemplazarlo?',
-      errorProcessingFile: 'Error al procesar el archivo.',
       dropToCreateLauncher: 'Suelte aquí para crear un lanzador',
-      dropExecutableOrUrl: 'Arrastre una aplicación o URL',
-      executablePathPrompt: 'Ingrese la ruta completa para {{name}}:'
+      dropUrlHere: 'Arrastre una URL aquí para crear un lanzador',
+      launcherAlreadyExists: 'Ya existe un lanzador para "{{name}}". ¿Desea reemplazarlo?',
+      errorProcessingFile: 'Error al procesar la URL.'
     }
   }
 }
