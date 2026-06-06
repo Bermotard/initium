@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { invoke, open, save } from '@tauri-apps/api'
+import { invoke } from '@tauri-apps/api/core'
+import { open, save } from '@tauri-apps/plugin-dialog'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n/index.js'
 import './App.css'
