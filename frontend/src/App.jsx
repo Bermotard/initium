@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { open, save } from '@tauri-apps/plugin-dialog'
 import { useTranslation } from 'react-i18next'
 import i18n from './i18n/index.js'
-import { open, save } from '@tauri-apps/plugin-dialog'
 import './App.css'
 
 function App() {
@@ -22,8 +22,11 @@ function App() {
     icon: ''
   })
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' })
+  const [isDragOver, setIsDragOver] = useState(false)
+  const [dragCounter, setDragCounter] = useState(0)
   const fileInputRef = useRef(null)
   const backgroundFileInputRef = useRef(null)
+  const appRef = useRef(null)
 
   useEffect(() => {
     loadLaunchers()
@@ -185,6 +188,106 @@ function App() {
     }, 3000)
   }
 
+  // ==================== Drag & Drop Handlers ====================
+  
+  const handleDragEnter = useCallback((e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragCounter(prev => {
+      const newCount = prev + 1
+      if (newCount === 1) {
+        setIsDragOver(true)
+      }
+      return newCount
+    })
+  }, [])
+
+  const handleDragLeave = useCallback((e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragCounter(prev => {
+      const newCount = prev - 1
+      if (newCount === 0) {
+        setIsDragOver(false)
+      }
+      return newCount
+    })
+  }, [])
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    e.dataTransfer.dropEffect = 'copy'
+  }, [])
+
+  const handleDrop = useCallback(async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragOver(false)
+    setDragCounter(0)
+    
+    try {
+      const items = e.dataTransfer.items
+      
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        
+        // Handle text/URL drop from browser
+        if (item.kind === 'string' && item.type === 'text/uri-list') {
+          const url = e.dataTransfer.getData('text/uri-list')
+          if (url && await invoke('is_valid_url', { url })) {
+            const domain = await invoke('extract_domain', { url })
+            const exists = await invoke('launcher_exists', { target: url })
+            if (exists) {
+              if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
+                openEditModalWithData(domain, 'web', url, null)
+              }
+              return
+            }
+            openEditModalWithData(domain, 'web', url, null)
+            return
+          }
+        }
+        
+        // Handle plain text drop (might be a URL)
+        if (item.kind === 'string' && item.type === 'text/plain') {
+          const text = e.dataTransfer.getData('text/plain')
+          if (text && await invoke('is_valid_url', { url: text })) {
+            const domain = await invoke('extract_domain', { url: text })
+            const exists = await invoke('launcher_exists', { target: text })
+            if (exists) {
+              if (window.confirm(t('launcherAlreadyExists', { name: domain }))) {
+                openEditModalWithData(domain, 'web', text, null)
+              }
+              return
+            }
+            openEditModalWithData(domain, 'web', text, null)
+            return
+          }
+        }
+      }
+      
+      // If we get here, no valid URL was found
+      showNotification(t('dropUrlHere'), 'error')
+      
+    } catch (err) {
+      console.error('Drag and drop error:', err)
+      showNotification(t('errorProcessingFile'), 'error')
+    }
+  }, [t])
+
+  // Helper function to open modal with pre-filled data
+  const openEditModalWithData = useCallback((name, type, target, icon) => {
+    setFormData({
+      name: name,
+      type: type,
+      target: target,
+      icon: icon || ''
+    })
+    setSelectedLauncher(null)
+    setShowModal(true)
+  }, [])
+
   async function openSettingsModal() {
     try {
       const settingsData = await invoke('get_settings')
@@ -281,7 +384,15 @@ function App() {
   }
 
   return (
-    <div className="app" style={{background: getBackgroundStyle()}}>
+    <div 
+      className={`app ${isDragOver ? 'drag-over' : ''}`}
+      ref={appRef}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      style={{background: getBackgroundStyle()}}
+    >
       <header className="header">
         <div className="header-content">
           <h1>{t('title')}</h1>

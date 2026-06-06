@@ -49,6 +49,11 @@ const resources = {
       settingsReset: 'Settings reset to default!',
       exportSuccess: 'Config exported successfully!',
       importSuccess: 'Config imported successfully!',
+      // Drag & Drop
+      dropToCreateLauncher: 'Drop here to create a launcher',
+      dropUrlHere: 'Drop a URL here to create a launcher',
+      launcherAlreadyExists: 'A launcher for "{{name}}" already exists. Replace it?',
+      errorProcessingFile: 'Error processing the URL.'
     }
   },
   fr: {
@@ -98,6 +103,11 @@ const resources = {
       settingsReset: 'Paramètres réinitialisés !',
       exportSuccess: 'Configuration exportée avec succès !',
       importSuccess: 'Configuration importée avec succès !',
+      // Glisser-Déposer
+      dropToCreateLauncher: 'Déposez ici pour créer un lanceur',
+      dropUrlHere: 'Déposez une URL ici pour créer un lanceur',
+      launcherAlreadyExists: 'Un lanceur pour "{{name}}" existe déjà. Voulez-vous le remplacer ?',
+      errorProcessingFile: 'Erreur lors du traitement de l\'URL.'
     }
   },
   es: {
@@ -147,6 +157,11 @@ const resources = {
       settingsReset: '¡Ajustes restablecidos!',
       exportSuccess: '¡Configuración exportada con éxito!',
       importSuccess: '¡Configuración importada con éxito!',
+      // Arrastrar y Soltar
+      dropToCreateLauncher: 'Suelte aquí para crear un lanzador',
+      dropUrlHere: 'Arrastre una URL aquí para crear un lanzador',
+      launcherAlreadyExists: 'Ya existe un lanzador para "{{name}}". ¿Desea reemplazarlo?',
+      errorProcessingFile: 'Error al procesar la URL.'
     }
   }
 }

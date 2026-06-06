@@ -118,6 +118,10 @@ pub fn run() {
             read_file_as_base64,
             write_file,
             read_file_as_text,
+            // Drag & Drop commands - URL only
+            is_valid_url,
+            extract_domain,
+            launcher_exists,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -192,6 +196,39 @@ async fn execute_launcher_cmd(id: String) -> Result<String, String> {
     Ok(format!("Launcher '{}' executed", launcher.name))
 }
 
+// ==================== Drag & Drop Commands (URL only) ====================
+
+/// Validate if a string is a valid URL
+#[tauri::command]
+fn is_valid_url(url: String) -> bool {
+    url.starts_with("http://") || 
+    url.starts_with("https://") || 
+    url.starts_with("ftp://") ||
+    url.starts_with("file://")
+}
+
+/// Extract domain from URL
+#[tauri::command]
+fn extract_domain(url: String) -> String {
+    // Remove protocol
+    let without_protocol = url.split("://").last().unwrap_or(&url);
+    // Get first part before /, ?, or #
+    without_protocol.split('/').next()
+        .and_then(|s| s.split('?').next())
+        .and_then(|s| s.split('#').next())
+        .unwrap_or("unknown")
+        .to_string()
+}
+
+/// Check if a launcher with the same target already exists
+#[tauri::command]
+fn launcher_exists(target: String) -> Result<bool, String> {
+    let manager = ConfigManager::load_or_default()?;
+    let exists = manager.config().launchers.iter()
+        .any(|l| l.target == target);
+    Ok(exists)
+}
+
 #[tauri::command]
 fn export_config() -> Result<String, String> {
     let manager = ConfigManager::load_or_default()?;
@@ -202,6 +239,30 @@ fn export_config() -> Result<String, String> {
 fn import_config(json: String) -> Result<(), String> {
     let manager = ConfigManager::import_from_json(&json)?;
     manager.save()
+}
+
+// ==================== Drag & Drop Tests (URL only) ====================
+
+#[cfg(test)]
+mod drag_drop_tests {
+    use super::*;
+    
+    #[test]
+    fn test_is_valid_url() {
+        assert!(is_valid_url("https://github.com".to_string()));
+        assert!(is_valid_url("http://example.com".to_string()));
+        assert!(is_valid_url("ftp://ftp.example.com".to_string()));
+        assert!(!is_valid_url("/path/to/file".to_string()));
+        assert!(!is_valid_url("not-a-url".to_string()));
+    }
+    
+    #[test]
+    fn test_extract_domain() {
+        assert_eq!(extract_domain("https://github.com/user/repo".to_string()), "github.com");
+        assert_eq!(extract_domain("http://localhost:3000".to_string()), "localhost:3000");
+        assert_eq!(extract_domain("https://example.com/path?query=1".to_string()), "example.com");
+        assert_eq!(extract_domain("ftp://ftp.example.com/file".to_string()), "ftp.example.com");
+    }
 }
 
 #[cfg(not(target_os = "macos"))]
