@@ -555,3 +555,49 @@ mod tests {
         cleanup_test_config();
     }
 }
+#[cfg(test)]
+mod test_default_config {
+    use super::*;
+    use std::sync::Mutex;
+    
+    static TEST_LOCK: Mutex<()> = Mutex::new(());
+    
+    fn cleanup_test_config() {
+        let path = ConfigManager::get_config_path();
+        let _ = std::fs::remove_file(&path);
+        let icons_dir = ConfigManager::get_icons_dir();
+        let _ = std::fs::remove_dir_all(&icons_dir);
+    }
+    
+    #[test]
+    fn test_default_config_loads() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+        
+        // This should create the config with default resources
+        let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
+        
+        // Check we have the expected launchers
+        assert_eq!(manager.config().launchers.len(), 2);
+        
+        // Check launcher IDs
+        let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"firefox"));
+        assert!(ids.contains(&"youtube"));
+        
+        // Check background is set
+        assert!(manager.config().background.is_some());
+        assert!(manager.config().background.as_ref().unwrap().contains("fond.png"));
+        
+        // Check language
+        assert_eq!(manager.config().language, "fr");
+        
+        // Check icons were copied
+        let icons_dir = ConfigManager::get_icons_dir();
+        assert!(icons_dir.exists());
+        assert!(icons_dir.join("firefox.png").exists());
+        assert!(icons_dir.join("youtube.png").exists());
+        
+        cleanup_test_config();
+    }
+}
