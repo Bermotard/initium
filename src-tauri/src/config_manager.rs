@@ -85,16 +85,109 @@ impl ConfigManager {
         }
     }
 
-    /// Create default configuration with initial launcher
+    /// Create default configuration with firefox and youtube launchers
     fn default_config() -> Config {
-        Config {
-            version: "0.1.0".to_string(),
-            theme: "light".to_string(),
-            autostart: false,
-            launchers: vec![Self::create_default_launcher()],
-            background: None,
-            language: "en".to_string(),
+        // Load default config from embedded resources
+        let default_config_path = Path::new("resources/config.json");
+        if default_config_path.exists() {
+            match Config::load(default_config_path) {
+                Ok(config) => config,
+                Err(_) => {
+                    log::warn!("Failed to load default config from resources, using fallback");
+                    // Fallback to minimal config
+                    let mut config = Config {
+                        version: "1.0.2".to_string(),
+                        theme: "light".to_string(),
+                        autostart: false,
+                        launchers: vec![],
+                        background: None,
+                        language: "fr".to_string(),
+                    };
+                    // Add firefox launcher
+                    config.launchers.push(Launcher::new(
+                        "firefox".to_string(),
+                        "Firefox".to_string(),
+                        crate::launcher::LaunchType::App,
+                        "firefox".to_string(),
+                    ));
+                    // Add youtube launcher
+                    config.launchers.push(Launcher::new(
+                        "youtube".to_string(),
+                        "YouTube".to_string(),
+                        crate::launcher::LaunchType::Web,
+                        "https://youtube.com".to_string(),
+                    ));
+                    config
+                }
+            }
+        } else {
+            // Fallback if resources/config.json doesn't exist
+            let mut config = Config {
+                version: "1.0.2".to_string(),
+                theme: "light".to_string(),
+                autostart: false,
+                launchers: vec![],
+                background: None,
+                language: "fr".to_string(),
+            };
+            // Add firefox launcher
+            config.launchers.push(Launcher::new(
+                "firefox".to_string(),
+                "Firefox".to_string(),
+                crate::launcher::LaunchType::App,
+                "firefox".to_string(),
+            ));
+            // Add youtube launcher
+            config.launchers.push(Launcher::new(
+                "youtube".to_string(),
+                "YouTube".to_string(),
+                crate::launcher::LaunchType::Web,
+                "https://youtube.com".to_string(),
+            ));
+            config
         }
+    }
+
+    /// Copy default resources (fond.png, icons/) to user config directory
+    fn copy_default_resources() -> Result<(), String> {
+        use std::fs;
+        use std::io::Write;
+        
+        let config_dir = Self::get_config_dir();
+        let icons_dir = Self::get_icons_dir();
+        let resources_dir = Path::new("resources");
+        
+        // Copy fond.png
+        let fond_src = resources_dir.join("fond.png");
+        let fond_dst = config_dir.join("fond.png");
+        if fond_src.exists() && !fond_dst.exists() {
+            fs::copy(&fond_src, &fond_dst)
+                .map_err(|e| format!("Failed to copy fond.png: {}", e))?;
+            log::info!("Copied default background image");
+        }
+        
+        // Copy icons
+        if icons_dir.exists() {
+            let icons_src = resources_dir.join("icons");
+            if icons_src.exists() {
+                for entry in fs::read_dir(&icons_src)
+                    .map_err(|e| format!("Failed to read icons directory: {}", e))?
+                {
+                    let entry = entry.map_err(|e| e.to_string())?;
+                    let src_path = entry.path();
+                    let file_name = entry.file_name();
+                    let dst_path = icons_dir.join(&file_name);
+                    
+                    if src_path.is_file() && !dst_path.exists() {
+                        fs::copy(&src_path, &dst_path)
+                            .map_err(|e| format!("Failed to copy icon {}: {}", file_name.to_string_lossy(), e))?;
+                        log::info!("Copied default icon: {}", file_name.to_string_lossy());
+                    }
+                }
+            }
+        }
+        
+        Ok(())
     }
 
     /// Load configuration or create default if not exists
@@ -106,6 +199,9 @@ impl ConfigManager {
             Config::load(&config_path)
                 .map_err(|e| format!("Failed to load config: {}", e))?
         } else {
+            // Copy default resources first
+            Self::copy_default_resources()?;
+            
             let default = Self::default_config();
             default.save(&config_path)
                 .map_err(|e| format!("Failed to save default config: {}", e))?;
