@@ -166,20 +166,25 @@ impl ConfigManager {
     /// Load configuration or create default if not exists
     /// 
     /// IMPORTANT: This function will NEVER overwrite an existing config file.
-    /// If the config file exists but cannot be loaded, it returns an error.
-    /// This ensures user data is never lost.
+    /// If the config file exists, it loads it. If it doesn't exist, it creates default.
+    /// If the config exists but cannot be loaded, it returns an error WITHOUT modifying the file.
+    /// This GUARANTEES user data is never lost.
     pub fn load_or_default() -> Result<Self, String> {
         Self::create_directories()?;
         let config_path = Self::get_config_path();
         
-        let config = if config_path.exists() {
-            // If config exists, always try to load it - NEVER overwrite
+        // FIRST: Check if config exists
+        let config_exists = config_path.exists();
+        
+        let config = if config_exists {
+            // If config exists, ALWAYS try to load it - NEVER overwrite, NEVER create default
             Config::load(&config_path)
-                .map_err(|e| format!("Failed to load existing config at {}: {}. \
-Please fix the config file manually or back it up before restarting.", 
+                .map_err(|e| format!("ERREUR CRITIQUE: Impossible de charger la configuration existante à {}: {}. \
+\nNE MODIFIEZ PAS CE FICHIER! Votre configuration n'a PAS été écrasée. \
+Corrigez le fichier manuellement ou faites une sauvegarde avant de relancer.", 
                     config_path.display(), e))?
         } else {
-            // Only create default config if file doesn't exist
+            // Only create default config if file DOES NOT exist
             Self::copy_default_resources()?;
             
             let default = Self::default_config();
@@ -189,6 +194,26 @@ Please fix the config file manually or back it up before restarting.",
         };
         
         Ok(ConfigManager { config_path, config })
+    }
+    
+    /// Initialize configuration for FIRST EVER launch only
+    /// This is called manually when we detect it's the first launch
+    /// NEVER call this if a config already exists!
+    pub fn initialize_first_launch() -> Result<(), String> {
+        let config_path = Self::get_config_path();
+        
+        // SAFETY CHECK: Only proceed if config does NOT exist
+        if config_path.exists() {
+            return Err(format!("ERROR: Attempted to initialize first launch but config already exists at {}", config_path.display()));
+        }
+        
+        Self::create_directories()?;
+        Self::copy_default_resources()?;
+        
+        let default = Self::default_config();
+        default.save(&config_path)?;
+        
+        Ok(())
     }
 
     /// Save configuration to disk

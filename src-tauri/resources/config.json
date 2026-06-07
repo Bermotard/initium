@@ -6,6 +6,14 @@
   "language": "fr",
   "launchers": [
     {
+      "id": "rhone_digital",
+      "name": "Rhône Digital",
+      "type": "web",
+      "target": "http://www.rhone-digital.fr",
+      "icon": null,
+      "options": null
+    },
+    {
       "id": "firefox",
       "name": "Firefox",
       "type": "app",
