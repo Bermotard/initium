@@ -12,7 +12,49 @@ fn set_background(background: String) -> Result<(), String> {
 #[tauri::command]
 fn get_background() -> Result<Option<String>, String> {
     let manager = ConfigManager::load_or_default()?;
-    Ok(manager.config().background.clone())
+    let bg = manager.config().background.clone();
+    
+    if let Some(background) = bg {
+        // If it's already a data URL or JSON, return as is
+        if background.starts_with("data:") || background.starts_with('{') {
+            Ok(Some(background))
+        } else {
+            // It's a file path, convert to data URL
+            let config_dir = ConfigManager::get_config_dir_path();
+            let file_path = config_dir.join(&background);
+            
+            if file_path.exists() {
+                // Read file and convert to base64
+                let mut file = std::fs::File::open(&file_path)
+                    .map_err(|e| format!("Failed to open background file: {}", e))?;
+                let mut buffer = Vec::new();
+                use std::io::Read;
+                file.read_to_end(&mut buffer)
+                    .map_err(|e| format!("Failed to read background file: {}", e))?;
+                
+                let ext = std::path::Path::new(&background).extension()
+                    .and_then(|e| e.to_str())
+                    .unwrap_or("png");
+                let mime = match ext {
+                    "svg" => "image/svg+xml",
+                    "jpg" | "jpeg" => "image/jpeg",
+                    "ico" => "image/x-icon",
+                    _ => "image/png",
+                };
+                
+                let base64 = base64_encode(&buffer);
+                let data_url = format!("data:{};base64,{}", mime, base64);
+                
+                // Return as JSON object
+                Ok(Some(format!("{{\"type\":\"image\",\"value\":\"{}\"}}", data_url)))
+            } else {
+                // File doesn't exist, return as is
+                Ok(Some(background))
+            }
+        }
+    } else {
+        Ok(None)
+    }
 }
 
 #[tauri::command]

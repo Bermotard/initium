@@ -86,49 +86,51 @@ impl ConfigManager {
         }
     }
 
-    /// Create default configuration with Rhone Digital, firefox and youtube launchers
+    /// Create default configuration from embedded config.json
     /// This is ONLY used for first-time installation when no config exists
     fn default_config() -> Config {
-        use crate::launcher::LaunchType;
-        
-        let mut config = Config {
-            version: "1.0.2".to_string(),
-            theme: "light".to_string(),
-            autostart: false,
-            launchers: vec![],
-            background: Some("fond.png".to_string()),
-            language: "fr".to_string(),
-        };
-        
-        // Add Rhone Digital launcher
-        config.launchers.push(Launcher::new(
-            "rhone_digital".to_string(),
-            "Rhône Digital".to_string(),
-            LaunchType::Web,
-            "http://www.rhone-digital.fr".to_string(),
-        ));
-        
-        // Add firefox launcher
-        config.launchers.push(Launcher::new(
-            "firefox".to_string(),
-            "Firefox".to_string(),
-            LaunchType::App,
-            "firefox".to_string(),
-        ));
-        
-        // Add youtube launcher
-        config.launchers.push(Launcher::new(
-            "youtube".to_string(),
-            "YouTube".to_string(),
-            LaunchType::Web,
-            "https://www.youtube.com".to_string(),
-        ));
-        
-        config
+        // Load default config from embedded JSON
+        let default_config_json = include_str!("../resources/config.json");
+        match serde_json::from_str::<Config>(default_config_json) {
+            Ok(config) => config,
+            Err(e) => {
+                log::warn!("Failed to parse default config: {}, using fallback", e);
+                // Fallback to hardcoded config
+                use crate::launcher::LaunchType;
+                let mut config = Config {
+                    version: "1.10.0".to_string(),
+                    theme: "light".to_string(),
+                    autostart: false,
+                    launchers: vec![],
+                    background: Some("fond.png".to_string()),
+                    language: "fr".to_string(),
+                };
+                config.launchers.push(Launcher::new(
+                    "rhone_digital".to_string(),
+                    "Rhône Digital".to_string(),
+                    LaunchType::Web,
+                    "http://www.rhone-digital.fr".to_string(),
+                ));
+                config.launchers.push(Launcher::new(
+                    "firefox".to_string(),
+                    "Firefox".to_string(),
+                    LaunchType::App,
+                    "firefox".to_string(),
+                ));
+                config.launchers.push(Launcher::new(
+                    "youtube".to_string(),
+                    "YouTube".to_string(),
+                    LaunchType::Web,
+                    "https://www.youtube.com".to_string(),
+                ));
+                config
+            }
+        }
     }
 
     /// Copy default resources (fond.png, icons/) to user config directory
     /// IMPORTANT: Only copies files that don't already exist - NEVER overwrites user files
+    /// Uses embedded resources via include_bytes! to ensure they're always available
     fn copy_default_resources() -> Result<(), String> {
         use std::fs;
         
@@ -142,32 +144,43 @@ impl ConfigManager {
         // Copy fond.png ONLY if it doesn't exist
         let fond_dst = config_dir.join("fond.png");
         if !fond_dst.exists() {
-            let resources_dir = Path::new("resources");
-            let fond_src = resources_dir.join("fond.png");
-            fs::copy(&fond_src, &fond_dst)
-                .map_err(|e| format!("Failed to copy fond.png: {}", e))?;
+            // Use include_bytes! to embed the image directly
+            let fond_bytes = include_bytes!("../resources/fond.png");
+            fs::write(&fond_dst, fond_bytes)
+                .map_err(|e| format!("Failed to write fond.png: {}", e))?;
             log::info!("Copied default background image");
         }
         
-        // Copy ALL icons from resources/icons/ ONLY if they don't exist
-        // Use absolute path to resources directory
-        let resources_dir = Path::new("resources");
-        let icons_src = resources_dir.join("icons");
-        if icons_src.exists() {
-            for entry in fs::read_dir(&icons_src)
-                .map_err(|e| format!("Failed to read icons directory: {}", e))?
-            {
-                let entry = entry.map_err(|e| e.to_string())?;
-                let file_name = entry.file_name();
-                let src_path = entry.path();
-                let dst_path = icons_dir.join(&file_name);
-                
-                // Only copy if destination doesn't exist
-                if src_path.is_file() && !dst_path.exists() {
-                    fs::copy(&src_path, &dst_path)
-                        .map_err(|e| format!("Failed to copy icon {}: {}", file_name.to_string_lossy(), e))?;
-                    log::info!("Copied default icon: {}", file_name.to_string_lossy());
-                }
+        // Copy ALL icons from embedded resources ONLY if they don't exist
+        // This ensures icons are available even when the app is installed as a binary
+        // We embed each icon individually using include_bytes!
+        
+        // List of icons to copy (must match files in src-tauri/resources/icons/)
+        // Using &[u8] to handle different sized icons
+        let icon_files: &[(&str, &[u8])] = &[
+            ("1.png", include_bytes!("../resources/icons/1.png")),
+            ("A.jpeg", include_bytes!("../resources/icons/A.jpeg")),
+            ("claudeconsole.png", include_bytes!("../resources/icons/claudeconsole.png")),
+            ("codage.png", include_bytes!("../resources/icons/codage.png")),
+            ("deepseek.png", include_bytes!("../resources/icons/deepseek.png")),
+            ("firefox.png", include_bytes!("../resources/icons/firefox.png")),
+            ("fortuneo.png", include_bytes!("../resources/icons/fortuneo.png")),
+            ("gitea.png", include_bytes!("../resources/icons/gitea.png")),
+            ("gmail.png", include_bytes!("../resources/icons/gmail.png")),
+            ("HibpLogo.svg", include_bytes!("../resources/icons/HibpLogo.svg")),
+            ("icons8-google-drive-100.png", include_bytes!("../resources/icons/icons8-google-drive-100.png")),
+            ("icons8-whatsapp-48.png", include_bytes!("../resources/icons/icons8-whatsapp-48.png")),
+            ("openclaw.svg", include_bytes!("../resources/icons/openclaw.svg")),
+            ("protonmail.png", include_bytes!("../resources/icons/protonmail.png")),
+            ("youtube.png", include_bytes!("../resources/icons/youtube.png")),
+        ];
+        
+        for (file_name, icon_bytes) in icon_files {
+            let dst_path = icons_dir.join(file_name);
+            if !dst_path.exists() {
+                fs::write(&dst_path, icon_bytes)
+                    .map_err(|e| format!("Failed to write icon {}: {}", file_name, e))?;
+                log::info!("Copied default icon: {}", file_name);
             }
         }
         
@@ -348,7 +361,7 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
-        assert_eq!(manager.config().version, "1.0.2");
+        assert_eq!(manager.config().version, "1.10.0");
         assert_eq!(manager.config().theme, "light");
         assert_eq!(manager.get_language(), "fr");
         

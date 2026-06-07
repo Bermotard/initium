@@ -1,6 +1,6 @@
 {
   "productName": "Initium",
-  "version": "1.0.2",
+  "version": "1.10.0",
   "identifier": "com.initium.app",
   "build": {
     "beforeDevCommand": "",

@@ -38,7 +38,9 @@ function App() {
           const parsed = JSON.parse(bg)
           setBackgroundColor(parsed)
         } catch {
-          setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+          // Si ce n'est pas du JSON, supposer que c'est un chemin de fichier
+          // Vérifier si le fichier existe dans le dossier config
+          setBackgroundColor({ type: 'image', value: bg })
         }
       } else {
         setBackgroundColor({ type: 'gradient', value: 'gradient1' })
@@ -299,7 +301,8 @@ function App() {
           const parsed = JSON.parse(bg)
           setBackgroundColor(parsed)
         } catch {
-          setBackgroundColor({ type: 'gradient', value: 'gradient1' })
+          // Si ce n'est pas du JSON, supposer que c'est un chemin de fichier
+          setBackgroundColor({ type: 'image', value: bg })
         }
       } else {
         setBackgroundColor({ type: 'gradient', value: 'gradient1' })
