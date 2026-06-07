@@ -68,7 +68,8 @@ impl ConfigManager {
         Ok(())
     }
 
-    /// Create default launcher from file
+    /// Create default launcher from file (kept for backward compatibility)
+    #[allow(dead_code)]
     fn create_default_launcher() -> Launcher {
         let initial_launcher_json = include_str!("../initial-launcher.json");
         match serde_json::from_str::<Launcher>(initial_launcher_json) {
@@ -88,17 +89,9 @@ impl ConfigManager {
     /// Create default configuration with firefox and youtube launchers
     fn default_config() -> Config {
         // Try to load default config from embedded string
-        let default_config_json = include_str!("../../resources/config.json");
+        let default_config_json = include_str!("../resources/config.json");
         match serde_json::from_str::<Config>(default_config_json) {
-            Ok(mut config) => {
-                // Ensure background path is relative to config dir
-                if let Some(bg) = &config.background {
-                    if bg.contains("fond.png") {
-                        // Keep as is, will be handled by copy_default_resources
-                    }
-                }
-                config
-            }
+            Ok(config) => config,
             Err(e) => {
                 log::warn!("Failed to parse default config: {}, using fallback", e);
                 // Fallback to minimal config
@@ -132,7 +125,6 @@ impl ConfigManager {
     /// Copy default resources (fond.png, icons/) to user config directory
     fn copy_default_resources() -> Result<(), String> {
         use std::fs;
-        use std::io::Write;
         
         let config_dir = Self::get_config_dir();
         let icons_dir = Self::get_icons_dir();
@@ -140,7 +132,7 @@ impl ConfigManager {
         // Copy fond.png from embedded bytes
         let fond_dst = config_dir.join("fond.png");
         if !fond_dst.exists() {
-            let fond_bytes = include_bytes!("../../resources/fond.png");
+            let fond_bytes = include_bytes!("../resources/fond.png");
             fs::write(&fond_dst, fond_bytes)
                 .map_err(|e| format!("Failed to write fond.png: {}", e))?;
             log::info!("Copied default background image");
@@ -153,7 +145,7 @@ impl ConfigManager {
         // Copy firefox.png
         let firefox_dst = icons_dir.join("firefox.png");
         if !firefox_dst.exists() {
-            let firefox_bytes = include_bytes!("../../resources/default-icons/firefox.png");
+            let firefox_bytes = include_bytes!("../resources/default-icons/firefox.png");
             fs::write(&firefox_dst, firefox_bytes)
                 .map_err(|e| format!("Failed to write firefox.png: {}", e))?;
             log::info!("Copied default icon: firefox.png");
@@ -162,7 +154,7 @@ impl ConfigManager {
         // Copy youtube.png
         let youtube_dst = icons_dir.join("youtube.png");
         if !youtube_dst.exists() {
-            let youtube_bytes = include_bytes!("../../resources/default-icons/youtube.png");
+            let youtube_bytes = include_bytes!("../resources/default-icons/youtube.png");
             fs::write(&youtube_dst, youtube_bytes)
                 .map_err(|e| format!("Failed to write youtube.png: {}", e))?;
             log::info!("Copied default icon: youtube.png");
