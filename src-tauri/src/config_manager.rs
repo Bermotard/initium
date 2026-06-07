@@ -142,16 +142,19 @@ impl ConfigManager {
         // Copy fond.png ONLY if it doesn't exist
         let fond_dst = config_dir.join("fond.png");
         if !fond_dst.exists() {
-            let fond_bytes = include_bytes!("../resources/fond.png");
-            fs::write(&fond_dst, fond_bytes)
-                .map_err(|e| format!("Failed to write fond.png: {}", e))?;
+            let resources_dir = Path::new("resources");
+            let fond_src = resources_dir.join("fond.png");
+            fs::copy(&fond_src, &fond_dst)
+                .map_err(|e| format!("Failed to copy fond.png: {}", e))?;
             log::info!("Copied default background image");
         }
         
         // Copy ALL icons from resources/icons/ ONLY if they don't exist
-        let icons_src = Path::new("../resources/icons");
+        // Use absolute path to resources directory
+        let resources_dir = Path::new("resources");
+        let icons_src = resources_dir.join("icons");
         if icons_src.exists() {
-            for entry in fs::read_dir(icons_src)
+            for entry in fs::read_dir(&icons_src)
                 .map_err(|e| format!("Failed to read icons directory: {}", e))?
             {
                 let entry = entry.map_err(|e| e.to_string())?;
@@ -347,7 +350,7 @@ mod tests {
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
         assert_eq!(manager.config().version, "1.0.2");
         assert_eq!(manager.config().theme, "light");
-        assert_eq!(manager.config().language, "fr");
+        assert_eq!(manager.get_language(), "fr");
         
         cleanup_test_config();
     }
@@ -533,9 +536,10 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load");
-        // Now we have firefox and youtube as default launchers
-        assert_eq!(manager.config().launchers.len(), 2);
+        // Now we have Rhone Digital, firefox and youtube as default launchers
+        assert_eq!(manager.config().launchers.len(), 3);
         let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"rhone_digital"));
         assert!(ids.contains(&"firefox"));
         assert!(ids.contains(&"youtube"));
 
@@ -600,11 +604,12 @@ mod test_default_config {
         // This should create the config with default resources
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
         
-        // Check we have the expected launchers
-        assert_eq!(manager.config().launchers.len(), 2);
+        // Check we have the expected launchers (3: rhone_digital, firefox, youtube)
+        assert_eq!(manager.config().launchers.len(), 3);
         
         // Check launcher IDs
         let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"rhone_digital"));
         assert!(ids.contains(&"firefox"));
         assert!(ids.contains(&"youtube"));
         
@@ -613,7 +618,7 @@ mod test_default_config {
         assert!(manager.config().background.as_ref().unwrap().contains("fond.png"));
         
         // Check language
-        assert_eq!(manager.config().language, "fr");
+        assert_eq!(manager.get_language(), "fr");
         
         // Check icons were copied
         let icons_dir = ConfigManager::get_icons_dir();
