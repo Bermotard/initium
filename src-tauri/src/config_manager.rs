@@ -164,15 +164,22 @@ impl ConfigManager {
     }
 
     /// Load configuration or create default if not exists
+    /// 
+    /// IMPORTANT: This function will NEVER overwrite an existing config file.
+    /// If the config file exists but cannot be loaded, it returns an error.
+    /// This ensures user data is never lost.
     pub fn load_or_default() -> Result<Self, String> {
         Self::create_directories()?;
         let config_path = Self::get_config_path();
         
         let config = if config_path.exists() {
+            // If config exists, always try to load it - NEVER overwrite
             Config::load(&config_path)
-                .map_err(|e| format!("Failed to load config: {}", e))?
+                .map_err(|e| format!("Failed to load existing config at {}: {}. \
+Please fix the config file manually or back it up before restarting.", 
+                    config_path.display(), e))?
         } else {
-            // Copy default resources first
+            // Only create default config if file doesn't exist
             Self::copy_default_resources()?;
             
             let default = Self::default_config();
