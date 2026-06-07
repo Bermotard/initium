@@ -325,9 +325,9 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
-        assert_eq!(manager.config().version, "0.1.0");
+        assert_eq!(manager.config().version, "1.0.2");
         assert_eq!(manager.config().theme, "light");
-        assert_eq!(manager.config().language, "en");
+        assert_eq!(manager.config().language, "fr");
         
         cleanup_test_config();
     }
@@ -338,7 +338,7 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load");
-        assert_eq!(manager.get_language(), "en");
+        assert_eq!(manager.get_language(), "fr");
 
         cleanup_test_config();
     }
@@ -513,8 +513,11 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load");
-        assert_eq!(manager.config().launchers.len(), 1);
-        assert_eq!(manager.config().launchers[0].id, "rhone_digital");
+        // Now we have firefox and youtube as default launchers
+        assert_eq!(manager.config().launchers.len(), 2);
+        let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"firefox"));
+        assert!(ids.contains(&"youtube"));
 
         cleanup_test_config();
     }
