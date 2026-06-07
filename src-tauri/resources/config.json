@@ -2,10 +2,7 @@
   "version": "1.0.2",
   "theme": "light",
   "autostart": false,
-  "background": {
-    "type": "image",
-    "value": "fond.png"
-  },
+  "background": "fond.png",
   "language": "fr",
   "launchers": [
     {

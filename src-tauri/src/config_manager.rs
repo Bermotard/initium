@@ -87,64 +87,45 @@ impl ConfigManager {
 
     /// Create default configuration with firefox and youtube launchers
     fn default_config() -> Config {
-        // Load default config from embedded resources
-        let default_config_path = Path::new("resources/config.json");
-        if default_config_path.exists() {
-            match Config::load(default_config_path) {
-                Ok(config) => config,
-                Err(_) => {
-                    log::warn!("Failed to load default config from resources, using fallback");
-                    // Fallback to minimal config
-                    let mut config = Config {
-                        version: "1.0.2".to_string(),
-                        theme: "light".to_string(),
-                        autostart: false,
-                        launchers: vec![],
-                        background: None,
-                        language: "fr".to_string(),
-                    };
-                    // Add firefox launcher
-                    config.launchers.push(Launcher::new(
-                        "firefox".to_string(),
-                        "Firefox".to_string(),
-                        crate::launcher::LaunchType::App,
-                        "firefox".to_string(),
-                    ));
-                    // Add youtube launcher
-                    config.launchers.push(Launcher::new(
-                        "youtube".to_string(),
-                        "YouTube".to_string(),
-                        crate::launcher::LaunchType::Web,
-                        "https://youtube.com".to_string(),
-                    ));
-                    config
+        // Try to load default config from embedded string
+        let default_config_json = include_str!("../../resources/config.json");
+        match serde_json::from_str::<Config>(default_config_json) {
+            Ok(mut config) => {
+                // Ensure background path is relative to config dir
+                if let Some(bg) = &config.background {
+                    if bg.contains("fond.png") {
+                        // Keep as is, will be handled by copy_default_resources
+                    }
                 }
+                config
             }
-        } else {
-            // Fallback if resources/config.json doesn't exist
-            let mut config = Config {
-                version: "1.0.2".to_string(),
-                theme: "light".to_string(),
-                autostart: false,
-                launchers: vec![],
-                background: None,
-                language: "fr".to_string(),
-            };
-            // Add firefox launcher
-            config.launchers.push(Launcher::new(
-                "firefox".to_string(),
-                "Firefox".to_string(),
-                crate::launcher::LaunchType::App,
-                "firefox".to_string(),
-            ));
-            // Add youtube launcher
-            config.launchers.push(Launcher::new(
-                "youtube".to_string(),
-                "YouTube".to_string(),
-                crate::launcher::LaunchType::Web,
-                "https://youtube.com".to_string(),
-            ));
-            config
+            Err(e) => {
+                log::warn!("Failed to parse default config: {}, using fallback", e);
+                // Fallback to minimal config
+                let mut config = Config {
+                    version: "1.0.2".to_string(),
+                    theme: "light".to_string(),
+                    autostart: false,
+                    launchers: vec![],
+                    background: Some("fond.png".to_string()),
+                    language: "fr".to_string(),
+                };
+                // Add firefox launcher
+                config.launchers.push(Launcher::new(
+                    "firefox".to_string(),
+                    "Firefox".to_string(),
+                    crate::launcher::LaunchType::App,
+                    "firefox".to_string(),
+                ));
+                // Add youtube launcher
+                config.launchers.push(Launcher::new(
+                    "youtube".to_string(),
+                    "YouTube".to_string(),
+                    crate::launcher::LaunchType::Web,
+                    "https://youtube.com".to_string(),
+                ));
+                config
+            }
         }
     }
 
@@ -155,36 +136,36 @@ impl ConfigManager {
         
         let config_dir = Self::get_config_dir();
         let icons_dir = Self::get_icons_dir();
-        let resources_dir = Path::new("resources");
         
-        // Copy fond.png
-        let fond_src = resources_dir.join("fond.png");
+        // Copy fond.png from embedded bytes
         let fond_dst = config_dir.join("fond.png");
-        if fond_src.exists() && !fond_dst.exists() {
-            fs::copy(&fond_src, &fond_dst)
-                .map_err(|e| format!("Failed to copy fond.png: {}", e))?;
+        if !fond_dst.exists() {
+            let fond_bytes = include_bytes!("../../resources/fond.png");
+            fs::write(&fond_dst, fond_bytes)
+                .map_err(|e| format!("Failed to write fond.png: {}", e))?;
             log::info!("Copied default background image");
         }
         
-        // Copy icons
-        if icons_dir.exists() {
-            let icons_src = resources_dir.join("icons");
-            if icons_src.exists() {
-                for entry in fs::read_dir(&icons_src)
-                    .map_err(|e| format!("Failed to read icons directory: {}", e))?
-                {
-                    let entry = entry.map_err(|e| e.to_string())?;
-                    let src_path = entry.path();
-                    let file_name = entry.file_name();
-                    let dst_path = icons_dir.join(&file_name);
-                    
-                    if src_path.is_file() && !dst_path.exists() {
-                        fs::copy(&src_path, &dst_path)
-                            .map_err(|e| format!("Failed to copy icon {}: {}", file_name.to_string_lossy(), e))?;
-                        log::info!("Copied default icon: {}", file_name.to_string_lossy());
-                    }
-                }
-            }
+        // Copy default icons from embedded bytes
+        fs::create_dir_all(&icons_dir)
+            .map_err(|e| format!("Failed to create icons directory: {}", e))?;
+        
+        // Copy firefox.png
+        let firefox_dst = icons_dir.join("firefox.png");
+        if !firefox_dst.exists() {
+            let firefox_bytes = include_bytes!("../../resources/default-icons/firefox.png");
+            fs::write(&firefox_dst, firefox_bytes)
+                .map_err(|e| format!("Failed to write firefox.png: {}", e))?;
+            log::info!("Copied default icon: firefox.png");
+        }
+        
+        // Copy youtube.png
+        let youtube_dst = icons_dir.join("youtube.png");
+        if !youtube_dst.exists() {
+            let youtube_bytes = include_bytes!("../../resources/default-icons/youtube.png");
+            fs::write(&youtube_dst, youtube_bytes)
+                .map_err(|e| format!("Failed to write youtube.png: {}", e))?;
+            log::info!("Copied default icon: youtube.png");
         }
         
         Ok(())
