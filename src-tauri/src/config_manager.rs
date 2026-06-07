@@ -86,50 +86,60 @@ impl ConfigManager {
         }
     }
 
-    /// Create default configuration with firefox and youtube launchers
+    /// Create default configuration with Rhone Digital, firefox and youtube launchers
+    /// This is ONLY used for first-time installation when no config exists
     fn default_config() -> Config {
-        // Try to load default config from embedded string
-        let default_config_json = include_str!("../resources/config.json");
-        match serde_json::from_str::<Config>(default_config_json) {
-            Ok(config) => config,
-            Err(e) => {
-                log::warn!("Failed to parse default config: {}, using fallback", e);
-                // Fallback to minimal config
-                let mut config = Config {
-                    version: "1.0.2".to_string(),
-                    theme: "light".to_string(),
-                    autostart: false,
-                    launchers: vec![],
-                    background: Some("fond.png".to_string()),
-                    language: "fr".to_string(),
-                };
-                // Add firefox launcher
-                config.launchers.push(Launcher::new(
-                    "firefox".to_string(),
-                    "Firefox".to_string(),
-                    crate::launcher::LaunchType::App,
-                    "firefox".to_string(),
-                ));
-                // Add youtube launcher
-                config.launchers.push(Launcher::new(
-                    "youtube".to_string(),
-                    "YouTube".to_string(),
-                    crate::launcher::LaunchType::Web,
-                    "https://youtube.com".to_string(),
-                ));
-                config
-            }
-        }
+        use crate::launcher::LaunchType;
+        
+        let mut config = Config {
+            version: "1.0.2".to_string(),
+            theme: "light".to_string(),
+            autostart: false,
+            launchers: vec![],
+            background: Some("fond.png".to_string()),
+            language: "fr".to_string(),
+        };
+        
+        // Add Rhone Digital launcher
+        config.launchers.push(Launcher::new(
+            "rhone_digital".to_string(),
+            "Rhône Digital".to_string(),
+            LaunchType::Web,
+            "http://www.rhone-digital.fr".to_string(),
+        ));
+        
+        // Add firefox launcher
+        config.launchers.push(Launcher::new(
+            "firefox".to_string(),
+            "Firefox".to_string(),
+            LaunchType::App,
+            "firefox".to_string(),
+        ));
+        
+        // Add youtube launcher
+        config.launchers.push(Launcher::new(
+            "youtube".to_string(),
+            "YouTube".to_string(),
+            LaunchType::Web,
+            "https://www.youtube.com".to_string(),
+        ));
+        
+        config
     }
 
     /// Copy default resources (fond.png, icons/) to user config directory
+    /// IMPORTANT: Only copies files that don't already exist - NEVER overwrites user files
     fn copy_default_resources() -> Result<(), String> {
         use std::fs;
         
         let config_dir = Self::get_config_dir();
         let icons_dir = Self::get_icons_dir();
         
-        // Copy fond.png from embedded bytes
+        // Create icons directory if it doesn't exist
+        fs::create_dir_all(&icons_dir)
+            .map_err(|e| format!("Failed to create icons directory: {}", e))?;
+        
+        // Copy fond.png ONLY if it doesn't exist
         let fond_dst = config_dir.join("fond.png");
         if !fond_dst.exists() {
             let fond_bytes = include_bytes!("../resources/fond.png");
@@ -138,26 +148,24 @@ impl ConfigManager {
             log::info!("Copied default background image");
         }
         
-        // Copy default icons from embedded bytes
-        fs::create_dir_all(&icons_dir)
-            .map_err(|e| format!("Failed to create icons directory: {}", e))?;
-        
-        // Copy firefox.png
-        let firefox_dst = icons_dir.join("firefox.png");
-        if !firefox_dst.exists() {
-            let firefox_bytes = include_bytes!("../resources/default-icons/firefox.png");
-            fs::write(&firefox_dst, firefox_bytes)
-                .map_err(|e| format!("Failed to write firefox.png: {}", e))?;
-            log::info!("Copied default icon: firefox.png");
-        }
-        
-        // Copy youtube.png
-        let youtube_dst = icons_dir.join("youtube.png");
-        if !youtube_dst.exists() {
-            let youtube_bytes = include_bytes!("../resources/default-icons/youtube.png");
-            fs::write(&youtube_dst, youtube_bytes)
-                .map_err(|e| format!("Failed to write youtube.png: {}", e))?;
-            log::info!("Copied default icon: youtube.png");
+        // Copy ALL icons from resources/icons/ ONLY if they don't exist
+        let icons_src = Path::new("../resources/icons");
+        if icons_src.exists() {
+            for entry in fs::read_dir(icons_src)
+                .map_err(|e| format!("Failed to read icons directory: {}", e))?
+            {
+                let entry = entry.map_err(|e| e.to_string())?;
+                let file_name = entry.file_name();
+                let src_path = entry.path();
+                let dst_path = icons_dir.join(&file_name);
+                
+                // Only copy if destination doesn't exist
+                if src_path.is_file() && !dst_path.exists() {
+                    fs::copy(&src_path, &dst_path)
+                        .map_err(|e| format!("Failed to copy icon {}: {}", file_name.to_string_lossy(), e))?;
+                    log::info!("Copied default icon: {}", file_name.to_string_lossy());
+                }
+            }
         }
         
         Ok(())
@@ -196,26 +204,6 @@ Corrigez le fichier manuellement ou faites une sauvegarde avant de relancer.",
         Ok(ConfigManager { config_path, config })
     }
     
-    /// Initialize configuration for FIRST EVER launch only
-    /// This is called manually when we detect it's the first launch
-    /// NEVER call this if a config already exists!
-    pub fn initialize_first_launch() -> Result<(), String> {
-        let config_path = Self::get_config_path();
-        
-        // SAFETY CHECK: Only proceed if config does NOT exist
-        if config_path.exists() {
-            return Err(format!("ERROR: Attempted to initialize first launch but config already exists at {}", config_path.display()));
-        }
-        
-        Self::create_directories()?;
-        Self::copy_default_resources()?;
-        
-        let default = Self::default_config();
-        default.save(&config_path)?;
-        
-        Ok(())
-    }
-
     /// Save configuration to disk
     pub fn save(&self) -> Result<(), String> {
         self.config
