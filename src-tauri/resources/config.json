@@ -1,0 +1,33 @@
+{
+  "version": "1.10.0",
+  "theme": "light",
+  "autostart": false,
+  "background": "fond.png",
+  "language": "fr",
+  "launchers": [
+    {
+      "id": "rhone_digital",
+      "name": "Rhône Digital",
+      "type": "web",
+      "target": "http://www.rhone-digital.fr",
+      "icon": null,
+      "options": null
+    },
+    {
+      "id": "firefox",
+      "name": "Firefox",
+      "type": "app",
+      "target": "firefox",
+      "icon": "firefox.png",
+      "options": null
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "type": "web",
+      "target": "https://www.youtube.com",
+      "icon": "youtube.png",
+      "options": null
+    }
+  ]
+}

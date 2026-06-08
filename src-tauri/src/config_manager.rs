@@ -68,7 +68,8 @@ impl ConfigManager {
         Ok(())
     }
 
-    /// Create default launcher from file
+    /// Create default launcher from file (kept for backward compatibility)
+    #[allow(dead_code)]
     fn create_default_launcher() -> Launcher {
         let initial_launcher_json = include_str!("../initial-launcher.json");
         match serde_json::from_str::<Launcher>(initial_launcher_json) {
@@ -85,27 +86,131 @@ impl ConfigManager {
         }
     }
 
-    /// Create default configuration with initial launcher
+    /// Create default configuration from embedded config.json
+    /// This is ONLY used for first-time installation when no config exists
     fn default_config() -> Config {
-        Config {
-            version: "0.1.0".to_string(),
-            theme: "light".to_string(),
-            autostart: false,
-            launchers: vec![Self::create_default_launcher()],
-            background: None,
-            language: "en".to_string(),
+        // Load default config from embedded JSON
+        let default_config_json = include_str!("../resources/config.json");
+        match serde_json::from_str::<Config>(default_config_json) {
+            Ok(config) => config,
+            Err(e) => {
+                log::warn!("Failed to parse default config: {}, using fallback", e);
+                // Fallback to hardcoded config
+                use crate::launcher::LaunchType;
+                let mut config = Config {
+                    version: "1.10.0".to_string(),
+                    theme: "light".to_string(),
+                    autostart: false,
+                    launchers: vec![],
+                    background: Some("fond.png".to_string()),
+                    language: "fr".to_string(),
+                };
+                config.launchers.push(Launcher::new(
+                    "rhone_digital".to_string(),
+                    "Rhône Digital".to_string(),
+                    LaunchType::Web,
+                    "http://www.rhone-digital.fr".to_string(),
+                ));
+                config.launchers.push(Launcher::new(
+                    "firefox".to_string(),
+                    "Firefox".to_string(),
+                    LaunchType::App,
+                    "firefox".to_string(),
+                ));
+                config.launchers.push(Launcher::new(
+                    "youtube".to_string(),
+                    "YouTube".to_string(),
+                    LaunchType::Web,
+                    "https://www.youtube.com".to_string(),
+                ));
+                config
+            }
         }
     }
 
+    /// Copy default resources (fond.png, icons/) to user config directory
+    /// IMPORTANT: Only copies files that don't already exist - NEVER overwrites user files
+    /// Uses embedded resources via include_bytes! to ensure they're always available
+    fn copy_default_resources() -> Result<(), String> {
+        use std::fs;
+        
+        let config_dir = Self::get_config_dir();
+        let icons_dir = Self::get_icons_dir();
+        
+        // Create icons directory if it doesn't exist
+        fs::create_dir_all(&icons_dir)
+            .map_err(|e| format!("Failed to create icons directory: {}", e))?;
+        
+        // Copy fond.png ONLY if it doesn't exist
+        let fond_dst = config_dir.join("fond.png");
+        if !fond_dst.exists() {
+            // Use include_bytes! to embed the image directly
+            let fond_bytes = include_bytes!("../resources/fond.png");
+            fs::write(&fond_dst, fond_bytes)
+                .map_err(|e| format!("Failed to write fond.png: {}", e))?;
+            log::info!("Copied default background image");
+        }
+        
+        // Copy ALL icons from embedded resources ONLY if they don't exist
+        // This ensures icons are available even when the app is installed as a binary
+        // We embed each icon individually using include_bytes!
+        
+        // List of icons to copy (must match files in src-tauri/resources/icons/)
+        // Using &[u8] to handle different sized icons
+        let icon_files: &[(&str, &[u8])] = &[
+            ("1.png", include_bytes!("../resources/icons/1.png")),
+            ("A.jpeg", include_bytes!("../resources/icons/A.jpeg")),
+            ("claudeconsole.png", include_bytes!("../resources/icons/claudeconsole.png")),
+            ("codage.png", include_bytes!("../resources/icons/codage.png")),
+            ("deepseek.png", include_bytes!("../resources/icons/deepseek.png")),
+            ("firefox.png", include_bytes!("../resources/icons/firefox.png")),
+            ("fortuneo.png", include_bytes!("../resources/icons/fortuneo.png")),
+            ("gitea.png", include_bytes!("../resources/icons/gitea.png")),
+            ("gmail.png", include_bytes!("../resources/icons/gmail.png")),
+            ("HibpLogo.svg", include_bytes!("../resources/icons/HibpLogo.svg")),
+            ("icons8-google-drive-100.png", include_bytes!("../resources/icons/icons8-google-drive-100.png")),
+            ("icons8-whatsapp-48.png", include_bytes!("../resources/icons/icons8-whatsapp-48.png")),
+            ("openclaw.svg", include_bytes!("../resources/icons/openclaw.svg")),
+            ("protonmail.png", include_bytes!("../resources/icons/protonmail.png")),
+            ("youtube.png", include_bytes!("../resources/icons/youtube.png")),
+        ];
+        
+        for (file_name, icon_bytes) in icon_files {
+            let dst_path = icons_dir.join(file_name);
+            if !dst_path.exists() {
+                fs::write(&dst_path, icon_bytes)
+                    .map_err(|e| format!("Failed to write icon {}: {}", file_name, e))?;
+                log::info!("Copied default icon: {}", file_name);
+            }
+        }
+        
+        Ok(())
+    }
+
     /// Load configuration or create default if not exists
+    /// 
+    /// IMPORTANT: This function will NEVER overwrite an existing config file.
+    /// If the config file exists, it loads it. If it doesn't exist, it creates default.
+    /// If the config exists but cannot be loaded, it returns an error WITHOUT modifying the file.
+    /// This GUARANTEES user data is never lost.
     pub fn load_or_default() -> Result<Self, String> {
         Self::create_directories()?;
         let config_path = Self::get_config_path();
         
-        let config = if config_path.exists() {
+        // FIRST: Check if config exists
+        let config_exists = config_path.exists();
+        
+        let config = if config_exists {
+            // If config exists, ALWAYS try to load it - NEVER overwrite, NEVER create default
             Config::load(&config_path)
-                .map_err(|e| format!("Failed to load config: {}", e))?
+                .map_err(|e| format!("ERREUR CRITIQUE: Impossible de charger la configuration existante à {}: {}. \
+\nNE MODIFIEZ PAS CE FICHIER! Votre configuration n'a PAS été écrasée. \
+Corrigez le fichier manuellement ou faites une sauvegarde avant de relancer.", 
+                    config_path.display(), e))?
         } else {
+            // Only create default config if file DOES NOT exist
+            Self::copy_default_resources()?;
+            
             let default = Self::default_config();
             default.save(&config_path)
                 .map_err(|e| format!("Failed to save default config: {}", e))?;
@@ -114,7 +219,7 @@ impl ConfigManager {
         
         Ok(ConfigManager { config_path, config })
     }
-
+    
     /// Save configuration to disk
     pub fn save(&self) -> Result<(), String> {
         self.config
@@ -256,9 +361,9 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
-        assert_eq!(manager.config().version, "0.1.0");
+        assert_eq!(manager.config().version, "1.10.0");
         assert_eq!(manager.config().theme, "light");
-        assert_eq!(manager.config().language, "en");
+        assert_eq!(manager.get_language(), "fr");
         
         cleanup_test_config();
     }
@@ -269,7 +374,7 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load");
-        assert_eq!(manager.get_language(), "en");
+        assert_eq!(manager.get_language(), "fr");
 
         cleanup_test_config();
     }
@@ -444,8 +549,12 @@ mod tests {
         cleanup_test_config();
 
         let manager = ConfigManager::load_or_default().expect("Failed to load");
-        assert_eq!(manager.config().launchers.len(), 1);
-        assert_eq!(manager.config().launchers[0].id, "rhone_digital");
+        // Now we have Rhone Digital, firefox and youtube as default launchers
+        assert_eq!(manager.config().launchers.len(), 3);
+        let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"rhone_digital"));
+        assert!(ids.contains(&"firefox"));
+        assert!(ids.contains(&"youtube"));
 
         cleanup_test_config();
     }
@@ -483,6 +592,53 @@ mod tests {
         assert_eq!(manager.get_language(), "fr");
         assert_eq!(manager.config().background, Some("gradient2".to_string()));
 
+        cleanup_test_config();
+    }
+}
+#[cfg(test)]
+mod test_default_config {
+    use super::*;
+    use std::sync::Mutex;
+    
+    static TEST_LOCK: Mutex<()> = Mutex::new(());
+    
+    fn cleanup_test_config() {
+        let path = ConfigManager::get_config_path();
+        let _ = std::fs::remove_file(&path);
+        let icons_dir = ConfigManager::get_icons_dir();
+        let _ = std::fs::remove_dir_all(&icons_dir);
+    }
+    
+    #[test]
+    fn test_default_config_loads() {
+        let _guard = TEST_LOCK.lock().unwrap();
+        cleanup_test_config();
+        
+        // This should create the config with default resources
+        let manager = ConfigManager::load_or_default().expect("Failed to load or create default config");
+        
+        // Check we have the expected launchers (3: rhone_digital, firefox, youtube)
+        assert_eq!(manager.config().launchers.len(), 3);
+        
+        // Check launcher IDs
+        let ids: Vec<&str> = manager.config().launchers.iter().map(|l| l.id.as_str()).collect();
+        assert!(ids.contains(&"rhone_digital"));
+        assert!(ids.contains(&"firefox"));
+        assert!(ids.contains(&"youtube"));
+        
+        // Check background is set
+        assert!(manager.config().background.is_some());
+        assert!(manager.config().background.as_ref().unwrap().contains("fond.png"));
+        
+        // Check language
+        assert_eq!(manager.get_language(), "fr");
+        
+        // Check icons were copied
+        let icons_dir = ConfigManager::get_icons_dir();
+        assert!(icons_dir.exists());
+        assert!(icons_dir.join("firefox.png").exists());
+        assert!(icons_dir.join("youtube.png").exists());
+        
         cleanup_test_config();
     }
 }
