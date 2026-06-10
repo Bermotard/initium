@@ -41,7 +41,7 @@ jobs:
         run: cargo install tauri-cli --version "^2"
 
       - name: Build .deb
-        run: cd src-tauri && cargo tauri build
+        run: cargo tauri build
 
       - name: Upload .deb
         uses: actions/upload-artifact@v4
@@ -72,7 +72,7 @@ jobs:
         run: cargo install tauri-cli --version "^2"
 
       - name: Build .exe
-        run: cd src-tauri && cargo tauri build
+        run: cargo tauri build
 
       - name: Upload .exe
         uses: actions/upload-artifact@v4
@@ -103,7 +103,7 @@ jobs:
         run: cargo install tauri-cli --version "^2"
 
       - name: Build .dmg
-        run: cd src-tauri && cargo tauri build
+        run: cargo tauri build
 
       - name: Upload .dmg
         uses: actions/upload-artifact@v4
