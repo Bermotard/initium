@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=Initium Dashboard
-Comment=Application Launcher
+Comment=Dashboard Intelligent Multi-Plateforme
 Exec=/usr/bin/initium
 Icon=initium
 Categories=Utility;

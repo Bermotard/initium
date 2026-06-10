@@ -1,10 +1,10 @@
 {
   "productName": "Initium",
-  "version": "1.10.0",
+  "version": "1.20.0",
   "identifier": "com.initium.app",
   "build": {
-    "beforeDevCommand": "",
-    "beforeBuildCommand": "",
+    "beforeDevCommand": "cd ../frontend && npm run dev",
+    "beforeBuildCommand": "cd ../frontend && npm install && npm run build",
     "devUrl": "http://localhost:5173",
     "frontendDist": "../frontend/dist"
   },
@@ -48,6 +48,16 @@
     "copyright": "© 2026 Initium",
     "category": "Utility",
     "shortDescription": "Dashboard Intelligent Multi-Plateforme",
-    "longDescription": "Initium est un tableau de bord intelligent pour lancer vos applications et sites web préférés."
+    "longDescription": "Initium est un tableau de bord intelligent pour lancer vos applications et sites web préférés.",
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libgtk-3-0",
+          "libsoup-3.0-0",
+          "libjavascriptcoregtk-4.1-0"
+        ]
+      }
+    }
   }
 }

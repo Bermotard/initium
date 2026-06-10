@@ -307,8 +307,18 @@ mod drag_drop_tests {
     }
 }
 
+/// Work around WebKitGTK blank/gray window on some Linux setups (NVIDIA, Wayland, etc.).
+#[cfg(target_os = "linux")]
+fn configure_linux_webview() {
+    // Must be set before WebKitGTK initializes.
+    std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+    std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
+}
+
 #[cfg(not(target_os = "macos"))]
 fn main() {
+    #[cfg(target_os = "linux")]
+    configure_linux_webview();
     run();
 }
 
